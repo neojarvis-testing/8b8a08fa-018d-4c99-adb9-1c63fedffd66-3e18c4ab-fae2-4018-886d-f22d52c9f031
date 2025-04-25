@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { CookingClassRequest } from '../models/cooking-class-request.model';
+import { CookingClass } from '../models/cooking-class.model';
 
 @Injectable({
   providedIn: 'root'
