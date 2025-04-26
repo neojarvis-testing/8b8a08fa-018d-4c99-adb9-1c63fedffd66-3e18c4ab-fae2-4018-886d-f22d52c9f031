@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace dotnetapp.Models
 {
@@ -13,8 +14,9 @@ namespace dotnetapp.Models
         public string Username { get; set; }
         public string MobileNumber { get; set; }
         public string UserRole { get; set; }
-
+        [JsonIgnore]
         public ICollection<CookingClassRequest> CookingClassRequests { get; set; } = new List<CookingClassRequest>();
+        [JsonIgnore]
         public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
     }
 }

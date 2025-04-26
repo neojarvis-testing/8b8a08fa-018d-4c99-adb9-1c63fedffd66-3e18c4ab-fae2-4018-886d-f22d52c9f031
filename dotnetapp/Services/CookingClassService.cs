@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using dotnetapp.Data;
 using dotnetapp.Exceptions;
 using dotnetapp.Models;
@@ -49,7 +50,7 @@ namespace dotnetapp.Services
             if (existingClass == null)
                 return false;
 
-            var duplicateClass = await _context.CookingClasses.FirstOrDefaultAsync(c => c.ClassName == cooking.ClassName);
+            var duplicateClass = await _context.CookingClasses.FirstOrDefaultAsync(c => c.ClassName == cooking.ClassName && c.CookingClassId != cookingId);
             if (duplicateClass != null)
                 throw new CookingClassException("Cooking class with the same name already exists");
 

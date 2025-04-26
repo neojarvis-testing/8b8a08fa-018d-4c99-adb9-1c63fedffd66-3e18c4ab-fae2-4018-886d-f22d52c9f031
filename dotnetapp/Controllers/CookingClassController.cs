@@ -1,28 +1,31 @@
+using dotnetapp.Models;
+using dotnetapp.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using dotnetapp.Exceptions;
 
-namespace CookingHub.Controllers
+namespace dotnetapp.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/cooking-class")]
     public class CookingClassController : ControllerBase
     {
-        private readonly ICookingClassService _cookingClassService;
+        private readonly CookingClassService _cookingClassService;
 
-        public CookingClassController(ICookingClassService cookingClassService)
+        public CookingClassController(CookingClassService cookingClassService)
         {
             _cookingClassService = cookingClassService;
         }
 
+        // Get all cooking classes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CookingClass>>> GetAllCookingClasses()
         {
             try
             {
-                var cookingClasses = await _cookingClassService.GetAllCookingClasses();
-                return Ok(cookingClasses);
+                var classes = await _cookingClassService.GetAllCookingClasses();
+                return Ok(classes);
             }
             catch (Exception ex)
             {
@@ -30,16 +33,16 @@ namespace CookingHub.Controllers
             }
         }
 
-        [HttpGet("{classId}")]
-        public async Task<ActionResult<CookingClass>> GetCookingClassById(int classId)
+        // Get cooking class by ID
+        [HttpGet("{cookingId}")]
+        public async Task<ActionResult<CookingClass>> GetCookingClassById(int cookingId)
         {
             try
             {
-                var cookingClass = await _cookingClassService.GetCookingClassById(classId);
+                var cookingClass = await _cookingClassService.GetCookingClassById(cookingId);
                 if (cookingClass == null)
-                {
-                    return NotFound("Cannot find any cooking");
-                }
+                    return NotFound("Cannot find any cooking class with the given ID");
+
                 return Ok(cookingClass);
             }
             catch (Exception ex)
@@ -48,6 +51,7 @@ namespace CookingHub.Controllers
             }
         }
 
+        // Add a cooking class
         [HttpPost]
         public async Task<ActionResult> AddCookingClass([FromBody] CookingClass cooking)
         {
@@ -55,46 +59,57 @@ namespace CookingHub.Controllers
             {
                 var result = await _cookingClassService.AddCookingClass(cooking);
                 if (result)
-                {
                     return Ok("Cooking class added successfully");
-                }
+
                 return StatusCode(500, "Failed to add cooking class");
             }
+            catch (CookingClassException ex)
+            {
+                return BadRequest(ex.Message); // Handles custom exceptions
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
         }
 
-        [HttpPut("{classId}")]
-        public async Task<ActionResult> UpdateCookingClass(int classId, [FromBody] CookingClass cooking)
+        // Update a cooking class
+        [HttpPut("{cookingId}")]
+        public async Task<ActionResult> UpdateCookingClass(int cookingId, [FromBody] CookingClass cooking)
         {
             try
             {
-                var updated = await _cookingClassService.UpdateCookingClass(classId, cooking);
+                var updated = await _cookingClassService.UpdateCookingClass(cookingId, cooking);
                 if (!updated)
-                {
-                    return NotFound("Cannot find any cooking");
-                }
+                    return NotFound("Cannot find any cooking class with the given ID");
+
                 return Ok("Cooking class updated successfully");
             }
+            catch (CookingClassException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
         }
 
-        [HttpDelete("{classId}")]
-        public async Task<ActionResult> DeleteCookingClass(int classId)
+        // Delete a cooking class
+        [HttpDelete("{cookingId}")]
+        public async Task<ActionResult> DeleteCookingClass(int cookingId)
         {
             try
             {
-                var deleted = await _cookingClassService.DeleteCookingClass(classId);
+                var deleted = await _cookingClassService.DeleteCookingClass(cookingId);
                 if (!deleted)
-                {
-                    return NotFound("Cannot find any cooking");
-                }
+                    return NotFound("Cannot find any cooking class with the given ID");
+
                 return Ok("Cooking class deleted successfully");
+            }
+            catch (CookingClassException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

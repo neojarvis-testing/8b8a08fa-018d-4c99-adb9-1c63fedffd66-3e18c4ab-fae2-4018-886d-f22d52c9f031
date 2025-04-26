@@ -1,21 +1,24 @@
+using dotnetapp.Models;
+using dotnetapp.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using dotnetapp.Exceptions;
 
-namespace CookingHub.Controllers
+namespace dotnetapp.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/cooking-class-request")]
     public class CookingClassRequestController : ControllerBase
     {
-        private readonly ICookingClassRequestService _cookingClassRequestService;
+        private readonly CookingClassRequestService _cookingClassRequestService;
 
-        public CookingClassRequestController(ICookingClassRequestService cookingClassRequestService)
+        public CookingClassRequestController(CookingClassRequestService cookingClassRequestService)
         {
             _cookingClassRequestService = cookingClassRequestService;
         }
 
+        // Get all cooking class requests
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CookingClassRequest>>> GetAllCookingClassRequests()
         {
@@ -30,12 +33,16 @@ namespace CookingHub.Controllers
             }
         }
 
+        // Get cooking class requests by User ID
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<CookingClassRequest>>> GetCookingClassRequestsByUserId(int userId)
         {
             try
             {
                 var requests = await _cookingClassRequestService.GetCookingClassRequestsByUserId(userId);
+                if (requests == null || !requests.Any())
+                    return NotFound("No cooking class requests found for the given user");
+
                 return Ok(requests);
             }
             catch (Exception ex)
@@ -44,6 +51,7 @@ namespace CookingHub.Controllers
             }
         }
 
+        // Add a cooking class request
         [HttpPost]
         public async Task<ActionResult> AddCookingClassRequest([FromBody] CookingClassRequest request)
         {
@@ -51,10 +59,13 @@ namespace CookingHub.Controllers
             {
                 var result = await _cookingClassRequestService.AddCookingClassRequest(request);
                 if (result)
-                {
                     return Ok("Cooking class request added successfully");
-                }
+
                 return StatusCode(500, "Failed to add cooking class request");
+            }
+            catch (CookingClassException ex)
+            {
+                return BadRequest(ex.Message); // Handles custom exceptions
             }
             catch (Exception ex)
             {
@@ -62,6 +73,7 @@ namespace CookingHub.Controllers
             }
         }
 
+        // Update a cooking class request
         [HttpPut("{requestId}")]
         public async Task<ActionResult> UpdateCookingClassRequest(int requestId, [FromBody] CookingClassRequest request)
         {
@@ -69,9 +81,8 @@ namespace CookingHub.Controllers
             {
                 var updated = await _cookingClassRequestService.UpdateCookingClassRequest(requestId, request);
                 if (!updated)
-                {
-                    return NotFound("Cannot find the request");
-                }
+                    return NotFound("No cooking class request found with the given ID");
+
                 return Ok("Cooking class request updated successfully");
             }
             catch (Exception ex)
@@ -80,6 +91,7 @@ namespace CookingHub.Controllers
             }
         }
 
+        // Delete a cooking class request
         [HttpDelete("{requestId}")]
         public async Task<ActionResult> DeleteCookingClassRequest(int requestId)
         {
@@ -87,9 +99,8 @@ namespace CookingHub.Controllers
             {
                 var deleted = await _cookingClassRequestService.DeleteCookingClassRequest(requestId);
                 if (!deleted)
-                {
-                    return NotFound("Cannot find the request");
-                }
+                    return NotFound("No cooking class request found with the given ID");
+
                 return Ok("Cooking class request deleted successfully");
             }
             catch (Exception ex)
