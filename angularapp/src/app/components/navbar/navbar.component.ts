@@ -12,4 +12,9 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  logout() {
+    console.log('Logged out successfully!');
+    // Add additional logout logic here, such as clearing session or redirecting to login page
+  }
+
 }

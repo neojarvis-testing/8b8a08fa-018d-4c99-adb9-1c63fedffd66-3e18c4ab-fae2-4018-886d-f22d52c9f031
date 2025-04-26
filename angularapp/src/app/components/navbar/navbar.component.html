@@ -1,1 +1,25 @@
 <h1>Cooking Hub</h1>
+<nav class="navbar">
+    <ul>
+      <!-- Home Link -->
+      <li>
+        <a routerLink="/home" routerLinkActive="active">Home</a>
+      </li>
+      
+      <!-- Class Request Link -->
+      <li>
+        <a routerLink="/user/add-request">Class Request</a>
+      </li>
+      
+      <!-- Cooking Class Feedback Link -->
+      <li>
+        <a routerLink="/admin/view-feedback" >Feedback</a>
+      </li>
+      
+      <!-- Logout Link -->
+      <li>
+        <a routerLink="/home" (click)="logout()">Logout</a>
+      </li>
+    </ul>
+  </nav>
+  

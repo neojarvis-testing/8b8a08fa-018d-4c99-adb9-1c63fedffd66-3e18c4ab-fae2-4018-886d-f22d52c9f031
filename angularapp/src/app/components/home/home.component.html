@@ -1,1 +1,39 @@
 <h1>Cooking Hub</h1>
+
+<div class="homepage">
+    <header class="header">
+      <p>Your ultimate destination for delicious recipes and cooking tips!</p>
+    </header>
+  
+    <section class="features">
+      <h2>Explore Features</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Recipes</h3>
+          <p>Discover thousands of recipes for every occasion.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Video Tutorials</h3>
+          <p>Learn cooking techniques from our expert chefs.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Community</h3>
+          <p>Connect with fellow food enthusiasts and share ideas.</p>
+        </div>
+      </div>
+    </section>
+  
+    <section class="subscribe">
+      <h2>Stay Updated</h2>
+      <p>Subscribe to our newsletter and never miss a new recipe!</p>
+      <form (ngSubmit)="subscribe()">
+        <input type="email" placeholder="Enter your email" name="email" ngModel required />
+        <button type="submit">Subscribe</button>
+      </form>
+    </section>
+  
+    <footer class="footer">
+      <p>&copy; 2025 Cooking Hub. All rights reserved.</p>
+    </footer>
+  </div>
+  
