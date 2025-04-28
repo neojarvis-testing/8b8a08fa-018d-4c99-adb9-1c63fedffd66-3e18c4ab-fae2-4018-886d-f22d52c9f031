@@ -1,1 +1,102 @@
 <h1>Registration</h1>
+
+<div class="registration-container">
+    <form #registrationForm="ngForm" (ngSubmit)="onSubmit(registrationForm)" novalidate>
+      <!-- Username Field -->
+      <div>
+        <label for="username">Username:</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          ngModel
+          required
+          minlength="3"
+          class="block outline w-full py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none rounded-sm sm:text-sm/6" placeholder=""
+        />
+        <small *ngIf="registrationForm.controls.username?.invalid && registrationForm.controls.username?.touched">
+          Username is required and must be at least 3 characters long.
+        </small>
+      </div>
+  
+      <!-- Email Field -->
+      <div>
+        <label for="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          ngModel
+          required
+        />
+        <small *ngIf="registrationForm.controls.email?.invalid && registrationForm.controls.email?.touched">
+          A valid email is required.
+        </small>
+      </div>
+  
+      <!-- Password Field -->
+      <div>
+        <label for="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          ngModel
+          required
+          minlength="6"
+        />
+        <small *ngIf="registrationForm.controls.password?.invalid && registrationForm.controls.password?.touched">
+          Password is required and must be at least 6 characters long.
+        </small>
+      </div>
+  
+      <!-- Confirm Password Field -->
+      <div>
+        <label for="confirmPassword">Confirm Password:</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          ngModel
+          required
+        />
+        <small *ngIf="registrationForm.controls.confirmPassword?.invalid && registrationForm.controls.confirmPassword?.touched">
+          Confirmation password is required.
+        </small>
+      </div>
+  
+      <!-- Mobile Number Field -->
+      <div>
+        <label for="mobile">Mobile Number:</label>
+        <input
+          type="text"
+          id="mobile"
+          name="mobile"
+          ngModel
+          required
+          minlength="10"
+          maxlength="10"
+        />
+        <small *ngIf="registrationForm.controls.mobile?.invalid && registrationForm.controls.mobile?.touched">
+          A valid mobile number is required.
+        </small>
+      </div>
+  
+      <!-- Role Field -->
+      <div>
+        <label for="role">Role:</label>
+        <select id="role" name="role" ngModel required>
+          <option value="" disabled>Select a role</option>
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </select>
+        <small *ngIf="registrationForm.controls.role?.invalid && registrationForm.controls.role?.touched">
+          Role is required.
+        </small>
+      </div>
+  
+      <!-- Submit Button -->
+      <button type="submit" [disabled]="registrationForm.invalid">Submit</button>
+    </form>
+  </div>
+  
