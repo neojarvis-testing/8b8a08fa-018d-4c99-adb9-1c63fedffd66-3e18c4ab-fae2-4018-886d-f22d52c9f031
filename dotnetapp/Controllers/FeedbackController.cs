@@ -1,21 +1,24 @@
+using dotnetapp.Models;
+using dotnetapp.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using dotnetapp.Exceptions;
 
-namespace CookingHub.Controllers
+namespace dotnetapp.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/feedback")]
     public class FeedbackController : ControllerBase
     {
-        private readonly IFeedbackService _feedbackService;
+        private readonly FeedbackService _feedbackService;
 
-        public FeedbackController(IFeedbackService feedbackService)
+        public FeedbackController(FeedbackService feedbackService)
         {
             _feedbackService = feedbackService;
         }
 
+        // Get all feedbacks
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Feedback>>> GetAllFeedbacks()
         {
@@ -30,12 +33,16 @@ namespace CookingHub.Controllers
             }
         }
 
+        // Get feedback by User ID
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<Feedback>>> GetFeedbacksByUserId(int userId)
         {
             try
             {
                 var feedbacks = await _feedbackService.GetFeedbacksByUserId(userId);
+                if (feedbacks == null || !feedbacks.Any())
+                    return NotFound("No feedback found for the given user");
+
                 return Ok(feedbacks);
             }
             catch (Exception ex)
@@ -44,6 +51,7 @@ namespace CookingHub.Controllers
             }
         }
 
+        // Add feedback
         [HttpPost]
         public async Task<ActionResult> AddFeedback([FromBody] Feedback feedback)
         {
@@ -51,9 +59,8 @@ namespace CookingHub.Controllers
             {
                 var result = await _feedbackService.AddFeedback(feedback);
                 if (result)
-                {
                     return Ok("Feedback added successfully");
-                }
+
                 return StatusCode(500, "Failed to add feedback");
             }
             catch (Exception ex)
@@ -62,6 +69,7 @@ namespace CookingHub.Controllers
             }
         }
 
+        // Delete feedback
         [HttpDelete("{feedbackId}")]
         public async Task<ActionResult> DeleteFeedback(int feedbackId)
         {
@@ -69,9 +77,8 @@ namespace CookingHub.Controllers
             {
                 var deleted = await _feedbackService.DeleteFeedback(feedbackId);
                 if (!deleted)
-                {
-                    return NotFound("Cannot find any feedback");
-                }
+                    return NotFound("No feedback found with the given ID");
+
                 return Ok("Feedback deleted successfully");
             }
             catch (Exception ex)
