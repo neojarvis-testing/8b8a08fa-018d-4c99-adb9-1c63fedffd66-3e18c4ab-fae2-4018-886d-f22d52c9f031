@@ -1,1 +1,18 @@
-<h1>Cooking Hub</h1>
+<header class="top-0 z-50 bg-[#0A6847] text-[#FFF5E0]">
+  <nav class="flex items-center justify-between p-6 lg:px-8">
+    <div class="flex lg:flex-1">
+      <a href="/" class="-m-1.5 p-1.5 font-bold text-2xl">
+       Cooking Hub
+      </a>
+    </div>
+    <div class="hidden lg:flex lg:gap-x-12">
+      <a routerLink="/home" class="text-base cursor-pointer">Home</a>
+      <a routerLink="/user/add-request" class="text-base cursor-pointer">Class Request</a>
+      <a routerLink="/admin/view-feedback" class="text-base cursor-pointer">Feedback</a>
+    </div>
+    <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+      <a routerLink="/home" (click)="logout()" class="text-sm cursor-pointer font-semibold"> Logout
+      <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </nav>
+</header>
