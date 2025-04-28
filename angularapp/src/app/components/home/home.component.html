@@ -1,39 +1,61 @@
-<h1>Cooking Hub</h1>
-
-<div class="homepage">
-    <header class="header">
-      <p>Your ultimate destination for delicious recipes and cooking tips!</p>
-    </header>
-  
-    <section class="features">
-      <h2>Explore Features</h2>
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h3>Recipes</h3>
-          <p>Discover thousands of recipes for every occasion.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Video Tutorials</h3>
-          <p>Learn cooking techniques from our expert chefs.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Community</h3>
-          <p>Connect with fellow food enthusiasts and share ideas.</p>
-        </div>
-      </div>
-    </section>
-  
-    <section class="subscribe">
-      <h2>Stay Updated</h2>
-      <p>Subscribe to our newsletter and never miss a new recipe!</p>
-      <form (ngSubmit)="subscribe()">
-        <input type="email" placeholder="Enter your email" name="email" ngModel required />
-        <button type="submit">Subscribe</button>
-      </form>
-    </section>
-  
-    <footer class="footer">
-      <p>&copy; 2025 Cooking Hub. All rights reserved.</p>
-    </footer>
+<div class="py-36 px-6">
+  <!-- Hero Section -->
+  <div class="text-center max-w-3xl mx-auto">
+      <h1 class="text-6xl font-bold text-green sm:text-6xl">Welcome to Cooking Hub</h1>
+      <p class="mt-6 text-base font-medium text-yellow sm:text-xl">
+          Ignite your passion for cooking with recipes, tips, and live workshops. Let's turn up the heat together!
+      </p>
+      <button class="mt-8 bg-[#0A6847] text-yellow py-3 px-6 rounded-lg text-lg font-semibold text-[#FFF5E0] hover:bg-[#7ABA78]">
+          Join the Culinary Adventure
+      </button>
   </div>
   
+  <!-- Feature Highlights Section -->
+  <div class="mt-16 grid grid-cols-1 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+      <div class="flex flex-col items-center text-center">
+          <div class="w-16 h-16 bg-lg-green rounded-full flex items-center justify-center text-2xl text-yellow font-bold">🥗</div>
+          <h3 class="mt-6 text-2xl font-semibold text-green">Expert Recipes</h3>
+          <p class="mt-2 text-yellow text-lg font-medium">
+              Discover recipes crafted by culinary experts to elevate your cooking skills.
+          </p>
+      </div>
+      <div class="flex flex-col items-center text-center">
+          <div class="w-16 h-16 bg-lg-green rounded-full flex items-center justify-center text-2xl text-yellow font-bold">🧑‍🍳</div>
+          <h3 class="mt-6 text-2xl font-semibold text-green">Live Workshops</h3>
+          <p class="mt-2 text-yellow text-lg font-medium">
+              Join interactive workshops hosted by professional chefs worldwide.
+          </p>
+      </div>
+      <div class="flex flex-col items-center text-center">
+          <div class="w-16 h-16 bg-lg-green rounded-full flex items-center justify-center text-2xl text-yellow font-bold">📖</div>
+          <h3 class="mt-6 text-2xl font-semibold text-green">Cooking Resources</h3>
+          <p class="mt-2 text-yellow text-lg font-medium">
+              Access a treasure trove of cooking tips, guides, and must-know techniques.
+          </p>
+      </div>
+  </div>
+  
+  <!-- Stats Section -->
+  <div class="mt-20 max-w-6xl mx-auto">
+      <h2 class="text-4xl font-bold text-center text-green">Why Choose Cooking Hub?</h2>
+      <div class="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="flex flex-col items-center">
+              <dd class="text-5xl font-bold text-green">12</dd>
+              <dt class="text-lg font-medium text-yellow">Countries We Inspire</dt>
+          </div>
+          <div class="flex flex-col items-center">
+              <dd class="text-5xl font-bold text-green">500+</dd>
+              <dt class="text-lg font-medium text-yellow">Recipes Shared</dt>
+          </div>
+          <div class="flex flex-col items-center">
+              <dd class="text-5xl font-bold text-green">50+</dd>
+              <dt class="text-lg font-medium text-yellow">Workshops Offered</dt>
+          </div>
+          <div class="flex flex-col items-center">
+              <dd class="text-5xl font-bold text-green">10K+</dd>
+              <dt class="text-lg font-medium text-yellow">Happy Foodies</dt>
+          </div>
+      </div>
+  </div>
+  
+</div>

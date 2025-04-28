@@ -24,6 +24,7 @@ import { UserviewclassComponent } from './components/userviewclass/userviewclass
 import { UserviewfeedbackComponent } from './components/userviewfeedback/userviewfeedback.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { HttpClientModule } from '@angular/common/http';
     UsernavComponent,
     UserviewappliedrequestComponent,
     UserviewclassComponent,
-    UserviewfeedbackComponent
+    UserviewfeedbackComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

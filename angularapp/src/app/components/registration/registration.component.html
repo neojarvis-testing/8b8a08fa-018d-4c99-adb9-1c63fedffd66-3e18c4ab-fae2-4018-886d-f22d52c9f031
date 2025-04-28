@@ -12,6 +12,7 @@
           ngModel
           required
           minlength="3"
+          class="block outline w-full py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none rounded-sm sm:text-sm/6" placeholder=""
         />
         <small *ngIf="registrationForm.controls.username?.invalid && registrationForm.controls.username?.touched">
           Username is required and must be at least 3 characters long.
