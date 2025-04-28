@@ -1,10 +1,10 @@
-<h1>Create New Cooking Class</h1>
+<h1 class="text-2xl font-bold text-center mb-4">Create New Cooking Class</h1>
 
-<div class="class-creation-container">
+<div class="class-creation-container max-w-3xl mx-auto p-4 border border-gray-300 rounded-lg shadow-md">
   <form #classForm="ngForm" (ngSubmit)="onSubmit(classForm)" novalidate>
     <!-- Class Name Field -->
-    <div>
-      <label for="className">Class Name:</label>
+    <div class="mb-4">
+      <label for="className" class="block text-sm font-medium text-gray-700">Class Name:</label>
       <input
         type="text"
         id="className"
@@ -12,60 +12,64 @@
         ngModel
         required
         minlength="3"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
       />
-      <small *ngIf="classForm.controls.className?.invalid && classForm.controls.className?.touched">
+      <small *ngIf="classForm.controls.className?.invalid && classForm.controls.className?.touched" class="text-red-500 text-xs">
         Class Name is required
       </small>
     </div>
 
     <!-- Cuisine Type Field -->
-    <div>
-      <label for="cuisineType">Cuisine Type:</label>
+    <div class="mb-4">
+      <label for="cuisineType" class="block text-sm font-medium text-gray-700">Cuisine Type:</label>
       <input
         type="text"
         id="cuisineType"
         name="cuisineType"
         ngModel
         required
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
       />
-      <small *ngIf="classForm.controls.cuisineType?.invalid && classForm.controls.cuisineType?.touched">
+      <small *ngIf="classForm.controls.cuisineType?.invalid && classForm.controls.cuisineType?.touched" class="text-red-500 text-xs">
         Cuisine Type is required
       </small>
     </div>
 
     <!-- Chef Name Field -->
-    <div>
-      <label for="chefName">Chef Name:</label>
+    <div class="mb-4">
+      <label for="chefName" class="block text-sm font-medium text-gray-700">Chef Name:</label>
       <input
         type="text"
         id="chefName"
         name="chefName"
         ngModel
         required
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
       />
-      <small *ngIf="classForm.controls.chefName?.invalid && classForm.controls.chefName?.touched">
+      <small *ngIf="classForm.controls.chefName?.invalid && classForm.controls.chefName?.touched" class="text-red-500 text-xs">
         Chef Name is required
       </small>
     </div>
 
     <!-- Location Field -->
-    <div>
-      <label for="location">Location:</label>
+    <div class="mb-4">
+      <label for="location" class="block text-sm font-medium text-gray-700">Location:</label>
       <input
         type="text"
         id="location"
         name="location"
         ngModel
         required
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
       />
-      <small *ngIf="classForm.controls.location?.invalid && classForm.controls.location?.touched">
+      <small *ngIf="classForm.controls.location?.invalid && classForm.controls.location?.touched" class="text-red-500 text-xs">
         Location is required
       </small>
     </div>
 
     <!-- Duration Field -->
-    <div>
-      <label for="duration">Duration (in hours):</label>
+    <div class="mb-4">
+      <label for="duration" class="block text-sm font-medium text-gray-700">Duration (in hours):</label>
       <input
         type="number"
         id="duration"
@@ -73,15 +77,16 @@
         ngModel
         required
         min="1"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
       />
-      <small *ngIf="classForm.controls.duration?.invalid && classForm.controls.duration?.touched">
+      <small *ngIf="classForm.controls.duration?.invalid && classForm.controls.duration?.touched" class="text-red-500 text-xs">
         Duration is required
       </small>
     </div>
 
     <!-- Fee Field -->
-    <div>
-      <label for="fee">Fee:</label>
+    <div class="mb-4">
+      <label for="fee" class="block text-sm font-medium text-gray-700">Fee:</label>
       <input
         type="number"
         id="fee"
@@ -89,57 +94,70 @@
         ngModel
         required
         min="1"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
       />
-      <small *ngIf="classForm.controls.fee?.invalid && classForm.controls.fee?.touched">
+      <small *ngIf="classForm.controls.fee?.invalid && classForm.controls.fee?.touched" class="text-red-500 text-xs">
         Fee is required
       </small>
     </div>
 
     <!-- Ingredients Provided Field -->
-    <div>
-      <label for="ingredients">Ingredients Provided:</label>
+    <div class="mb-4">
+      <label for="ingredients" class="block text-sm font-medium text-gray-700">Ingredients Provided:</label>
       <textarea
         id="ingredients"
         name="ingredients"
         ngModel
         required
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
       ></textarea>
-      <small *ngIf="classForm.controls.ingredients?.invalid && classForm.controls.ingredients?.touched">
+      <small *ngIf="classForm.controls.ingredients?.invalid && classForm.controls.ingredients?.touched" class="text-red-500 text-xs">
         Ingredients are required
       </small>
     </div>
 
     <!-- Skill Level Field -->
-    <div>
-      <label for="skillLevel">Skill Level:</label>
-      <select id="skillLevel" name="skillLevel" ngModel required>
+    <div class="mb-4">
+      <label for="skillLevel" class="block text-sm font-medium text-gray-700">Skill Level:</label>
+      <select
+        id="skillLevel"
+        name="skillLevel"
+        ngModel
+        required
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+      >
         <option value="" disabled>Select skill level</option>
         <option value="beginner">Beginner</option>
         <option value="intermediate">Intermediate</option>
         <option value="advanced">Advanced</option>
       </select>
-      <small *ngIf="classForm.controls.skillLevel?.invalid && classForm.controls.skillLevel?.touched">
+      <small *ngIf="classForm.controls.skillLevel?.invalid && classForm.controls.skillLevel?.touched" class="text-red-500 text-xs">
         Skill level is required
       </small>
     </div>
 
     <!-- Special Requirements Field -->
-	<div>
-  		<label for="specialRequirements">Special Requirements:</label>
-  	<textarea
-    		id="specialRequirements"
-    		name="specialRequirements"
-    		ngModel
-    		required
-  	></textarea>
-  	<small
-    		*ngIf="classForm.controls.specialRequirements?.invalid && classForm.controls.specialRequirements?.touched">
-		Special Requirements are required
-  	</small>
-	</div>
-
+    <div class="mb-4">
+      <label for="specialRequirements" class="block text-sm font-medium text-gray-700">Special Requirements:</label>
+      <textarea
+        id="specialRequirements"
+        name="specialRequirements"
+        ngModel
+        required
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+      ></textarea>
+      <small *ngIf="classForm.controls.specialRequirements?.invalid && classForm.controls.specialRequirements?.touched" class="text-red-500 text-xs">
+        Special Requirements are required
+      </small>
+    </div>
 
     <!-- Submit Button -->
-    <button type="submit" [disabled]="classForm.invalid">Submit</button>
+    <button
+      type="submit"
+      [disabled]="classForm.invalid"
+      class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+    >
+      Submit
+    </button>
   </form>
 </div>
