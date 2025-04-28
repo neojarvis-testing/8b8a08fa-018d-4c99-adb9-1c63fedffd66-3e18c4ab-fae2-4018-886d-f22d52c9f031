@@ -12,4 +12,9 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  subscribe() {
+    console.log('Thank you for subscribing!');
+    // Add logic for subscription handling (e.g., API call)
+  }
+
 }
