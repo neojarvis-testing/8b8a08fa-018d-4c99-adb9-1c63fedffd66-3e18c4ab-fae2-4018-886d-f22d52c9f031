@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using dotnetapp.Exceptions;
-
+using Microsoft.AspNetCore.Authorization;
 namespace dotnetapp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [ApiController]
-    [Route("api/cooking-class")]
+    [Route("api/cookingClass")]
     public class CookingClassController : ControllerBase
     {
         private readonly CookingClassService _cookingClassService;
@@ -34,12 +35,12 @@ namespace dotnetapp.Controllers
         }
 
         // Get cooking class by ID
-        [HttpGet("{cookingId}")]
-        public async Task<ActionResult<CookingClass>> GetCookingClassById(int cookingId)
+        [HttpGet("{classId}")]
+        public async Task<ActionResult<CookingClass>> GetCookingClassById(int classId)
         {
             try
             {
-                var cookingClass = await _cookingClassService.GetCookingClassById(cookingId);
+                var cookingClass = await _cookingClassService.GetCookingClassById(classId);
                 if (cookingClass == null)
                     return NotFound("Cannot find any cooking class with the given ID");
 
@@ -55,6 +56,8 @@ namespace dotnetapp.Controllers
         [HttpPost]
         public async Task<ActionResult> AddCookingClass([FromBody] CookingClass cooking)
         {
+            // System.Console.WriteLine(cooking);
+            // System.Console.WriteLine("log-----------------------------");
             try
             {
                 var result = await _cookingClassService.AddCookingClass(cooking);
@@ -74,12 +77,12 @@ namespace dotnetapp.Controllers
         }
 
         // Update a cooking class
-        [HttpPut("{cookingId}")]
-        public async Task<ActionResult> UpdateCookingClass(int cookingId, [FromBody] CookingClass cooking)
+        [HttpPut("{classId}")]
+        public async Task<ActionResult> UpdateCookingClass(int classId, [FromBody] CookingClass cooking)
         {
             try
             {
-                var updated = await _cookingClassService.UpdateCookingClass(cookingId, cooking);
+                var updated = await _cookingClassService.UpdateCookingClass(classId, cooking);
                 if (!updated)
                     return NotFound("Cannot find any cooking class with the given ID");
 
@@ -96,12 +99,12 @@ namespace dotnetapp.Controllers
         }
 
         // Delete a cooking class
-        [HttpDelete("{cookingId}")]
-        public async Task<ActionResult> DeleteCookingClass(int cookingId)
+        [HttpDelete("{classId}")]
+        public async Task<ActionResult> DeleteCookingClass(int classId)
         {
             try
             {
-                var deleted = await _cookingClassService.DeleteCookingClass(cookingId);
+                var deleted = await _cookingClassService.DeleteCookingClass(classId);
                 if (!deleted)
                     return NotFound("Cannot find any cooking class with the given ID");
 
