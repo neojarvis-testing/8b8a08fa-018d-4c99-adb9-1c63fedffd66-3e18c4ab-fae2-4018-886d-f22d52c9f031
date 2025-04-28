@@ -1,12 +1,12 @@
+using System.Threading.Tasks;
 using dotnetapp.Models;
 using dotnetapp.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace dotnetapp.Controllers
 {
     [ApiController]
-    [Route("api/auth")]
+    [Route("api")]
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -16,40 +16,24 @@ namespace dotnetapp.Controllers
             _authService = authService;
         }
 
-        // Login
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            try
-            {
-                var (status, result) = await _authService.Login(model);
-                if (status == 0)
-                    return BadRequest(result);
+            var result = await _authService.Login(model);
+            if (result.Item1 == 0)
+                return Unauthorized(new { message = result.Item2 });
 
-                return Ok(new { Token = result });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return Ok(new { token = result.Item2 });
         }
 
-        // Register
         [HttpPost("register")]
-        public async Task<IActionResult> Register(User model)
+        public async Task<IActionResult> Register([FromBody] User model)
         {
-            try
-            {
-                var (status, result) = await _authService.Registration(model, model.UserRole);
-                if (status == 0)
-                    return BadRequest(result);
+            var result = await _authService.Registration(model, model.UserRole);
+            if (result.Item1 == 0)
+                return BadRequest(new { message = result.Item2 });
 
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return Ok(new { message = result.Item2 });
         }
     }
 }
