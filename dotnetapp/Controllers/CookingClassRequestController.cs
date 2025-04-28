@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using dotnetapp.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace dotnetapp.Controllers
-{
+{   [Authorize(Roles = "User")]
     [ApiController]
     [Route("api/cooking-class-request")]
     public class CookingClassRequestController : ControllerBase
