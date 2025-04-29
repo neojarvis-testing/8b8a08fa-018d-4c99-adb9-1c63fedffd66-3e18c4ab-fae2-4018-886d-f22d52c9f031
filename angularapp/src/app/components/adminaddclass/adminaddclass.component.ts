@@ -6,15 +6,13 @@ import { NgForm } from '@angular/forms';
   templateUrl: './adminaddclass.component.html',
   styleUrls: ['./adminaddclass.component.css']
 })
-
 export class AdminaddclassComponent implements OnInit {
   existingClasses: string[] = ['Italian Basics', 'French Cuisine']; 
+  showModal: boolean = false; // Modal visibility flag
 
   constructor() {}
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   onSubmit(form: NgForm): void {
     if (form.invalid) {
@@ -27,9 +25,15 @@ export class AdminaddclassComponent implements OnInit {
     if (this.existingClasses.includes(className)) {
       alert('Cooking class with the same name already exists'); 
     } else {
-      this.existingClasses.push(className); 
-      alert('Successfully Added!'); 
-      form.reset(); 
+      this.existingClasses.push(className);
+      form.reset();
+
+      // Show modal confirmation
+      this.showModal = true;
     }
+  }
+
+  closeModal(): void {
+    this.showModal = false;
   }
 }
