@@ -1,1 +1,65 @@
-<h1>Create New Cooking Class</h1>
+<h1 class="text-2xl font-bold text-center mb-4">Create New Cooking Class</h1>
+
+<div class="class-creation-container max-w-3xl mx-auto p-4 border border-gray-300 rounded-lg shadow-md">
+  <form #classForm="ngForm" (ngSubmit)="onSubmit(classForm)" novalidate>
+    <div class="mb-4">
+      <label for="className">Class Name:</label>
+      <input type="text" id="className" name="className" ngModel required minlength="3"/>
+    </div>
+
+    <div class="mb-4">
+      <label for="cuisineType">Cuisine Type:</label>
+      <input type="text" id="cuisineType" name="cuisineType" ngModel required />
+    </div>
+
+    <div class="mb-4">
+      <label for="chefName">Chef Name:</label>
+      <input type="text" id="chefName" name="chefName" ngModel required />
+    </div>
+
+    <div class="mb-4">
+      <label for="location">Location:</label>
+      <input type="text" id="location" name="location" ngModel required />
+    </div>
+
+    <div class="mb-4">
+      <label for="duration">Duration (in hours):</label>
+      <input type="number" id="duration" name="duration" ngModel required min="1"/>
+    </div>
+
+    <div class="mb-4">
+      <label for="fee">Fee:</label>
+      <input type="number" id="fee" name="fee" ngModel required min="1"/>
+    </div>
+
+    <div class="mb-4">
+      <label for="ingredients">Ingredients Provided:</label>
+      <textarea id="ingredients" name="ingredients" ngModel required></textarea>
+    </div>
+
+    <div class="mb-4">
+      <label for="skillLevel">Skill Level:</label>
+      <select id="skillLevel" name="skillLevel" ngModel required>
+        <option value="" disabled>Select skill level</option>
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="advanced">Advanced</option>
+      </select>
+    </div>
+
+    <div class="mb-4">
+      <label for="specialRequirements">Special Requirements:</label>
+      <textarea id="specialRequirements" name="specialRequirements" ngModel required></textarea>
+    </div>
+
+    <button type="submit" [disabled]="classForm.invalid">Submit</button>
+  </form>
+</div>
+
+<!-- Confirmation Modal -->
+<div *ngIf="showModal" class="modal-overlay">
+  <div class="modal-content">
+    <p class="modal-text">Successfully Submitted!</p>
+    <button class="ok-button" (click)="closeModal()">OK</button>
+  </div>
+</div>
