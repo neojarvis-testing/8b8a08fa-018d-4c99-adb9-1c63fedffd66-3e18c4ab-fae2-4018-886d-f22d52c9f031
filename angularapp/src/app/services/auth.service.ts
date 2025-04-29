@@ -10,11 +10,11 @@ import { Login } from '../models/login.model';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiBaseUrl = '/api';
+  private apiBaseUrl = 'https://8080-abeecbbbdbedfffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
   private userRole = new BehaviorSubject<string | null>(null);
   private userId = new BehaviorSubject<number | null>(null);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Register a new user
   register(user: User): Observable<any> {
@@ -22,16 +22,17 @@ export class AuthService {
   }
 
   // Login a user and update role and ID
-  login(login: Login): Observable<any> {
-    return this.http.post(`${this.apiBaseUrl}/login`, login).pipe(
-      tap((response: any) => {
-        if (response.token) {
-          localStorage.setItem('jwtToken', response.token);
-          this.userRole.next(response.role);
-          this.userId.next(response.id);
-        }
-      })
-    );
+  login(login: Login): Observable<Login> {
+    return this.http.post<Login>(`${this.apiBaseUrl}/login`, login)
+      .pipe(
+        tap((response: any) => {
+          if (response.token) {
+            localStorage.setItem('jwtToken', response.token);
+            this.userRole.next(response.role);
+            this.userId.next(response.id);
+          }
+        })
+      );
   }
 
   // Get the current user role

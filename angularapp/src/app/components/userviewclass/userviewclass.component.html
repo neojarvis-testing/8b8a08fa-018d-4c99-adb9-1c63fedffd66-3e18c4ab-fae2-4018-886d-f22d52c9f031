@@ -1,2 +1,52 @@
-
 <h1>Available Classes</h1>
+<div class="search-container">
+  <input 
+    type="text" 
+    [(ngModel)]="searchText" 
+    placeholder="Search classes by name, cuisine, or chef..." 
+    class="search-bar">
+</div>
+
+<div class="classes-table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Class Name</th>
+        <th>Cuisine Name</th>
+        <th>Chef Name</th>
+        <th>Location</th>
+        <th>Duration (Hours)</th>
+        <th>Fee ($)</th>
+        <th>Ingredients Provided</th>
+        <th>Skill Level</th>
+        <th>Requirements</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let class of getFilteredClasses(); let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ class.className }}</td>
+        <td>{{ class.cuisineName }}</td>
+        <td>{{ class.chefName }}</td>
+        <td>{{ class.location }}</td>
+        <td>{{ class.duration }}</td>
+        <td>{{ class.fee }}</td>
+        <td>{{ class.ingredientsProvided }}</td>
+        <td>{{ class.skillLevel }}</td>
+        <td>{{ class.requirements }}</td>
+        <td>
+          <button 
+            *ngIf="!class.applied" 
+            (click)="applyForClass(class.id)">
+            Apply
+          </button>
+          <span *ngIf="class.applied" class="applied-status">
+            Applied
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

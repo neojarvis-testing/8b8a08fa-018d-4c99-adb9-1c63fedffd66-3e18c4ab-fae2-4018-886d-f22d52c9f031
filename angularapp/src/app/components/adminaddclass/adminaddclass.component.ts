@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-adminaddclass',
@@ -6,10 +7,33 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./adminaddclass.component.css']
 })
 export class AdminaddclassComponent implements OnInit {
+  existingClasses: string[] = ['Italian Basics', 'French Cuisine']; 
+  showModal: boolean = false; // Modal visibility flag
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  onSubmit(form: NgForm): void {
+    if (form.invalid) {
+      alert('All fields are required'); 
+      return;
+    }
+
+    const className = form.value.className;
+
+    if (this.existingClasses.includes(className)) {
+      alert('Cooking class with the same name already exists'); 
+    } else {
+      this.existingClasses.push(className);
+      form.reset();
+
+      // Show modal confirmation
+      this.showModal = true;
+    }
   }
 
+  closeModal(): void {
+    this.showModal = false;
+  }
 }

@@ -7,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CookingImpComponent implements OnInit {
 
+  quote = {
+    text: 'Cooking is an art, but an art requires knowing something about techniques and materials.',
+    author: 'Nathan Myhrvold'
+  };
+
   constructor() { }
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void { }
 }

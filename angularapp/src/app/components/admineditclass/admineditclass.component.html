@@ -1,1 +1,115 @@
-<p>admineditclass works!</p>
+<h1>Edit Cooking Class</h1>
+
+<div class="edit-class-container">
+  <form #editClassForm="ngForm" (ngSubmit)="onSubmit(editClassForm)" novalidate>
+    <!-- Class Name -->
+    <div>
+      <label for="className">Class Name:</label>
+      <input
+        type="text"
+        id="className"
+        name="ClassName"
+        [(ngModel)]="cookingClass.ClassName"
+        required
+        minlength="3"
+      />
+      <small *ngIf="editClassForm.controls.ClassName?.invalid && editClassForm.controls.ClassName?.touched">
+        Class Name is required and must be at least 3 characters long.
+      </small>
+    </div>
+
+    <!-- Cuisine Type -->
+    <div>
+      <label for="CuisineType">Cuisine Type:</label>
+      <input
+        type="text"
+        id="CuisineType"
+        name="CuisineType"
+        [(ngModel)]="cookingClass.CuisineType"
+        required
+      />
+      <small *ngIf="editClassForm.controls.CuisineType?.invalid && editClassForm.controls.CuisineType?.touched">
+        Cuisine Type is required.
+      </small>
+    </div>
+
+    <!-- Chef Name -->
+    <div>
+      <label for="ChefName">Chef Name:</label>
+      <input
+        type="text"
+        id="ChefName"
+        name="ChefName"
+        [(ngModel)]="cookingClass.ChefName"
+        required
+      />
+      <small *ngIf="editClassForm.controls.ChefName?.invalid && editClassForm.controls.ChefName?.touched">
+        Chef Name is required.
+      </small>
+    </div>
+
+    <!-- Location -->
+    <div>
+      <label for="Location">Location:</label>
+      <input
+        type="text"
+        id="Location"
+        name="Location"
+        [(ngModel)]="cookingClass.Location"
+        required
+      />
+      <small *ngIf="editClassForm.controls.Location?.invalid && editClassForm.controls.Location?.touched">
+        Location is required.
+      </small>
+    </div>
+
+    <!-- Duration -->
+    <div>
+      <label for="DurationInHours">Duration (in hours):</label>
+      <input
+        type="number"
+        id="DurationInHours"
+        name="DurationInHours"
+        [(ngModel)]="cookingClass.DurationInHours"
+        required
+        min="1"
+      />
+      <small *ngIf="editClassForm.controls.DurationInHours?.invalid && editClassForm.controls.DurationInHours?.touched">
+        Duration is required and must be at least 1 hour.
+      </small>
+    </div>
+
+    <!-- Fee -->
+    <div>
+      <label for="Fee">Fee:</label>
+      <input
+        type="number"
+        id="Fee"
+        name="Fee"
+        [(ngModel)]="cookingClass.Fee"
+        required
+        min="0"
+      />
+      <small *ngIf="editClassForm.controls.Fee?.invalid && editClassForm.controls.Fee?.touched">
+        Fee is required and must be a positive number.
+      </small>
+    </div>
+
+    <!-- Special Requirements -->
+    <div>
+      <label for="SpecialRequirements">Special Requirements:</label>
+      <input
+        type="text"
+        id="SpecialRequirements"
+        name="SpecialRequirements"
+        [(ngModel)]="cookingClass.SpecialRequirements"
+      />
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" [disabled]="editClassForm.invalid">Save</button>
+
+    <!-- Back Button -->
+    <button type="button" (click)="navigateToAdminViewClass()">Back</button>
+  </form>
+</div>

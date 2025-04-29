@@ -1,1 +1,94 @@
-<h1>Cooking Class Request Form</h1>
+<h1 class="text-xl font-bold mb-4 text-center">Cooking Class Request Form</h1>
+
+<div class="form-container mx-auto max-w-md border border-gray-300 p-6 rounded-lg">
+  <form #requestForm="ngForm" (ngSubmit)="onSubmit(requestForm)">
+    <!-- Dietary Preferences -->
+    <div class="mb-4">
+      <label for="dietaryPreferences" class="block text-sm font-medium mb-1">Dietary Preferences:</label>
+      <input
+        type="text"
+        id="dietaryPreferences"
+        name="dietaryPreferences"
+        [(ngModel)]="requestFormData.dietaryPreferences"
+        class="border border-gray-300 rounded px-3 py-2 w-full"
+        required
+      />
+      <span
+        *ngIf="requestForm.controls.dietaryPreferences?.invalid && requestForm.controls.dietaryPreferences?.touched"
+        class="text-red-500 text-sm"
+      >
+        Dietary Preferences are required.
+      </span>
+    </div>
+
+    <!-- Cooking Goals -->
+    <div class="mb-4">
+      <label for="cookingGoals" class="block text-sm font-medium mb-1">Cooking Goals:</label>
+      <input
+        type="text"
+        id="cookingGoals"
+        name="cookingGoals"
+        [(ngModel)]="requestFormData.cookingGoals"
+        class="border border-gray-300 rounded px-3 py-2 w-full"
+        required
+      />
+      <span
+        *ngIf="requestForm.controls.cookingGoals?.invalid && requestForm.controls.cookingGoals?.touched"
+        class="text-red-500 text-sm"
+      >
+        Cooking Goals are required.
+      </span>
+    </div>
+
+    <!-- Comments -->
+    <div class="mb-4">
+      <label for="comments" class="block text-sm font-medium mb-1">Comments:</label>
+      <textarea
+        id="comments"
+        name="comments"
+        [(ngModel)]="requestFormData.comments"
+        class="border border-gray-300 rounded px-3 py-2 w-full"
+        required
+      ></textarea>
+      <span
+        *ngIf="requestForm.controls.comments?.invalid && requestForm.controls.comments?.touched"
+        class="text-red-500 text-sm"
+      >
+        Comments are required.
+      </span>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-between mt-4">
+      <button
+        type="button"
+        class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+        (click)="navigateBack()"
+      >
+        Back
+      </button>
+      <button
+        type="submit"
+        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        [disabled]="requestForm.invalid"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Success Modal -->
+<div *ngIf="showSuccessModal" class="fixed inset-0 bg-backdrop-blur-md bg-opacity-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg p-6 w-96">
+    <h2 class="text-lg font-bold mb-4">Successfully Submitted!</h2>
+    <div class="mt-4 flex justify-center">
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        (click)="closeSuccessModal()"
+      >
+        Ok
+      </button>
+    </div>
+  </div>
+</div>

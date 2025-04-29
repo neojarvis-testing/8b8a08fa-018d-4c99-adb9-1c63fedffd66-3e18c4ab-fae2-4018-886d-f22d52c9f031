@@ -1,102 +1,113 @@
-<h1>Registration</h1>
 
-<div class="registration-container">
-    <form #registrationForm="ngForm" (ngSubmit)="onSubmit(registrationForm)" novalidate>
+<div class="flex justify-center">
+
+  <div class="registration-container p-8 font-bold w-[60%] shadow-lg rounded-lg p-8">
+    <h1 class="text-4xl text-center">Registration</h1>
+    <form #registrationForm="ngForm" (ngSubmit)="onSubmit(registrationForm)" class="space-y-4" novalidate>
       <!-- Username Field -->
       <div>
-        <label for="username">Username:</label>
+        <label for="Username">Username:</label>
         <input
-          type="text"
-          id="username"
-          name="username"
-          ngModel
-          required
-          minlength="3"
-          class="block outline w-full py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none rounded-sm sm:text-sm/6" placeholder=""
+        type="text"
+        id="Username"
+        name="Username"
+        ngModel
+        required
+        minlength="3"
+        class="block border w-full py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none rounded-sm sm:text-sm/6" placeholder=""
         />
-        <small *ngIf="registrationForm.controls.username?.invalid && registrationForm.controls.username?.touched">
+        <small class="text-red-500" *ngIf="registrationForm.controls.Username?.invalid && registrationForm.controls.Username?.touched">
           Username is required and must be at least 3 characters long.
         </small>
       </div>
-  
+      
       <!-- Email Field -->
       <div>
-        <label for="email">Email:</label>
+        <label for="Email">Email:</label>
         <input
-          type="email"
-          id="email"
-          name="email"
-          ngModel
-          required
+        type="Email"
+        id="Email"
+        name="Email"
+        ngModel
+        required
+        class="block border w-full py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none rounded-sm sm:text-sm/6" placeholder=""
+        
         />
-        <small *ngIf="registrationForm.controls.email?.invalid && registrationForm.controls.email?.touched">
-          A valid email is required.
+        <small class="text-red-500" *ngIf="registrationForm.controls.Email?.invalid && registrationForm.controls.Email?.touched">
+          A valid Email is required.
         </small>
       </div>
-  
+      
       <!-- Password Field -->
       <div>
-        <label for="password">Password:</label>
+        <label for="Password">Password:</label>
         <input
-          type="password"
-          id="password"
-          name="password"
+        type="Password"
+          id="Password"
+          name="Password"
           ngModel
           required
           minlength="6"
-        />
-        <small *ngIf="registrationForm.controls.password?.invalid && registrationForm.controls.password?.touched">
+          class="block border w-full py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none rounded-sm sm:text-sm/6" placeholder=""
+          
+          />
+        <small class="text-red-500" *ngIf="registrationForm.controls.Password?.invalid && registrationForm.controls.Password?.touched">
           Password is required and must be at least 6 characters long.
         </small>
       </div>
-  
+      
       <!-- Confirm Password Field -->
       <div>
         <label for="confirmPassword">Confirm Password:</label>
         <input
-          type="password"
-          id="confirmPassword"
-          name="confirmPassword"
-          ngModel
-          required
+        type="Password"
+        id="confirmPassword"
+        name="confirmPassword"
+        ngModel
+        required
+        class="block border w-full py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none rounded-sm sm:text-sm/6" placeholder=""
+        
         />
-        <small *ngIf="registrationForm.controls.confirmPassword?.invalid && registrationForm.controls.confirmPassword?.touched">
-          Confirmation password is required.
+        <small class="text-red-500" *ngIf="registrationForm.controls.confirmPassword?.invalid && registrationForm.controls.confirmPassword?.touched">
+          Confirmation Password is required.
         </small>
       </div>
-  
-      <!-- Mobile Number Field -->
+      
+      <!-- MobileNumber Number Field -->
       <div>
-        <label for="mobile">Mobile Number:</label>
+        <label for="MobileNumber">MobileNumber Number:</label>
         <input
-          type="text"
-          id="mobile"
-          name="mobile"
-          ngModel
-          required
-          minlength="10"
-          maxlength="10"
+        type="text"
+        id="MobileNumber"
+        name="MobileNumber"
+        ngModel
+        required
+        minlength="10"
+        maxlength="10"
+        class="block border w-full py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none rounded-sm sm:text-sm/6" placeholder=""
+        
         />
-        <small *ngIf="registrationForm.controls.mobile?.invalid && registrationForm.controls.mobile?.touched">
-          A valid mobile number is required.
+        <small class="text-red-500" *ngIf="registrationForm.controls.MobileNumber?.invalid && registrationForm.controls.MobileNumber?.touched">
+          A valid MobileNumber number is required.
         </small>
       </div>
-  
-      <!-- Role Field -->
+      
+      <!-- UserRole Field -->
       <div>
-        <label for="role">Role:</label>
-        <select id="role" name="role" ngModel required>
-          <option value="" disabled>Select a role</option>
+        <label for="UserRole">Role:</label>
+        <select id="UserRole" name="UserRole" ngModel required class="border text-sm rounded-lg block w-full p-2.5">
+          <option value="" disabled>Select a UserRole</option>
           <option value="admin">Admin</option>
           <option value="user">User</option>
         </select>
-        <small *ngIf="registrationForm.controls.role?.invalid && registrationForm.controls.role?.touched">
-          Role is required.
+        <small class="text-red-500" *ngIf="registrationForm.controls.UserRole?.invalid && registrationForm.controls.UserRole?.touched">
+          UserRole is required.
         </small>
       </div>
-  
+      
       <!-- Submit Button -->
-      <button type="submit" [disabled]="registrationForm.invalid">Submit</button>
+      <button type="submit" [disabled]="registrationForm.invalid" class="px-10 py-2 border bg-[#F3CA52] text-white rounded transition">Submit</button>
     </form>
   </div>
-  
+
+</div>
