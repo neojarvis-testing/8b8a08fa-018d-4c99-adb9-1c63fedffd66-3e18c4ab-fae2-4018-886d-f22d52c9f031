@@ -17,7 +17,7 @@ namespace dotnetapp.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginModel lModel)
+        public async Task<IActionResult> Login([FromBody] LoginModel lModel)
         {
             // Console.WriteLine($"Attempting login for email: {lModel.Email}");
             var result = await _authService.Login(lModel);
