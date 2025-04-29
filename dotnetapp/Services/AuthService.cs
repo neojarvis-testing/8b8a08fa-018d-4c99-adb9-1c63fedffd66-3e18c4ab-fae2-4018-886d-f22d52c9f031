@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using dotnetapp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using dotnetapp.Data;
+
 
 namespace dotnetapp.Services
 {
@@ -28,92 +28,72 @@ namespace dotnetapp.Services
             _context = context;
         }
 
-        // Register user
         public async Task<(int, string)> Registration(User model, string role)
         {
-            try
+            var userExists = await _userManager.FindByEmailAsync(model.Email);
+            if (userExists != null)
+                return (0, "User already exists");
+
+            ApplicationUser user = new ApplicationUser()
             {
-                // Check if user already exists
-                var existingUser = await _userManager.FindByEmailAsync(model.Email);
-                if (existingUser != null)
-                    return (0, "User already exists");
+                Email = model.Email,
+                UserName = model.Username,
+                PhoneNumber = model.MobileNumber,
+                Name = model.Username // Set the Name property
+            };
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+                return (0, "User creation failed! Please check user details and try again");
 
-                // Create new user
-                var newUser = new ApplicationUser
-                {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    Name = model.Username
-                };
+            if (!await _roleManager.RoleExistsAsync(role))
+                await _roleManager.CreateAsync(new IdentityRole(role));
 
-                var result = await _userManager.CreateAsync(newUser, model.Password);
-                if (!result.Succeeded)
-                    {
-                        var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                        return (0, $"User creation failed! Errors: {errors}");
-                    }
-
-                // Ensure role exists
-                if (!await _roleManager.RoleExistsAsync(role))
-                    await _roleManager.CreateAsync(new IdentityRole(role));
-
-                // Assign role to user
-                await _userManager.AddToRoleAsync(newUser, role);
-
-                return (1, "User created successfully!");
-            }
-            catch (Exception ex)
+            if (await _roleManager.RoleExistsAsync(role))
             {
-                return (0, $"Error registering user: {ex.Message}");
+                await _userManager.AddToRoleAsync(user, role);
             }
+
+            return (1, "User created successfully!");
         }
 
-        // Login user
         public async Task<(int, string)> Login(LoginModel model)
-{
-    if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password))
-        return (0, "Email or password cannot be empty.");
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+                return (0, "Invalid email");
 
-    var user = await _userManager.FindByEmailAsync(model.Email);
-    
-    // 🔹 Debugging log
-    Console.WriteLine($"User found: {user?.Email}");
-    Console.WriteLine($"UserName: {user?.UserName}");
-    Console.WriteLine($"PasswordHash: {user?.PasswordHash}");
+            if (!await _userManager.CheckPasswordAsync(user, model.Password))
+                return (0, "Invalid password");
 
-    if (user == null)
-        return (0, "Invalid email");
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var authClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            };
 
-    if (string.IsNullOrEmpty(user.PasswordHash))
-        return (0, "User password is missing. Try resetting your password.");
+            foreach (var userRole in userRoles)
+            {
+                // System.Console.WriteLine(userRole);
+                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+            }
 
-    if (!await _userManager.CheckPasswordAsync(user, model.Password))
-        return (0, "Invalid password");
+            var token = GenerateToken(authClaims);
 
-    var token = GenerateToken(new List<Claim>
-    {
-        new Claim(ClaimTypes.NameIdentifier, user.Id),
-        new Claim(ClaimTypes.Email, user.Email),
-        new Claim(ClaimTypes.Role, string.Join(",", await _userManager.GetRolesAsync(user))) // Ensure roles are included
-    });
+            return (1, token);
+        }
 
-    return (1, token);
-}
-
-
-
-        // Generate JWT Token
         private string GenerateToken(IEnumerable<Claim> claims)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: _configuration["JWT:ValidIssuer"],
+                audience: _configuration["JWT:ValidAudience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(2),
-                signingCredentials: creds);
+                expires: DateTime.Now.AddHours(3),
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
