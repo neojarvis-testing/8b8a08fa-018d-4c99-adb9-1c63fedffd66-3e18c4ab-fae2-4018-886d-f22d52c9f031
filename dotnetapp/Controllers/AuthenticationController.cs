@@ -19,7 +19,7 @@ namespace dotnetapp.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginModel lModel)
         {
-            Console.WriteLine($"Attempting login for email: {lModel.Email}");
+            // Console.WriteLine($"Attempting login for email: {lModel.Email}");
             var result = await _authService.Login(lModel);
             if (result.Item1 == 0)
                 return Unauthorized(new { message = result.Item2 });
