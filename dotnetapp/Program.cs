@@ -96,6 +96,13 @@ builder.Configuration
 // Configure database connection
 builder.Services.AddDbContext<ApplicationDbContext>(o => 
     o.UseSqlServer(builder.Configuration.GetConnectionString("conn")));
+builder.Services.AddCors(opttions=>{
+    opttions.AddDefaultPolicy(builder=>{
+        builder.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
 
 // Configure Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -141,7 +148,6 @@ builder.Services.AddScoped<FeedbackService>();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
- 
+app.UseCors();
 app.MapControllers();
- 
 app.Run();

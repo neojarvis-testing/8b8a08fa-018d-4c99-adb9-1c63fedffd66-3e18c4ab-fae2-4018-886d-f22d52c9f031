@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using dotnetapp.Data;
-
+using Microsoft.EntityFrameworkCore; // ✅ Added EF Core namespace for SingleOrDefaultAsync
 
 namespace dotnetapp.Services
 {
@@ -18,46 +18,55 @@ namespace dotnetapp.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
-        private readonly ApplicationDbContext _context;
 
-        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDbContext context)
+        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
-            _context = context;
         }
 
         public async Task<(int, string)> Registration(User model, string role)
         {
-            var userExists = await _userManager.FindByEmailAsync(model.Email);
+            // 🔹 Validate Email
+            if (string.IsNullOrWhiteSpace(model.Email))
+                return (0, "Email is required");
+
+            // 🔹 Lookup by NormalizedEmail for case-insensitive search
+            var normalizedEmail = model.Email.ToUpper();
+            var userExists = await _userManager.Users.SingleOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail);
+
             if (userExists != null)
                 return (0, "User already exists");
 
+            // 🔹 Create New User
             ApplicationUser user = new ApplicationUser()
             {
                 Email = model.Email,
                 UserName = model.Username,
                 PhoneNumber = model.MobileNumber,
-                Name = model.Username // Set the Name property
+                Name = model.Username
             };
+
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
                 return (0, "User creation failed! Please check user details and try again");
 
+            // 🔹 Validate Role Before Assigning
             if (!await _roleManager.RoleExistsAsync(role))
-                await _roleManager.CreateAsync(new IdentityRole(role));
+                return (0, $"Role '{role}' does not exist. Please create the role first.");
 
-            if (await _roleManager.RoleExistsAsync(role))
-            {
-                await _userManager.AddToRoleAsync(user, role);
-            }
+            await _userManager.AddToRoleAsync(user, role);
 
             return (1, "User created successfully!");
         }
 
         public async Task<(int, string)> Login(LoginModel model)
         {
+            // 🔹 Validate Email
+            if (string.IsNullOrWhiteSpace(model.Email))
+                return (0, "Email is required");
+
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
                 return (0, "Invalid email");
@@ -74,7 +83,6 @@ namespace dotnetapp.Services
 
             foreach (var userRole in userRoles)
             {
-                // System.Console.WriteLine(userRole);
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));
             }
 
@@ -85,17 +93,25 @@ namespace dotnetapp.Services
 
         private string GenerateToken(IEnumerable<Claim> claims)
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            
-            var token = new JwtSecurityToken(
-                issuer: _configuration["JWT:ValidIssuer"],
-                audience: _configuration["JWT:ValidAudience"],
-                claims: claims,
-                expires: DateTime.Now.AddHours(3),
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-            );
+            try
+            {
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+                var token = new JwtSecurityToken(
+                    issuer: _configuration["JWT:ValidIssuer"],
+                    audience: _configuration["JWT:ValidAudience"],
+                    claims: claims,
+                    expires: DateTime.Now.AddHours(3),
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
+
+                return new JwtSecurityTokenHandler().WriteToken(token);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Token generation failed: {ex.Message}");
+                return null;
+            }
         }
     }
 }
