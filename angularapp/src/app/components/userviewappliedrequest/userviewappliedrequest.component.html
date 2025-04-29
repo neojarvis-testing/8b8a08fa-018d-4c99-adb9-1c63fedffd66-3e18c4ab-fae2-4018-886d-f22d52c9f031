@@ -1,1 +1,56 @@
 <h1>Applied Class Requests</h1>
+
+<div class="form-container">
+  <form #cookingForm="ngForm" (ngSubmit)="onSubmit(cookingForm)" novalidate>
+    <!-- Dietary Preferences Field -->
+    <div>
+      <label for="dietaryPreferences">Dietary Preferences:</label>
+      <input
+        type="text"
+        id="dietaryPreferences"
+        name="dietaryPreferences"
+        ngModel
+        required
+      />
+      <small *ngIf="cookingForm.controls.dietaryPreferences?.invalid && cookingForm.controls.dietaryPreferences?.touched">
+        Dietary Preferences are required.
+      </small>
+    </div>
+
+    <!-- Cooking Goals Field -->
+    <div>
+      <label for="cookingGoals">Cooking Goals:</label>
+      <input
+        type="text"
+        id="cookingGoals"
+        name="cookingGoals"
+        ngModel
+        required
+      />
+      <small *ngIf="cookingForm.controls.cookingGoals?.invalid && cookingForm.controls.cookingGoals?.touched">
+        Cooking Goals are required.
+      </small>
+    </div>
+
+    <!-- Comments Field -->
+    <div>
+      <label for="comments">Comments:</label>
+      <textarea
+        id="comments"
+        name="comments"
+        ngModel
+      ></textarea>
+    </div>
+
+    <!-- Submit and Back Buttons -->
+    <div class="form-actions">
+      <button type="submit" [disabled]="cookingForm.invalid">Submit</button>
+      <button type="button" (click)="goBack()">Back</button>
+    </div>
+  </form>
+
+  <!-- Validation Message -->
+  <div *ngIf="cookingForm.invalid && cookingForm.touched">
+    <small>All required fields cannot be left empty.</small>
+  </div>
+</div>

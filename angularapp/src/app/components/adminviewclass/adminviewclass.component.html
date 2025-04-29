@@ -1,1 +1,138 @@
 <h1>Cooking Classes</h1>
+
+<div class="form-container">
+  <form #cookingForm="ngForm" (ngSubmit)="onSubmit(cookingForm)" novalidate>
+    <!-- Class Name Field -->
+    <div>
+      <label for="className">Class Name:</label>
+      <input
+        type="text"
+        id="className"
+        name="className"
+        ngModel
+        required
+      />
+      <small *ngIf="cookingForm.controls.className?.invalid && cookingForm.controls.className?.touched">
+        Class Name is required.
+      </small>
+    </div>
+
+    <!-- Cuisine Type Field -->
+    <div>
+      <label for="cuisineType">Cuisine Type:</label>
+      <input
+        type="text"
+        id="cuisineType"
+        name="cuisineType"
+        ngModel
+        required
+      />
+      <small *ngIf="cookingForm.controls.cuisineType?.invalid && cookingForm.controls.cuisineType?.touched">
+        Cuisine Type is required.
+      </small>
+    </div>
+
+    <!-- Chef Name Field -->
+    <div>
+      <label for="chefName">Chef Name:</label>
+      <input
+        type="text"
+        id="chefName"
+        name="chefName"
+        ngModel
+        required
+      />
+      <small *ngIf="cookingForm.controls.chefName?.invalid && cookingForm.controls.chefName?.touched">
+        Chef Name is required.
+      </small>
+    </div>
+
+    <!-- Duration Field -->
+    <div>
+      <label for="duration">Duration (in hours):</label>
+      <input
+        type="number"
+        id="duration"
+        name="duration"
+        ngModel
+        required
+      />
+      <small *ngIf="cookingForm.controls.duration?.invalid && cookingForm.controls.duration?.touched">
+        Duration is required.
+      </small>
+    </div>
+
+    <!-- Location Field -->
+    <div>
+      <label for="location">Location:</label>
+      <input
+        type="text"
+        id="location"
+        name="location"
+        ngModel
+        required
+      />
+      <small *ngIf="cookingForm.controls.location?.invalid && cookingForm.controls.location?.touched">
+        Location is required.
+      </small>
+    </div>
+
+    <!-- Fee Field -->
+    <div>
+      <label for="fee">Fee:</label>
+      <input
+        type="number"
+        id="fee"
+        name="fee"
+        ngModel
+        required
+      />
+      <small *ngIf="cookingForm.controls.fee?.invalid && cookingForm.controls.fee?.touched">
+        Fee is required.
+      </small>
+    </div>
+
+    <!-- Ingredients Provided Field -->
+    <div>
+      <label for="ingredientsProvided">Ingredients Provided:</label>
+      <input
+        type="text"
+        id="ingredientsProvided"
+        name="ingredientsProvided"
+        ngModel
+      />
+    </div>
+
+    <!-- Skill Level Field -->
+    <div>
+      <label for="skillLevel">Skill Level:</label>
+      <input
+        type="text"
+        id="skillLevel"
+        name="skillLevel"
+        ngModel
+      />
+    </div>
+
+    <!-- Special Requirements Field -->
+    <div>
+      <label for="specialRequirements">Special Requirements:</label>
+      <textarea
+        id="specialRequirements"
+        name="specialRequirements"
+        ngModel
+      ></textarea>
+    </div>
+
+    <!-- Submit and Back Buttons -->
+    <div class="form-actions">
+      <button type="submit" [disabled]="cookingForm.invalid">Update Class</button>
+      <button type="button" (click)="goBack()">Back</button>
+    </div>
+  </form>
+
+  <!-- Validation Message -->
+  <div *ngIf="cookingForm.invalid && cookingForm.touched">
+    <small>All required fields cannot be left empty.</small>
+  </div>
+</div>
