@@ -24,8 +24,8 @@ builder.Configuration
 // Configure database connection
 builder.Services.AddDbContext<ApplicationDbContext>(o => 
     o.UseSqlServer(builder.Configuration.GetConnectionString("conn")));
-    builder.Services.AddCors(opttions=>{
-    opttions.AddDefaultPolicy(builder=>{
+builder.Services.AddCors(options=>{
+    options.AddDefaultPolicy(builder=>{
         builder.AllowAnyOrigin()
         .AllowAnyHeader()
         .AllowAnyMethod();
@@ -78,5 +78,4 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors();
 app.MapControllers();
- 
 app.Run();

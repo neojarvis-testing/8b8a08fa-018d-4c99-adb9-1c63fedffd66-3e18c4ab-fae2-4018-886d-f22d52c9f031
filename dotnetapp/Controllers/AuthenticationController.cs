@@ -17,9 +17,10 @@ namespace dotnetapp.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginModel lModel)
         {
-            var result = await _authService.Login(model);
+            // Console.WriteLine($"Attempting login for email: {lModel.Email}");
+            var result = await _authService.Login(lModel);
             if (result.Item1 == 0)
                 return Unauthorized(new { message = result.Item2 });
 
@@ -27,9 +28,9 @@ namespace dotnetapp.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] User model)
+        public async Task<IActionResult> Register([FromBody] User rModel)
         {
-            var result = await _authService.Registration(model, model.UserRole);
+            var result = await _authService.Registration(rModel, rModel.UserRole);
             if (result.Item1 == 0)
                 return BadRequest(new { message = result.Item2 });
 

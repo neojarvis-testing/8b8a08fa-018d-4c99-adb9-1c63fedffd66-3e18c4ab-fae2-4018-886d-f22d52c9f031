@@ -1,1 +1,62 @@
-<p>adminviewappliedrequest works!</p>
+<h1>Class Requests for Approval</h1>
+
+<div class="requests-container">
+  <!-- Search and Filter Section -->
+  <div class="search-filter">
+    <!-- Search by Class Name -->
+    <input
+      type="text"
+      placeholder="Search by Class Name"
+      [(ngModel)]="searchClassName"
+      (input)="filterRequests()"
+    />
+
+    <!-- Dropdown Filter by Status -->
+    <select [(ngModel)]="statusFilter" (change)="filterRequests()">
+      <option value="">All Statuses</option>
+      <option value="Pending">Pending</option>
+      <option value="Approved">Approved</option>
+      <option value="Rejected">Rejected</option>
+    </select>
+  </div>
+
+  <!-- If No Data is Available -->
+  <div *ngIf="filteredRequests.length === 0">
+    <p>Oops! No records found</p>
+  </div>
+
+  <!-- Table Display for Requests -->
+  <table *ngIf="filteredRequests.length > 0">
+    <thead>
+      <tr>
+        <th>Class Name</th>
+        <th>User ID</th>
+        <th>Request Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let request of filteredRequests">
+        <td>{{ getClassName(request.CookingClassId) }}</td>
+        <td>{{ request.UserId }}</td>
+        <td>{{ request.RequestDate }}</td>
+        <td>{{ request.Status }}</td>
+        <td>
+          <button
+            (click)="approveRequest(request)"
+            [disabled]="request.Status !== 'Pending'"
+          >
+            Approve
+          </button>
+          <button
+            (click)="rejectRequest(request)"
+            [disabled]="request.Status !== 'Pending'"
+          >
+            Reject
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
