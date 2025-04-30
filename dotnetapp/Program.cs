@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using dotnetapp.Data;
- 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;

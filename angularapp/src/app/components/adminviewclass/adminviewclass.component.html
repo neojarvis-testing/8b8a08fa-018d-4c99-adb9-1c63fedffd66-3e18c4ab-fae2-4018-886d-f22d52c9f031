@@ -1,138 +1,78 @@
-<h1>Cooking Classes</h1>
+<div class="p-6">
+  <h1 class="text-2xl font-bold mb-4">Cooking Classes</h1>
 
-<div class="form-container">
-  <form #cookingForm="ngForm" (ngSubmit)="onSubmit(cookingForm)" novalidate>
-    <!-- Class Name Field -->
-    <div>
-      <label for="className">Class Name:</label>
-      <input
-        type="text"
-        id="className"
-        name="className"
-        ngModel
-        required
-      />
-      <small *ngIf="cookingForm.controls.className?.invalid && cookingForm.controls.className?.touched">
-        Class Name is required.
-      </small>
+  <!-- Search Bar -->
+  <input type="text" placeholder="Search by Class Name" [(ngModel)]="searchTerm"
+         class="border border-gray-300 rounded-lg p-2 w-full mb-4">
+
+  <!-- Classes Table -->
+  <table class="table-auto border-collapse border border-gray-300 w-full">
+    <thead>
+      <tr class="bg-gray-900 text-white">
+        <th class="border border-gray-300 px-4 py-2">S No.</th>
+        <th class="border border-gray-300 px-4 py-2">Class Name</th>
+        <th class="border border-gray-300 px-4 py-2">Cuisine Type</th>
+        <th class="border border-gray-300 px-4 py-2">Chef Name</th>
+        <th class="border border-gray-300 px-4 py-2">Location</th>
+        <th class="border border-gray-300 px-4 py-2">Fee</th>
+        <th class="border border-gray-300 px-4 py-2">Duration</th>
+        <th class="border border-gray-300 px-4 py-2">Skill Level</th>
+        <th class="border border-gray-300 px-4 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let class of filteredClasses; let i = index">
+        <td class="border border-gray-300 px-4 py-2 text-center">{{ i + 1 }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ class.name }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ class.cuisineType }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ class.chefName }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ class.location }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ class.fee }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ class.duration }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ class.skillLevel }}</td>
+        <td class="border border-gray-300 px-4 py-2 flex justify-evenly">
+          <button (click)="editClass(class)" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700">
+            Edit
+          </button>
+          <button (click)="confirmDelete(class)" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Delete Confirmation Modal -->
+  <div *ngIf="selectedClass && !isEditMode" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-96">
+      <h2 class="text-xl font-bold mb-4">Delete Confirmation</h2>
+      <p class="text-gray-700 mb-4">Are you sure you want to delete "{{ selectedClass.name }}"?</p>
+      <div class="flex justify-end space-x-4">
+        <button (click)="deleteClass()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">Delete</button>
+        <button (click)="cancelDelete()" class="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">Cancel</button>
+      </div>
     </div>
+  </div>
 
-    <!-- Cuisine Type Field -->
-    <div>
-      <label for="cuisineType">Cuisine Type:</label>
-      <input
-        type="text"
-        id="cuisineType"
-        name="cuisineType"
-        ngModel
-        required
-      />
-      <small *ngIf="cookingForm.controls.cuisineType?.invalid && cookingForm.controls.cuisineType?.touched">
-        Cuisine Type is required.
-      </small>
+  <!-- Edit Form Modal -->
+  <div *ngIf="selectedClass && isEditMode" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-96">
+      <h2 class="text-xl font-bold mb-4">Edit Class</h2>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-gray-700">Class Name</label>
+          <input [(ngModel)]="selectedClass.name" class="border border-gray-300 rounded-lg p-2 w-full">
+        </div>
+        <div>
+          <label class="block text-gray-700">Cuisine Type</label>
+          <input [(ngModel)]="selectedClass.cuisineType" class="border border-gray-300 rounded-lg p-2 w-full">
+        </div>
+        <!-- Add other fields like Chef Name, Location, Fee, etc. -->
+      </div>
+      <div class="flex justify-end space-x-4 mt-4">
+        <button (click)="saveEdit()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Save</button>
+        <button (click)="cancelEdit()" class="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">Cancel</button>
+      </div>
     </div>
-
-    <!-- Chef Name Field -->
-    <div>
-      <label for="chefName">Chef Name:</label>
-      <input
-        type="text"
-        id="chefName"
-        name="chefName"
-        ngModel
-        required
-      />
-      <small *ngIf="cookingForm.controls.chefName?.invalid && cookingForm.controls.chefName?.touched">
-        Chef Name is required.
-      </small>
-    </div>
-
-    <!-- Duration Field -->
-    <div>
-      <label for="duration">Duration (in hours):</label>
-      <input
-        type="number"
-        id="duration"
-        name="duration"
-        ngModel
-        required
-      />
-      <small *ngIf="cookingForm.controls.duration?.invalid && cookingForm.controls.duration?.touched">
-        Duration is required.
-      </small>
-    </div>
-
-    <!-- Location Field -->
-    <div>
-      <label for="location">Location:</label>
-      <input
-        type="text"
-        id="location"
-        name="location"
-        ngModel
-        required
-      />
-      <small *ngIf="cookingForm.controls.location?.invalid && cookingForm.controls.location?.touched">
-        Location is required.
-      </small>
-    </div>
-
-    <!-- Fee Field -->
-    <div>
-      <label for="fee">Fee:</label>
-      <input
-        type="number"
-        id="fee"
-        name="fee"
-        ngModel
-        required
-      />
-      <small *ngIf="cookingForm.controls.fee?.invalid && cookingForm.controls.fee?.touched">
-        Fee is required.
-      </small>
-    </div>
-
-    <!-- Ingredients Provided Field -->
-    <div>
-      <label for="ingredientsProvided">Ingredients Provided:</label>
-      <input
-        type="text"
-        id="ingredientsProvided"
-        name="ingredientsProvided"
-        ngModel
-      />
-    </div>
-
-    <!-- Skill Level Field -->
-    <div>
-      <label for="skillLevel">Skill Level:</label>
-      <input
-        type="text"
-        id="skillLevel"
-        name="skillLevel"
-        ngModel
-      />
-    </div>
-
-    <!-- Special Requirements Field -->
-    <div>
-      <label for="specialRequirements">Special Requirements:</label>
-      <textarea
-        id="specialRequirements"
-        name="specialRequirements"
-        ngModel
-      ></textarea>
-    </div>
-
-    <!-- Submit and Back Buttons -->
-    <div class="form-actions">
-      <button type="submit" [disabled]="cookingForm.invalid">Update Class</button>
-      <button type="button" (click)="goBack()">Back</button>
-    </div>
-  </form>
-
-  <!-- Validation Message -->
-  <div *ngIf="cookingForm.invalid && cookingForm.touched">
-    <small>All required fields cannot be left empty.</small>
   </div>
 </div>
