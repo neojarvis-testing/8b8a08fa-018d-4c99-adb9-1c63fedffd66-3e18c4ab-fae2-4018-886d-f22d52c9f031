@@ -1,65 +1,72 @@
-<h1 class="text-2xl font-bold text-center mb-4">Create New Cooking Class</h1>
+<div class="flex flex-col items-center justify-center px-6 py-8 mx-auto">
 
-<div class="class-creation-container max-w-3xl mx-auto p-4 border border-gray-300 rounded-lg shadow-md">
-  <form #classForm="ngForm" (ngSubmit)="onSubmit(classForm)" novalidate>
-    <div class="mb-4">
-      <label for="className">Class Name:</label>
-      <input type="text" id="className" name="className" ngModel required minlength="3"/>
+  <div class="w-full bg-[#FFF5E0] rounded-lg shadow shadow-lg dark:border md:mt-0 sm:max-w-md xl:p-0">
+
+    <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+      <h1 class="text-xl font-bold leading-tight tracking-tight text-[#0A6847] md:text-2xl">Create New Cooking Class</h1>
+        <form #classForm="ngForm" (ngSubmit)="onSubmit(classForm)" class="space-y-4 md:space-y-6" novalidate>
+          <div class="mb-4">
+            <label for="className" class="block mb-2 text-sm font-medium text-[#0A6847]">Class Name:</label>
+            <input type="text" id="className" name="className" class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" ngModel required minlength="3" />
+          </div>
+
+          <div class="mb-4">
+            <label for="cuisineType" class="block mb-2 text-sm font-medium text-[#0A6847]">Cuisine Type:</label>
+            <input type="text" id="cuisineType" name="cuisineType" class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" ngModel required />
+          </div>
+
+          <div class="mb-4">
+            <label for="chefName" class="block mb-2 text-sm font-medium text-[#0A6847]">Chef Name:</label>
+            <input type="text" id="chefName" name="chefName" class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" ngModel required />
+          </div>
+
+          <div class="mb-4">
+            <label for="location" class="block mb-2 text-sm font-medium text-[#0A6847]">Location:</label>
+            <input type="text" id="location" name="location" class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" ngModel required />
+          </div>
+
+
+          <div class="mb-4">
+            <label for="duration" class="block mb-2 text-sm font-medium text-[#0A6847]">Duration (in hours):</label>
+            <input type="number" id="duration" name="duration" class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" ngModel required min="1" />
+          </div>
+
+          <div class="mb-4">
+            <label for="fee" class="block mb-2 text-sm font-medium text-[#0A6847]">Fee:</label>
+            <input type="number" id="fee" name="fee" class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" ngModel required min="1" />
+          </div>
+
+          <div class="mb-4">
+            <label for="ingredients" class="block mb-2 text-sm font-medium text-[#0A6847]">Ingredients Provided:</label>
+            <textarea id="ingredients" name="ingredients" ngModel required></textarea>
+          </div>
+
+          <div class="mb-4">
+            <label for="skillLevel" class="block mb-2 text-sm font-medium text-[#0A6847]">Skill Level:</label>
+            <select id="skillLevel" name="skillLevel" ngModel required>
+              <option value="" disabled>Select skill level</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label for="specialRequirements" class="block mb-2 text-sm font-medium text-[#0A6847]">Special Requirements:</label>
+            <textarea id="specialRequirements" name="specialRequirements" ngModel required></textarea>
+          </div>
+
+          <button type="submit" [disabled]="classForm.invalid" class="w-full text-white bg-[#0A6847] hover:bg-[#7ABA78] focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center">Submit</button>
+        </form>
+      </div>
+
+      <!-- Confirmation Modal -->
+      <div *ngIf="showModal" class="modal-overlay">
+        <div class="modal-content">
+          <p class="modal-text">Successfully Submitted!</p>
+          <button class="ok-button" (click)="closeModal()">OK</button>
+        </div>
+      </div>
+
     </div>
-
-    <div class="mb-4">
-      <label for="cuisineType">Cuisine Type:</label>
-      <input type="text" id="cuisineType" name="cuisineType" ngModel required />
-    </div>
-
-    <div class="mb-4">
-      <label for="chefName">Chef Name:</label>
-      <input type="text" id="chefName" name="chefName" ngModel required />
-    </div>
-
-    <div class="mb-4">
-      <label for="location">Location:</label>
-      <input type="text" id="location" name="location" ngModel required />
-    </div>
-
-    <div class="mb-4">
-      <label for="duration">Duration (in hours):</label>
-      <input type="number" id="duration" name="duration" ngModel required min="1"/>
-    </div>
-
-    <div class="mb-4">
-      <label for="fee">Fee:</label>
-      <input type="number" id="fee" name="fee" ngModel required min="1"/>
-    </div>
-
-    <div class="mb-4">
-      <label for="ingredients">Ingredients Provided:</label>
-      <textarea id="ingredients" name="ingredients" ngModel required></textarea>
-    </div>
-
-    <div class="mb-4">
-      <label for="skillLevel">Skill Level:</label>
-      <select id="skillLevel" name="skillLevel" ngModel required>
-        <option value="" disabled>Select skill level</option>
-        <option value="beginner">Beginner</option>
-        <option value="intermediate">Intermediate</option>
-        <option value="advanced">Advanced</option>
-      </select>
-    </div>
-
-    <div class="mb-4">
-      <label for="specialRequirements">Special Requirements:</label>
-      <textarea id="specialRequirements" name="specialRequirements" ngModel required></textarea>
-    </div>
-
-    <button type="submit" [disabled]="classForm.invalid">Submit</button>
-  </form>
-</div>
-
-<!-- Confirmation Modal -->
-<div *ngIf="showModal" class="modal-overlay">
-  <div class="modal-content">
-    <p class="modal-text">Successfully Submitted!</p>
-    <button class="ok-button" (click)="closeModal()">OK</button>
   </div>
-</div>
