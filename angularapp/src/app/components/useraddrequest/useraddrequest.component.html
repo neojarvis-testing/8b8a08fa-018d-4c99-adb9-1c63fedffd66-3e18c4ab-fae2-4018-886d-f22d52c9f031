@@ -1,76 +1,81 @@
-<h1 class="text-xl font-bold mb-4 text-center">Cooking Class Request Form</h1>
+<div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+  <div class="w-full bg-[#FFF5E0] rounded-lg shadow shadow-lg dark:border md:mt-0 sm:max-w-md xl:p-0">
+    <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+      
+      <h1 class="text-xl font-bold leading-tight tracking-tight text-[#0A6847] md:text-2xl">Cooking Class Request Form</h1>
+      
+      <form #requestForm="ngForm" form class="space-y-4 md:space-y-6" (ngSubmit)="onSubmit(requestForm)">
+        <!-- Dietary Preferences -->
+        <div class="mb-4">
+          <label for="dietaryPreferences" class="block mb-2 text-sm font-medium text-[#0A6847]">Dietary Preferences:</label>
+          <input
+          type="text"
+          id="dietaryPreferences"
+          name="dietaryPreferences"
+          [(ngModel)]="requestFormData.dietaryPreferences"
+          class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5"
 
-<div class="form-container mx-auto max-w-md border border-gray-300 p-6 rounded-lg">
-  <form #requestForm="ngForm" (ngSubmit)="onSubmit(requestForm)">
-    <!-- Dietary Preferences -->
-    <div class="mb-4">
-      <label for="dietaryPreferences" class="block text-sm font-medium mb-1">Dietary Preferences:</label>
-      <input
-        type="text"
-        id="dietaryPreferences"
-        name="dietaryPreferences"
-        [(ngModel)]="requestFormData.dietaryPreferences"
-        class="border border-gray-300 rounded px-3 py-2 w-full"
-        required
-      />
-      <span
-        *ngIf="requestForm.controls.dietaryPreferences?.invalid && requestForm.controls.dietaryPreferences?.touched"
-        class="text-red-500 text-sm"
-      >
-        Dietary Preferences are required.
-      </span>
-    </div>
-
-    <!-- Cooking Goals -->
-    <div class="mb-4">
-      <label for="cookingGoals" class="block text-sm font-medium mb-1">Cooking Goals:</label>
-      <input
+          required
+          />
+          <span
+          *ngIf="requestForm.controls.dietaryPreferences?.invalid && requestForm.controls.dietaryPreferences?.touched"
+          class="text-red-500 text-sm"
+          >
+          Dietary Preferences are required.
+        </span>
+      </div>
+      
+      <!-- Cooking Goals -->
+      <div class="mb-4">
+        <label for="cookingGoals" class="block mb-2 text-sm font-medium text-[#0A6847]">Cooking Goals:</label>
+        <input
         type="text"
         id="cookingGoals"
         name="cookingGoals"
         [(ngModel)]="requestFormData.cookingGoals"
-        class="border border-gray-300 rounded px-3 py-2 w-full"
+        class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5"
+
         required
-      />
-      <span
+        />
+        <span
         *ngIf="requestForm.controls.cookingGoals?.invalid && requestForm.controls.cookingGoals?.touched"
         class="text-red-500 text-sm"
-      >
+        >
         Cooking Goals are required.
       </span>
     </div>
-
+    
     <!-- Comments -->
     <div class="mb-4">
-      <label for="comments" class="block text-sm font-medium mb-1">Comments:</label>
+      <label for="comments" class="block mb-2 text-sm font-medium text-[#0A6847]">Comments:</label>
       <textarea
-        id="comments"
-        name="comments"
-        [(ngModel)]="requestFormData.comments"
-        class="border border-gray-300 rounded px-3 py-2 w-full"
-        required
+      id="comments"
+      name="comments"
+      [(ngModel)]="requestFormData.comments"
+      class="border border-gray-300 rounded px-3 py-2 w-full"
+      required
       ></textarea>
       <span
-        *ngIf="requestForm.controls.comments?.invalid && requestForm.controls.comments?.touched"
-        class="text-red-500 text-sm"
+      *ngIf="requestForm.controls.comments?.invalid && requestForm.controls.comments?.touched"
+      class="text-red-500 text-sm"
       >
-        Comments are required.
-      </span>
-    </div>
-
-    <!-- Buttons -->
-    <div class="flex justify-between mt-4">
-      <button
-        type="button"
-        class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-        (click)="navigateBack()"
-      >
-        Back
-      </button>
-      <button
-        type="submit"
-        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        [disabled]="requestForm.invalid"
+      Comments are required.
+    </span>
+  </div>
+  
+  <!-- Buttons -->
+  <div class="flex justify-between mt-4">
+    <button
+    type="button"
+    class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+    (click)="navigateBack()"
+    >
+    Back
+  </button>
+  <button
+  type="submit"
+  class="w-full text-white bg-[#0A6847] hover:bg-[#7ABA78] focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+  [disabled]="requestForm.invalid"
       >
         Submit
       </button>
@@ -84,11 +89,13 @@
     <h2 class="text-lg font-bold mb-4">Successfully Submitted!</h2>
     <div class="mt-4 flex justify-center">
       <button
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        (click)="closeSuccessModal()"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      (click)="closeSuccessModal()"
       >
-        Ok
-      </button>
-    </div>
+      Ok
+    </button>
   </div>
+</div>
+</div>
+</div>
 </div>
