@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CookingClassRequest } from '../models/cooking-class-request.model';
 import { CookingClass } from '../models/cooking-class.model';
@@ -41,11 +41,13 @@ export class CookingClassService {
   }
 
   // Update an existing cooking class
+
   updateCookingClass(classId: string, cooking: CookingClass): Observable<CookingClass> {
     return this.http.put<CookingClass>(`${this.apiBaseUrl}/cookingClass/${classId}`, cooking, {
       headers: this.getAuthHeaders()
     });
   }
+  
 
   // Delete a cooking class by ID
   deleteCookingClass(classId: string): Observable<void> {

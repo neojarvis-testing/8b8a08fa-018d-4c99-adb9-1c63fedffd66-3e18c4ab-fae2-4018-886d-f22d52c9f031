@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { CookingClassService } from 'src/app/services/cooking-class.service';
+import { CookingClass } from 'src/app/models/cooking-class.model';
+import { CookingClassRequest } from 'src/app/models/cooking-class-request.model';
 
 @Component({
   selector: 'app-userviewclass',
@@ -6,54 +9,52 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./userviewclass.component.css']
 })
 export class UserviewclassComponent implements OnInit {
-  classes = [
-    {
-      id: 1,
-      className: 'Italian Cuisine',
-      cuisineName: 'Italian',
-      chefName: 'Chef Mario',
-      location: 'Rome',
-      duration: 3,
-      fee: 50,
-      ingredientsProvided: 'Yes',
-      skillLevel: 'Beginner',
-      requirements: 'None',
-      applied: false
-    },
-    {
-      id: 2,
-      className: 'Baking Basics',
-      cuisineName: 'French',
-      chefName: 'Chef Pierre',
-      location: 'Paris',
-      duration: 2,
-      fee: 40,
-      ingredientsProvided: 'No',
-      skillLevel: 'Intermediate',
-      requirements: 'Bring your own tools',
-      applied: true
-    },
-    // Add more classes as needed
-  ];
-
+  classes: CookingClass[] = [];
   searchText: string = '';
+  appliedClasses: { [key: number]: boolean } = {}; // ✅ Tracks applied state separately
 
-  constructor() { }
+  constructor(private cookingClassService: CookingClassService) {}
 
-  ngOnInit(): void { }
-
-  applyForClass(classId: number): void {
-    const selectedClass = this.classes.find(c => c.id === classId);
-    if (selectedClass) {
-      selectedClass.applied = true;
-    }
+  ngOnInit(): void {
+    this.loadCookingClasses();
   }
 
-  getFilteredClasses(): any[] {
+  // Fetch cooking classes dynamically from API
+  loadCookingClasses(): void {
+    this.cookingClassService.getAllCookingClasses().subscribe({
+      next: (data) => {
+        this.classes = data; // ✅ No need to modify CookingClass model
+      },
+      error: (err) => console.error('Error fetching classes:', err)
+    });
+  }
+
+  // Apply for a cooking class via API (Tracks applied state separately)
+  applyForClass(classId: number): void {
+    const request: CookingClassRequest = {
+      CookingClassId: classId,
+      UserId: 1, // Replace with actual user ID
+      RequestDate: new Date().toISOString(),
+      Status: 'Pending',
+      DietaryPreferences: 'None',
+      CookingGoals: 'Learn cooking',
+      Comments: 'Excited for the class!'
+    };
+    
+    this.cookingClassService.addCookingClassRequest(request).subscribe({
+      next: () => {
+        this.appliedClasses[classId] = true; // ✅ Tracks applied state separately
+      },
+      error: (err) => console.error('Error applying for class:', err)
+    });
+  }
+
+  // Filtering logic for cooking classes
+  getFilteredClasses(): CookingClass[] {
     return this.classes.filter(c =>
-      c.className.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      c.cuisineName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      c.chefName.toLowerCase().includes(this.searchText.toLowerCase())
+      c.ClassName.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      c.CuisineType.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      c.ChefName.toLowerCase().includes(this.searchText.toLowerCase())
     );
   }
 }

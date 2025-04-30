@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./userviewappliedrequest.component.css']
 })
 export class UserviewappliedrequestComponent implements OnInit {
+filteredRequests: any;
+showDeleteModal: any;
 
   constructor() { }
 

@@ -1,4 +1,7 @@
-export interface CookingClass { 
+export interface CookingClass {
+   
+    
+   
     CookingClassId?: number;           
     ClassName: string;                 
     CuisineType: string;              

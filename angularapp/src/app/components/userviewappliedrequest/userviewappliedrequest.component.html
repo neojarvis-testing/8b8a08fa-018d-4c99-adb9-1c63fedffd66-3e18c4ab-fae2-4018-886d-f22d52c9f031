@@ -1,56 +1,66 @@
-<h1>Applied Class Requests</h1>
+<h1 class="text-xl font-bold mb-4 text-center">Applied Class Requests</h1>
 
-<div class="form-container">
-  <form #cookingForm="ngForm" (ngSubmit)="onSubmit(cookingForm)" novalidate>
-    <!-- Dietary Preferences Field -->
-    <div>
-      <label for="dietaryPreferences">Dietary Preferences:</label>
-      <input
-        type="text"
-        id="dietaryPreferences"
-        name="dietaryPreferences"
-        ngModel
-        required
-      />
-      <small *ngIf="cookingForm.controls.dietaryPreferences?.invalid && cookingForm.controls.dietaryPreferences?.touched">
-        Dietary Preferences are required.
-      </small>
-    </div>
-
-    <!-- Cooking Goals Field -->
-    <div>
-      <label for="cookingGoals">Cooking Goals:</label>
-      <input
-        type="text"
-        id="cookingGoals"
-        name="cookingGoals"
-        ngModel
-        required
-      />
-      <small *ngIf="cookingForm.controls.cookingGoals?.invalid && cookingForm.controls.cookingGoals?.touched">
-        Cooking Goals are required.
-      </small>
-    </div>
-
-    <!-- Comments Field -->
-    <div>
-      <label for="comments">Comments:</label>
-      <textarea
-        id="comments"
-        name="comments"
-        ngModel
-      ></textarea>
-    </div>
-
-    <!-- Submit and Back Buttons -->
-    <div class="form-actions">
-      <button type="submit" [disabled]="cookingForm.invalid">Submit</button>
-      <button type="button" (click)="goBack()">Back</button>
-    </div>
-  </form>
-
-  <!-- Validation Message -->
-  <div *ngIf="cookingForm.invalid && cookingForm.touched">
-    <small>All required fields cannot be left empty.</small>
+<div class="requests-container rounded-lg">
+  <!-- If No Requests Available -->
+  <div *ngIf="filteredRequests.length === 0">
+    <p>No applied requests available.</p>
   </div>
+
+  <!-- Table Display for Applied Requests -->
+  <table class="table-auto border-collapse border border-black w-full">
+    <thead class="bg-gray-800 text-white">
+      <tr>
+        <th class="border border-gray-900 px-4 py-2">S.No</th>
+        <th class="border border-gray-900 px-4 py-2">Class Name</th>
+        <th class="border border-gray-900 px-4 py-2">Fee</th>
+        <th class="border border-gray-900 px-4 py-2">Request Date</th>
+        <th class="border border-gray-900 px-4 py-2">Status</th>
+        <th class="border border-gray-900 px-4 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="border border-gray-900 px-4 py-2 text-center">1</td>
+        <td class="border border-gray-900 px-4 py-2">Italian Pasta Making</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">100</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">2025-04-28</td>
+        <td class="border border-gray-900 px-4 py-2 text-green-500 font-bold">Pending</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">
+          <button 
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td class="border border-gray-900 px-4 py-2 text-center">2</td>
+        <td class="border border-gray-900 px-4 py-2">French Pastry Masterclass</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">150</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">2025-04-27</td>
+        <td class="border border-gray-900 px-4 py-2 text-blue-500 font-bold">Approved</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">
+          <button 
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td class="border border-gray-900 px-4 py-2 text-center">3</td>
+        <td class="border border-gray-900 px-4 py-2">Japanese Sushi Techniques</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">120</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">2025-04-26</td>
+        <td class="border border-gray-900 px-4 py-2 text-red-500 font-bold">Rejected</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">
+          <button 
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
