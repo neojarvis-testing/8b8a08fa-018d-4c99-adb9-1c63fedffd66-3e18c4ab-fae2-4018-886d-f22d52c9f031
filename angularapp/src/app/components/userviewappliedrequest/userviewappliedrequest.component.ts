@@ -12,4 +12,17 @@ export class UserviewappliedrequestComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // Method to handle form submission
+  onSubmit(cookingForm): void {
+    if (cookingForm.valid) {
+      alert('Form submitted successfully!');
+      console.log('Form Data:', cookingForm.value); // Logs the form data
+    } else {
+      alert('All required fields cannot be left empty.');
+    }
+  }
+  goBack(): void {
+    alert('Navigating back!');
+    // Implement navigation logic, e.g., using Angular Router or any other preferred approach
+  }
 }

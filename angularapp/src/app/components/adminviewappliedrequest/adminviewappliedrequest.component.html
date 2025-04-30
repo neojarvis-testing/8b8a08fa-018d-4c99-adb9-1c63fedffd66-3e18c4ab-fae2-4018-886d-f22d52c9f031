@@ -1,4 +1,4 @@
-<h1>Class Requests for Approval</h1>
+<h1 class="text-xl font-bold mb-4 text-center">Class Requests for Approval</h1>
 
 <div class="requests-container">
   <!-- Search and Filter Section -->
@@ -7,12 +7,13 @@
     <input
       type="text"
       placeholder="Search by Class Name"
+      class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5"
       [(ngModel)]="searchClassName"
       (input)="filterRequests()"
     />
 
     <!-- Dropdown Filter by Status -->
-    <select [(ngModel)]="statusFilter" (change)="filterRequests()">
+    <select [(ngModel)]="statusFilter" (change)="filterRequests() ">
       <option value="">All Statuses</option>
       <option value="Pending">Pending</option>
       <option value="Approved">Approved</option>
@@ -26,30 +27,30 @@
   </div>
 
   <!-- Table Display for Requests -->
-  <table *ngIf="filteredRequests.length > 0">
-    <thead>
+  <table class="table-auto border-collapse border border-black w-full" *ngIf="filteredRequests.length > 0">
+    <thead class="bg-gray-800 text-white">
       <tr>
-        <th>Class Name</th>
-        <th>User ID</th>
-        <th>Request Date</th>
-        <th>Status</th>
-        <th>Actions</th>
+        <th class="border border-gray-900 px-4 py-2">Class Name</th>
+        <th class="border border-gray-900 px-4 py-2">User ID</th>
+        <th class="border border-gray-900 px-4 py-2">Request Date</th>
+        <th class="border border-gray-900 px-4 py-2">Status</th>
+        <th class="border border-gray-900 px-4 py-2">Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let request of filteredRequests">
-        <td>{{ getClassName(request.CookingClassId) }}</td>
-        <td>{{ request.UserId }}</td>
-        <td>{{ request.RequestDate }}</td>
-        <td>{{ request.Status }}</td>
-        <td>
-          <button
+        <td class="border border-gray-900 px-4 py-2 text-center">{{ getClassName(request.CookingClassId) }}</td>
+        <td class="border border-gray-900 px-4 py-2">{{ request.UserId }}</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">{{ request.RequestDate }}</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">{{ request.Status }}</td>
+        <td class="border border-gray-900 px-4 py-2 text-center flex gap-3">
+          <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
             (click)="approveRequest(request)"
             [disabled]="request.Status !== 'Pending'"
           >
             Approve
           </button>
-          <button
+          <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
             (click)="rejectRequest(request)"
             [disabled]="request.Status !== 'Pending'"
           >

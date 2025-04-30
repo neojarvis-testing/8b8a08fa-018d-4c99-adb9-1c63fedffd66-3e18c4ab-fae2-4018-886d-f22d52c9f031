@@ -22,6 +22,7 @@ import { UsernavComponent } from './components/usernav/usernav.component';
 import { UserviewappliedrequestComponent } from './components/userviewappliedrequest/userviewappliedrequest.component';
 import { UserviewclassComponent } from './components/userviewclass/userviewclass.component';
 import { UserviewfeedbackComponent } from './components/userviewfeedback/userviewfeedback.component';
+
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FooterComponent } from './footer/footer.component';
