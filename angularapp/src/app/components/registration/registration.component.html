@@ -1,13 +1,13 @@
 
-<div class="flex flex-col block items-center justify-center px-6 py-8 mx-auto ">
-  <div class="w-full bg-[#FFF5E0] rounded-lg shadow shadow-lg dark:border md:mt-0 sm:max-w-md xl:p-0">
+<div class="flex flex-col items-center justify-center px-6 py-32 mx-auto bg-[url(../assets/doodle.png)]" >
+  <div class="w-full bg-[#FFF5E0] rounded-lg shadow shadow-lg border max-w-md font-bold">
 
-  <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-    <h1 class="text-xl font-bold leading-tight tracking-tight text-[#0A6847] md:text-2xl">Registration</h1>
+  <div class="space-y-6 p-8">
+    <h1 class=" text-[#0A6847] text-2xl">Registration</h1>
     <form #registrationForm="ngForm" (ngSubmit)="onSubmit(registrationForm)" class="space-y-4 md:space-y-6" novalidate>
       <!-- Username Field -->
       <div>
-        <label for="Username" class="block mb-2 text-sm font-medium text-[#0A6847]">Username:</label>
+        <label for="Username" class="block mb-2 text-sm text-[#0A6847]">Username:</label>
         <input
         type="text"
         id="Username"
@@ -15,7 +15,7 @@
         ngModel
         required
         minlength="3"
-        class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" placeholder=""
+        class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg outline-none block w-full p-2.5 placeholder:font-medium" placeholder="username"
         />
         <small class="text-red-500" *ngIf="registrationForm.controls.Username?.invalid && registrationForm.controls.Username?.touched">
           Username is required and must be at least 3 characters long.
@@ -24,14 +24,14 @@
       
       <!-- Email Field -->
       <div>
-        <label for="Email" class="block mb-2 text-sm font-medium text-[#0A6847]">Email:</label>
+        <label for="Email" class="block mb-2 text-sm text-[#0A6847]">Email:</label>
         <input
-        type="Email"
+        type="email"
         id="Email"
         name="Email"
         ngModel
         required
-        class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" placeholder=""
+        class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg outline-none block w-full p-2.5 placeholder:font-medium" placeholder="email"
         
         />
         <small class="text-red-500" *ngIf="registrationForm.controls.Email?.invalid && registrationForm.controls.Email?.touched">
@@ -41,15 +41,15 @@
       
       <!-- Password Field -->
       <div>
-        <label for="Password" class="block mb-2 text-sm font-medium text-[#0A6847]">Password:</label>
+        <label for="Password" class="block mb-2 text-sm text-[#0A6847]">Password:</label>
         <input
-        type="Password"
+        type="password"
           id="Password"
           name="Password"
           ngModel
           required
           minlength="6"
-          class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" placeholder=""
+          class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg outline-none block w-full p-2.5 placeholder:font-medium" placeholder="••••••••"
           
           />
         <small class="text-red-500" *ngIf="registrationForm.controls.Password?.invalid && registrationForm.controls.Password?.touched">
@@ -59,14 +59,14 @@
       
       <!-- Confirm Password Field -->
       <div>
-        <label for="confirmPassword" class="block mb-2 text-sm font-medium text-[#0A6847]">Confirm Password:</label>
+        <label for="confirmPassword" class="block mb-2 text-sm text-[#0A6847]">Confirm Password:</label>
         <input
-        type="Password"
+        type="password"
         id="confirmPassword"
         name="confirmPassword"
         ngModel
         required
-        class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" placeholder=""
+        class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg outline-none block w-full p-2.5 placeholder:font-medium" placeholder="••••••••"
         
         />
         <small class="text-red-500" *ngIf="registrationForm.controls.confirmPassword?.invalid && registrationForm.controls.confirmPassword?.touched">
@@ -74,18 +74,18 @@
         </small>
       </div>
       
-      <!-- MobileNumber Number Field -->
+      <!-- Mobile Number Field -->
       <div>
-        <label for="MobileNumber" class="block mb-2 text-sm font-medium text-[#0A6847]">MobileNumber Number:</label>
+        <label for="MobileNumber" class="block mb-2 text-sm text-[#0A6847]">Mobile Number:</label>
         <input
-        type="text"
+        type="tel"
         id="MobileNumber"
         name="MobileNumber"
         ngModel
         required
         minlength="10"
         maxlength="10"
-        class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" placeholder=""
+        class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg outline-none block w-full p-2.5 placeholder:font-medium" placeholder="9090909090"
         
         />
         <small class="text-red-500" *ngIf="registrationForm.controls.MobileNumber?.invalid && registrationForm.controls.MobileNumber?.touched">
@@ -95,8 +95,8 @@
       
       <!-- UserRole Field -->
       <div>
-        <label for="UserRole" class="block mb-2 text-sm font-medium text-[#0A6847]">Role:</label>
-        <select id="UserRole" name="UserRole" ngModel required class="border text-sm rounded-lg block w-full p-2.5">
+        <label for="UserRole" class="block mb-2 text-sm text-[#0A6847]">Role:</label>
+        <select id="UserRole" name="UserRole" ngModel required class="border rounded-lg block w-full p-2.5 text-sm outline-none">
           <option value="" disabled>Select a UserRole</option>
           <option value="admin">Admin</option>
           <option value="user">User</option>
@@ -107,7 +107,7 @@
       </div>
       
       <!-- Submit Button -->
-      <button type="submit" [disabled]="registrationForm.invalid" class="w-full text-white bg-[#0A6847] hover:bg-[#7ABA78] focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center">Submit</button>
+      <button type="submit" [disabled]="registrationForm.invalid" class="w-full text-white bg-[#0A6847] hover:bg-[#7ABA78] rounded-lg text-sm px-5 py-2.5 text-center">Submit</button>
     </form>
   </div>
 </div>
