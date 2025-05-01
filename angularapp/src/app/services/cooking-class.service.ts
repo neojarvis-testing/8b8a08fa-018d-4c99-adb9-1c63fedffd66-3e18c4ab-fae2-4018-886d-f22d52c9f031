@@ -56,9 +56,7 @@ export class CookingClassService {
 
   // Fetch all cooking class requests
   getAllCookingClassRequests(): Observable<CookingClassRequest[]> {
-    return this.http.get<CookingClassRequest[]>(`${this.apiBaseUrl}/cooking-class-request`, {
-      headers: this.getAuthHeaders()
-    });
+    return this.http.get<CookingClassRequest[]>(`${this.apiBaseUrl}/cooking-class-request`);
   }
 
   // Fetch cooking class requests by user ID

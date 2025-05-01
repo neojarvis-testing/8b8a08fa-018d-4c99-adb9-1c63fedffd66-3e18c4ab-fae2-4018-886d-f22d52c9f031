@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CookingClass } from 'src/app/models/cooking-class.model';   // Adjust paths if necessary
-import { CookingClassRequest } from 'src/app/models/cooking-class-request.model'; // Adjust paths if necessary
+import { CookingClass } from 'src/app/models/cooking-class.model';
+import { CookingClassRequest } from 'src/app/models/cooking-class-request.model';
+import { CookingClassService } from 'src/app/services/cooking-class.service';
 
 @Component({
   selector: 'app-adminviewappliedrequest',
@@ -8,113 +9,92 @@ import { CookingClassRequest } from 'src/app/models/cooking-class-request.model'
   styleUrls: ['./adminviewappliedrequest.component.css']
 })
 export class AdminviewappliedrequestComponent implements OnInit {
-  // List of cooking classes
-  cookingClasses: CookingClass[] = [
-    {
-      CookingClassId: 202,
-      ClassName: 'Italian Cooking Basics',
-      CuisineType: 'Italian',
-      ChefName: 'Chef John Doe',
-      Location: 'New York',
-      DurationInHours: 3,
-      Fee: 500,
-      IngredientsProvided: 'Yes',
-      SkillLevel: 'Beginner',
-      SpecialRequirements: 'None'
-    },
-    {
-      CookingClassId: 203,
-      ClassName: 'Grilling Masterclass',
-      CuisineType: 'BBQ',
-      ChefName: 'Chef Jane Smith',
-      Location: 'Texas',
-      DurationInHours: 4,
-      Fee: 750,
-      IngredientsProvided: 'No',
-      SkillLevel: 'Intermediate',
-      SpecialRequirements: 'Outdoor Grill Required'
-    }
-  ];
+  cookingClasses: CookingClass[] = []; // List of cooking classes fetched from the service
+  requests: CookingClassRequest[] = []; // List of cooking class requests fetched from the service
+  filteredRequests: CookingClassRequest[] = []; // Filtered requests based on search and status filters
 
-  // List of class requests
-  requests: CookingClassRequest[] = [
-    {
-      CookingClassRequestId: 1,
-      UserId: 101,
-      CookingClassId: 202,
-      RequestDate: '2025-04-28',
-      Status: 'Pending',
-      DietaryPreferences: 'Vegetarian',
-      CookingGoals: 'Master Italian Cuisine',
-      Comments: 'Excited to join!'
-    },
-    {
-      CookingClassRequestId: 2,
-      UserId: 102,
-      CookingClassId: 203,
-      RequestDate: '2025-04-27',
-      Status: 'Approved',
-      DietaryPreferences: 'Non-Vegetarian',
-      CookingGoals: 'Learn Grilling Techniques',
-      Comments: 'Looking forward to it!'
-    }
-  ];
+  searchClassName: string = ''; // Search term for filtering by class name
+  statusFilter: string = ''; // Status filter for requests (e.g., Pending, Approved, Rejected)
 
-  // Filters and Search Terms
-  searchClassName: string = '';
-  statusFilter: string = '';
-  filteredRequests: CookingClassRequest[] = [];
+  // Pagination properties
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
+
+  constructor(private cookingClassService: CookingClassService) {}
 
   ngOnInit(): void {
-    // Initialize filteredRequests with all requests
-    this.filteredRequests = this.requests;
+    this.loadCookingClasses();
+    this.loadRequests();
   }
 
-  // Method to get the class name by CookingClassId
+  // Load cooking classes from the service
+  loadCookingClasses(): void {
+    this.cookingClassService.getAllCookingClasses().subscribe(data => {
+      this.cookingClasses = data;
+      
+    });
+  }
+
+  // Load cooking class requests from the service
+  loadRequests(): void {
+    this.cookingClassService.getAllCookingClassRequests().subscribe(data => {
+      this.requests = data;
+      this.filteredRequests = data; // Initialize filtered requests
+      console.log("Fetched Requests:", data);
+    });
+  }
+
+  // Get the class name by CookingClassId
   getClassName(cookingClassId: number): string {
-    const cookingClass = this.cookingClasses.find(
-      (classItem) => classItem.CookingClassId === cookingClassId
-    );
-    return cookingClass ? cookingClass.ClassName : 'Unknown Class';
+    const cookingClass = this.cookingClasses.find(classItem => classItem.cookingClassId === cookingClassId);
+    return cookingClass ? cookingClass.className : 'Unknown Class';
   }
 
-  // Method to filter requests based on search term and status
+  // Filter requests based on search term and status
   filterRequests(): void {
-    this.filteredRequests = this.requests.filter((request) => {
+    this.filteredRequests = this.requests.filter(request => {
       const className = this.getClassName(request.CookingClassId).toLowerCase();
-      const matchesSearch =
-        className.includes(this.searchClassName.toLowerCase());
-
-      const matchesStatus =
-        this.statusFilter === '' || request.Status === this.statusFilter;
+      const matchesSearch = className.includes(this.searchClassName.toLowerCase());
+      const matchesStatus = this.statusFilter === '' || request.Status === this.statusFilter;
 
       return matchesSearch && matchesStatus;
     });
   }
 
-  // Method to approve a request
+  // Pagination logic
+  get paginatedRequests(): CookingClassRequest[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.filteredRequests.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  changePage(page: number): void {
+    this.currentPage = page;
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredRequests.length / this.itemsPerPage);
+  }
+
+  // Approve a request
   approveRequest(request: CookingClassRequest): void {
-    if (request.Status === 'Pending') {
-      request.Status = 'Approved';
-      alert(
-        `Request for Class "${this.getClassName(
-          request.CookingClassId
-        )}" has been approved.`
-      );
-      this.filterRequests(); // Refresh the filtered list
+    console.log("Approving Request:", request.status);
+    if (request.status === 'Pending') {
+      request.status = 'Approved';
+      this.cookingClassService.updateCookingClassRequest(request.cookingClassRequestId.toString(), request).subscribe(() => {
+        alert(`Request for Class "${this.getClassName(request.cookingClassId)}" has been approved.`);
+        this.filterRequests(); // Refresh the filtered list
+      });
     }
   }
 
-  // Method to reject a request
+  // Reject a request
   rejectRequest(request: CookingClassRequest): void {
-    if (request.Status === 'Pending') {
-      request.Status = 'Rejected';
-      alert(
-        `Request for Class "${this.getClassName(
-          request.CookingClassId
-        )}" has been rejected.`
-      );
-      this.filterRequests(); // Refresh the filtered list
+    if (request.status === 'Pending') {
+      request.status = 'Rejected';
+      this.cookingClassService.updateCookingClassRequest(request.cookingClassRequestId.toString(), request).subscribe(() => {
+        alert(`Request for Class "${this.getClassName(request.cookingClassId)}" has been rejected.`);
+        this.filterRequests(); // Refresh the filtered list
+      });
     }
   }
 }

@@ -8,5 +8,5 @@ export interface CookingClass {
     Fee: number;                     
     IngredientsProvided: string;   
     SkillLevel: string;              
-    SpecialRequirements: string;   
+    SpecialRequirements: string;
 }
