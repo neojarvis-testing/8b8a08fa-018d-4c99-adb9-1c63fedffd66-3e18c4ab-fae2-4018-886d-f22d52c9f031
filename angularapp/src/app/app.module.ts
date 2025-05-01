@@ -25,7 +25,7 @@ import { UserviewfeedbackComponent } from './components/userviewfeedback/uservie
 
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { FooterComponent } from './footer/footer.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
