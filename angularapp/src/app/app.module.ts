@@ -8,6 +8,7 @@ import { AdminnavComponent } from './components/adminnav/adminnav.component';
 import { AdminviewappliedrequestComponent } from './components/adminviewappliedrequest/adminviewappliedrequest.component';
 import { AdminviewclassComponent } from './components/adminviewclass/adminviewclass.component';
 import { AdminviewfeedbackComponent } from './components/adminviewfeedback/adminviewfeedback.component';
+import { AuthguardComponent } from './authguard/auth.guard';
 import { CookingImpComponent } from './components/cooking-imp/cooking-imp.component';
 import { ErrorComponent } from './components/error/error.component';
 import { HomeComponent } from './components/home/home.component';

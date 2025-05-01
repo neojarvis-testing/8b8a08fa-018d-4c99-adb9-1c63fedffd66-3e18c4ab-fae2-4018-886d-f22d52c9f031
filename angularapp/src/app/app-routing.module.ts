@@ -18,6 +18,7 @@ import { UseraddfeedbackComponent } from './components/useraddfeedback/useraddfe
 import { UserviewappliedrequestComponent } from './components/userviewappliedrequest/userviewappliedrequest.component';
 import { UserviewclassComponent } from './components/userviewclass/userviewclass.component';
 import { UserviewfeedbackComponent } from './components/userviewfeedback/userviewfeedback.component';
+import { AuthguardComponent } from './authguard/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -35,6 +36,14 @@ const routes: Routes = [
   { path: 'admin/view-feedback', component: AdminviewfeedbackComponent },
 
   // User routes
+  // { path: 'user-nav', component: UsernavComponent, canActivate: [AuthguardComponent], data: { roles: ['User'] } },
+  // { path: 'user/add-request', component: UseraddrequestComponent, canActivate: [AuthguardComponent], data: { roles: ['User'] } },
+  // { path: 'user/add-feedback', component: UseraddfeedbackComponent, canActivate: [AuthguardComponent], data: { roles: ['User'] } },
+  // { path: 'user/view-requests', component: UserviewappliedrequestComponent, canActivate: [AuthguardComponent], data: { roles: ['User'] } },
+  // { path: 'user/view-classes', component: UserviewclassComponent, canActivate: [AuthguardComponent], data: { roles: ['User'] } },
+  // { path: 'user/view-feedback', component: UserviewfeedbackComponent, canActivate: [AuthguardComponent], data: { roles: ['User'] } },
+
+
   { path: 'user-nav', component: UsernavComponent },
   { path: 'user/add-request', component: UseraddrequestComponent },
   { path: 'user/add-feedback', component: UseraddfeedbackComponent },
@@ -42,6 +51,7 @@ const routes: Routes = [
   { path: 'user/view-classes', component: UserviewclassComponent },
   { path: 'user/view-feedback', component: UserviewfeedbackComponent },
 
+{path:'form',component:AuthguardComponent},
 
   // Error route
   { path: '**', component: ErrorComponent }
