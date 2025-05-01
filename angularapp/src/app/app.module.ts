@@ -3,13 +3,11 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AdminaddclassComponent } from './components/adminaddclass/adminaddclass.component';
 import { AdmineditclassComponent } from './components/admineditclass/admineditclass.component';
 import { AdminnavComponent } from './components/adminnav/adminnav.component';
 import { AdminviewappliedrequestComponent } from './components/adminviewappliedrequest/adminviewappliedrequest.component';
 import { AdminviewclassComponent } from './components/adminviewclass/adminviewclass.component';
 import { AdminviewfeedbackComponent } from './components/adminviewfeedback/adminviewfeedback.component';
-import { AuthguardComponent } from './components/authguard/authguard.component';
 import { CookingImpComponent } from './components/cooking-imp/cooking-imp.component';
 import { ErrorComponent } from './components/error/error.component';
 import { HomeComponent } from './components/home/home.component';
@@ -26,6 +24,7 @@ import { UserviewfeedbackComponent } from './components/userviewfeedback/uservie
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FooterComponent } from './components/footer/footer.component';
+import { AdminaddclassComponent } from './components/adminaddclass/adminaddclass.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +35,6 @@ import { FooterComponent } from './components/footer/footer.component';
     AdminviewappliedrequestComponent,
     AdminviewclassComponent,
     AdminviewfeedbackComponent,
-    AuthguardComponent,
     CookingImpComponent,
     ErrorComponent,
     HomeComponent,
