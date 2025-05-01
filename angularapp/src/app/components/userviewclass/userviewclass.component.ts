@@ -31,7 +31,7 @@ export class UserviewclassComponent implements OnInit {
       ingredientsProvided: 'No',
       skillLevel: 'Intermediate',
       requirements: 'Bring your own tools',
-      applied: true
+      applied: false
     },
     // Add more classes as needed
   ];

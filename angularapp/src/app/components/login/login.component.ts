@@ -20,11 +20,15 @@ export class LoginComponent implements OnInit {
   }
   onSubmit(loginForm: any) {
     if (loginForm.valid) {
-      this.login=loginForm.value;
+      this.login = loginForm.value;
       console.log('Form Submitted', loginForm.value);
       console.log(this.login);
+      let a;
+      this.authService.getRole().subscribe(data => a = data);
+      console.log(a);
       
-      this.authService.login(this.login).subscribe(data=>this.router.navigate(['home']))
+
+      this.authService.login(this.login).subscribe(data => this.router.navigate(['home']))
     } else {
       console.log('Form is invalid');
     }
