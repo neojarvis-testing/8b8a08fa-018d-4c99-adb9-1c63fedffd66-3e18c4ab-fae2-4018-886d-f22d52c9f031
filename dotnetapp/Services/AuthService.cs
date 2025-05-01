@@ -1,26 +1,29 @@
-using System;
-using System.Collections.Generic;
+using System.Text.Json;
+using dotnetapp.Data;
+using dotnetapp.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using dotnetapp.Models;
-using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using dotnetapp.Data;
-using Microsoft.EntityFrameworkCore; // ✅ Added EF Core namespace for SingleOrDefaultAsync
 
 namespace dotnetapp.Services
 {
     public class AuthService : IAuthService
     {
+        private readonly ApplicationDbContext _context; // ✅ Inject DbContext
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
 
-        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthService(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
+            _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
@@ -28,18 +31,15 @@ namespace dotnetapp.Services
 
         public async Task<(int, string)> Registration(User model, string role)
         {
-            // 🔹 Validate Email
             if (string.IsNullOrWhiteSpace(model.Email))
                 return (0, "Email is required");
 
-            // 🔹 Lookup by NormalizedEmail for case-insensitive search
             var normalizedEmail = model.Email.ToUpper();
-            var userExists = await _userManager.Users.SingleOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail);
+            var userExists = await _context.Users.SingleOrDefaultAsync(u => u.Email.ToUpper() == normalizedEmail);
 
             if (userExists != null)
                 return (0, "User already exists");
 
-            // 🔹 Create New User
             ApplicationUser user = new ApplicationUser()
             {
                 Email = model.Email,
@@ -52,18 +52,20 @@ namespace dotnetapp.Services
             if (!result.Succeeded)
                 return (0, "User creation failed! Please check user details and try again");
 
-            // 🔹 Validate Role Before Assigning
             if (!await _roleManager.RoleExistsAsync(role))
                 return (0, $"Role '{role}' does not exist. Please create the role first.");
 
             await _userManager.AddToRoleAsync(user, role);
+
+            // ✅ Save User to Database via DbContext
+            _context.Users.Add(model);
+            await _context.SaveChangesAsync();
 
             return (1, "User created successfully!");
         }
 
         public async Task<(int, string)> Login(LoginModel model)
         {
-            // 🔹 Validate Email
             if (string.IsNullOrWhiteSpace(model.Email))
                 return (0, "Email is required");
 
@@ -88,7 +90,28 @@ namespace dotnetapp.Services
 
             var token = GenerateToken(authClaims);
 
-            return (1, token);
+// 🔹 Fetch recently saved user data from User Table
+    var storedUser = await _context.Users.SingleOrDefaultAsync(u => u.Email == model.Email);
+    if (storedUser == null)
+        return (0, "User record not found in database");
+
+    // ✅ Serialize Response with Token, User Details, and Role(s)
+    var responseObject = new
+    {
+        token,
+        user = new
+        {
+            id = storedUser.UserId,  // Fetching user ID from DB
+            username = storedUser.Username,
+            email = storedUser.Email,
+            mobileNumber = storedUser.MobileNumber
+        },
+        role = userRoles[0]
+    };
+
+    string jsonResponse = JsonSerializer.Serialize(responseObject);
+
+    return (1, jsonResponse);
         }
 
         private string GenerateToken(IEnumerable<Claim> claims)
