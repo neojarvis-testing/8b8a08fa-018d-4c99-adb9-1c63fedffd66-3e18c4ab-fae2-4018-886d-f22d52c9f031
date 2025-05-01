@@ -41,7 +41,7 @@ export class AdmineditclassComponent implements OnInit {
   // Handle form submission for class editing
   onSubmit(editClassForm: any): void {
     if (editClassForm.valid) {
-      this.cookingService.updateCookingClass(this.classId, this.cookingClass).subscribe()
+      this.cookingService.updateCookingClass(this.classId,editClassForm.value).subscribe()
       console.log(editClassForm.value);
       
       alert('Cooking class details saved successfully!');

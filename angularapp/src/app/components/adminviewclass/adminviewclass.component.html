@@ -31,10 +31,10 @@
         <td class="border border-gray-300 px-4 py-2">{{ class.duration }}</td>
         <td class="border border-gray-300 px-4 py-2">{{ class.skillLevel }}</td>
         <td class="border border-gray-300 px-4 py-2 flex justify-evenly">
-          <button (click)="editClass(i)" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700">
+          <button (click)="editClass(class.cookingClassId)" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700">
             Edit
           </button>
-          <button (click)="confirmDelete(class.CookingClassId)" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700">
+          <button (click)="confirmDelete(i)" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700">
             Delete
           </button>
         </td>
