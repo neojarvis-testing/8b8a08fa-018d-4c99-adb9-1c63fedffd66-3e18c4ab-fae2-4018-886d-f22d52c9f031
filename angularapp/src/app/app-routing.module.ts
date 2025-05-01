@@ -18,7 +18,6 @@ import { UseraddfeedbackComponent } from './components/useraddfeedback/useraddfe
 import { UserviewappliedrequestComponent } from './components/userviewappliedrequest/userviewappliedrequest.component';
 import { UserviewclassComponent } from './components/userviewclass/userviewclass.component';
 import { UserviewfeedbackComponent } from './components/userviewfeedback/userviewfeedback.component';
-import { AuthguardComponent } from './components/authguard/authguard.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -43,7 +42,6 @@ const routes: Routes = [
   { path: 'user/view-classes', component: UserviewclassComponent },
   { path: 'user/view-feedback', component: UserviewfeedbackComponent },
 
-{path:'form',component:AuthguardComponent},
 
   // Error route
   { path: '**', component: ErrorComponent }
