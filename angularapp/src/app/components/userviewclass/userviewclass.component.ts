@@ -32,9 +32,9 @@ export class UserviewclassComponent implements OnInit {
 
   getFilteredClasses(): any[] {
     return this.classes.filter(c =>
-      c.ClassName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      c.CuisineType.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      c.ChefName.toLowerCase().includes(this.searchText.toLowerCase())
+      c.className.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      c.cuisineType.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      c.chefName.toLowerCase().includes(this.searchText.toLowerCase())
     );
   }
 }

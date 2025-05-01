@@ -19,6 +19,9 @@ import { UserviewappliedrequestComponent } from './components/userviewappliedreq
 import { UserviewclassComponent } from './components/userviewclass/userviewclass.component';
 import { UserviewfeedbackComponent } from './components/userviewfeedback/userviewfeedback.component';
 import { AuthguardComponent } from './authguard/auth.guard';
+import { AdminnavComponent } from './components/adminnav/adminnav.component';
+import { AdminHomeComponent } from './components/admin-home/admin-home.component';
+import { UserHomeComponent } from './components/user-home/user-home.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -28,7 +31,8 @@ const routes: Routes = [
   { path: 'cooking-imp', component: CookingImpComponent },
 
   // Admin routes
-  // { path: 'admin-nav', component: AdminnavComponent },
+  {path: 'admin-home', component:AdminHomeComponent},
+  { path: 'admin-nav', component: AdminnavComponent },
   { path: 'admin/add-class', component: AdminaddclassComponent },
   { path: 'admin/edit-class/:id', component: AdmineditclassComponent },
   { path: 'admin/view-requests', component: AdminviewappliedrequestComponent },
@@ -44,6 +48,7 @@ const routes: Routes = [
   // { path: 'user/view-feedback', component: UserviewfeedbackComponent, canActivate: [AuthguardComponent], data: { roles: ['User'] } },
 
 
+  {path: 'user-home', component:UserHomeComponent},
   { path: 'user-nav', component: UsernavComponent },
   { path: 'user/add-request', component: UseraddrequestComponent },
   { path: 'user/add-feedback', component: UseraddfeedbackComponent },

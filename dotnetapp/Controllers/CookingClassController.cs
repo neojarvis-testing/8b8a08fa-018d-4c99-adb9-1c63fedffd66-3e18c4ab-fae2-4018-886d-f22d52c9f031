@@ -7,7 +7,7 @@ using dotnetapp.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 namespace dotnetapp.Controllers
 {
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/cookingClass")]
     public class CookingClassController : ControllerBase

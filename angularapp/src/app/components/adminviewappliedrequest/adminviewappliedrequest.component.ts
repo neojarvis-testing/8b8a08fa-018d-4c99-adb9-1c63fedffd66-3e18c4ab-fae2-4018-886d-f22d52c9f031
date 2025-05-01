@@ -53,9 +53,9 @@ export class AdminviewappliedrequestComponent implements OnInit {
   // Filter requests based on search term and status
   filterRequests(): void {
     this.filteredRequests = this.requests.filter(request => {
-      const className = this.getClassName(request.CookingClassId).toLowerCase();
+      const className = this.getClassName(request.cookingClassId).toLowerCase();
       const matchesSearch = className.includes(this.searchClassName.toLowerCase());
-      const matchesStatus = this.statusFilter === '' || request.Status === this.statusFilter;
+      const matchesStatus = this.statusFilter === '' || request.status === this.statusFilter;
 
       return matchesSearch && matchesStatus;
     });
@@ -80,7 +80,7 @@ export class AdminviewappliedrequestComponent implements OnInit {
     console.log("Approving Request:", request.status);
     if (request.status === 'Pending') {
       request.status = 'Approved';
-      this.cookingClassService.updateCookingClassRequest(request.cookingClassRequestId.toString(), request).subscribe(() => {
+      this.cookingClassService.updateCookingClassRequest(request.cookingClassRequestId, request).subscribe(() => {
         alert(`Request for Class "${this.getClassName(request.cookingClassId)}" has been approved.`);
         this.filterRequests(); // Refresh the filtered list
       });
@@ -91,7 +91,7 @@ export class AdminviewappliedrequestComponent implements OnInit {
   rejectRequest(request: CookingClassRequest): void {
     if (request.status === 'Pending') {
       request.status = 'Rejected';
-      this.cookingClassService.updateCookingClassRequest(request.cookingClassRequestId.toString(), request).subscribe(() => {
+      this.cookingClassService.updateCookingClassRequest(request.cookingClassRequestId, request).subscribe(() => {
         alert(`Request for Class "${this.getClassName(request.cookingClassId)}" has been rejected.`);
         this.filterRequests(); // Refresh the filtered list
       });
