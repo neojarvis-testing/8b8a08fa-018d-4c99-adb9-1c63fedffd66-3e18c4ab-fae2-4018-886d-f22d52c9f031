@@ -1,18 +1,27 @@
-<header class="top-0 z-50 bg-[#0A6847] text-[#FFF5E0]">
+<header class="bg-[#0A6847] text-[#FFF5E0] shadow-md">
   <nav class="flex items-center justify-between p-6 lg:px-8">
+    <!-- Logo -->
     <div class="flex lg:flex-1">
-      <a href="/" class="-m-1.5 p-1.5 font-bold text-2xl">
-       Cooking Hub
+      <a href="/" class="font-bold text-2xl hover:opacity-80">
+        Cooking Hub
       </a>
     </div>
+
+    <!-- Navigation Links -->
     <div class="hidden lg:flex lg:gap-x-12">
-      <a routerLink="/home" class="text-base cursor-pointer">Home</a>
-      <a routerLink="/user/add-request" class="text-base cursor-pointer">Class Request</a>
-      <a routerLink="/admin/view-feedback" class="text-base cursor-pointer">Feedback</a>
+      <a href="/home" class="text-base hover:underline">Home</a>
+      <a href="/user/add-request" class="text-base hover:underline">Class Request</a>
+      <a href="/admin/view-feedback" class="text-base hover:underline">Feedback</a>
     </div>
-    <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-      <a routerLink="/home" (click)="logout()" class="text-sm cursor-pointer font-semibold"> Logout
-      <span aria-hidden="true">&rarr;</span></a>
+
+    <!-- User Actions -->
+    <div class="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
+      <a href="/registration" class="text-sm font-semibold hover:opacity-80">
+        Register &rarr;
+      </a>
+      <a href="/login" class="text-sm font-semibold hover:opacity-80">
+        Login &rarr;
+      </a>
     </div>
   </nav>
 </header>
