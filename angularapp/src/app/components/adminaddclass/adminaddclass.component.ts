@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { CookingClass } from 'src/app/models/cooking-class.model';
+import { CookingClassService } from 'src/app/services/cooking-class.service';
 
 @Component({
   selector: 'app-adminaddclass',
@@ -7,33 +9,36 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./adminaddclass.component.css']
 })
 export class AdminaddclassComponent implements OnInit {
-  existingClasses: string[] = ['Italian Basics', 'French Cuisine'];
   showModal: boolean = false; // Modal visibility flag
-
-  constructor() { }
-
+  constructor(private cooking: CookingClassService, private router: Router) { }
+  cookingclass: CookingClass = {
+    ClassName: '',
+    CuisineType: '',
+    ChefName: '',
+    Location: '',
+    DurationInHours: 0,
+    Fee: 0,
+    IngredientsProvided: '',
+    SkillLevel: '',
+    SpecialRequirements: ''
+  }
   ngOnInit(): void { }
 
-  onSubmit(form: NgForm): void {
-    if (form.invalid) {
-      alert('All fields are required');
-      return;
-    }
+  onSubmit(classForm: any): void {
 
-    const className = form.value.className;
+    this.cookingclass = classForm.value;
 
-    if (this.existingClasses.includes(className)) {
-      alert('Cooking class with the same name already exists');
-    } else {
-      this.existingClasses.push(className);
-      form.reset();
-
-      // Show modal confirmation
+    if (classForm.valid) {
+      this.cooking.addCookingClass(this.cookingclass).subscribe();
+      classForm.reset();
       this.showModal = true;
+      console.log(this.cookingclass);
+      
     }
   }
 
   closeModal(): void {
     this.showModal = false;
+    this.router.navigate(['admin/view-classes'])
   }
 }
