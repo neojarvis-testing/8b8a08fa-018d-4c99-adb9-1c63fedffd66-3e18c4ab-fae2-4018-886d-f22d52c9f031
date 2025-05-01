@@ -20,7 +20,7 @@ namespace dotnetapp.Controllers
         }
 
         // Get all cooking class requests
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CookingClassRequest>>> GetAllCookingClassRequests()
         {
@@ -36,7 +36,7 @@ namespace dotnetapp.Controllers
         }
 
         // Get cooking class requests by User ID
-        [Authorize(Roles = "User")]
+        // [Authorize(Roles = "User")]
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<CookingClassRequest>>> GetCookingClassRequestsByUserId(int userId)
         {
@@ -55,7 +55,7 @@ namespace dotnetapp.Controllers
         }
 
         // Add a cooking class request
-        [Authorize(Roles = "User")]
+        // [Authorize(Roles = "User")]
         [HttpPost]
         public async Task<ActionResult> AddCookingClassRequest([FromBody] CookingClassRequest request)
         {
@@ -78,7 +78,7 @@ namespace dotnetapp.Controllers
         }
 
         // Update a cooking class request
-        [Authorize(Roles = "User , Admin")]
+        // [Authorize(Roles = "User , Admin")]
         [HttpPut("{requestId}")]
         public async Task<ActionResult> UpdateCookingClassRequest(int requestId, [FromBody] CookingClassRequest request)
         {
@@ -97,7 +97,7 @@ namespace dotnetapp.Controllers
         }
 
         // Delete a cooking class request
-        [Authorize(Roles = "User")]
+        // [Authorize(Roles = "User")]
         [HttpDelete("{requestId}")]
         public async Task<ActionResult> DeleteCookingClassRequest(int requestId)
         {
