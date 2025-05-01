@@ -6,7 +6,7 @@ import { RegistrationComponent } from './components/registration/registration.co
 import { HomeComponent } from './components/home/home.component';
 import { ErrorComponent } from './components/error/error.component';
 import { CookingImpComponent } from './components/cooking-imp/cooking-imp.component';
-import { AdminnavComponent } from './components/adminnav/adminnav.component';
+// import { AdminnavComponent } from './components/adminnav/adminnav.component';
 import { AdminaddclassComponent } from './components/adminaddclass/adminaddclass.component';
 import { AdmineditclassComponent } from './components/admineditclass/admineditclass.component';
 import { AdminviewappliedrequestComponent } from './components/adminviewappliedrequest/adminviewappliedrequest.component';
@@ -28,9 +28,9 @@ const routes: Routes = [
   { path: 'cooking-imp', component: CookingImpComponent },
 
   // Admin routes
-  { path: 'admin-nav', component: AdminnavComponent },
+  // { path: 'admin-nav', component: AdminnavComponent },
   { path: 'admin/add-class', component: AdminaddclassComponent },
-  { path: 'admin/edit-class', component: AdmineditclassComponent },
+  { path: 'admin/edit-class/:id', component: AdmineditclassComponent },
   { path: 'admin/view-requests', component: AdminviewappliedrequestComponent },
   { path: 'admin/view-classes', component: AdminviewclassComponent },
   { path: 'admin/view-feedback', component: AdminviewfeedbackComponent },

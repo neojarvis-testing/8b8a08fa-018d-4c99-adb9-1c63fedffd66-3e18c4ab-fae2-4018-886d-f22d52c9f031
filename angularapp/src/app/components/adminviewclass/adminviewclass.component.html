@@ -2,7 +2,7 @@
   <h1 class="text-2xl font-bold mb-4">Cooking Classes</h1>
 
   <!-- Search Bar -->
-  <input type="text" placeholder="Search by Class Name" [(ngModel)]="searchTerm"
+  <input type="text" placeholder="Search by Class Name" ngModel
          class="border border-gray-300 rounded-lg p-2 w-full mb-4">
 
   <!-- Classes Table -->
@@ -31,10 +31,10 @@
         <td class="border border-gray-300 px-4 py-2">{{ class.duration }}</td>
         <td class="border border-gray-300 px-4 py-2">{{ class.skillLevel }}</td>
         <td class="border border-gray-300 px-4 py-2 flex justify-evenly">
-          <button (click)="editClass(class)" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700">
+          <button (click)="editClass(i)" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700">
             Edit
           </button>
-          <button (click)="confirmDelete(class)" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700">
+          <button (click)="confirmDelete(class.CookingClassId)" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700">
             Delete
           </button>
         </td>
@@ -54,26 +54,4 @@
     </div>
   </div>
 
-  <!-- Edit Form Modal -->
-  <div *ngIf="selectedClass && isEditMode" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white rounded-lg p-6 w-96">
-      <h2 class="text-xl font-bold mb-4">Edit Class</h2>
-      <div class="space-y-4">
-        <div>
-          <label class="block text-gray-700">Class Name</label>
-          <input [(ngModel)]="selectedClass.name" class="border border-gray-300 rounded-lg p-2 w-full">
-        </div>
-        <div>
-          <label class="block text-gray-700">Cuisine Type</label>
-          <input [(ngModel)]="selectedClass.cuisineType" class="border border-gray-300 rounded-lg p-2 w-full">
-        </div>
-        <!-- Add other fields like Chef Name, Location, Fee, etc. -->
-      </div>
-      <div class="flex justify-end space-x-4 mt-4">
-        <button (click)="saveEdit()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Save</button>
-        <button (click)="cancelEdit()" class="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">Cancel</button>
-
-      </div>
-    </div>
-  </div>
 </div>

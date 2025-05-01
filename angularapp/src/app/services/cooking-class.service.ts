@@ -8,7 +8,7 @@ import { CookingClass } from '../models/cooking-class.model';
   providedIn: 'root'
 })
 export class CookingClassService {
-  private apiBaseUrl = 'https://8080-abeecbbbdbedfffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
+  private apiBaseUrl = 'https://8080-cafdefafffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
 
   constructor(private http: HttpClient) {}
 
@@ -27,7 +27,7 @@ export class CookingClassService {
   }
 
   // Get a specific cooking class by ID
-  getCookingClassById(classId: string): Observable<CookingClass> {
+  getCookingClassById(classId: number): Observable<CookingClass> {
     return this.http.get<CookingClass>(`${this.apiBaseUrl}/cookingClass/${classId}`, {
       headers: this.getAuthHeaders()
     });
@@ -41,7 +41,7 @@ export class CookingClassService {
   }
 
   // Update an existing cooking class
-  updateCookingClass(classId: string, cooking: CookingClass): Observable<CookingClass> {
+  updateCookingClass(classId: number, cooking: CookingClass): Observable<CookingClass> {
     return this.http.put<CookingClass>(`${this.apiBaseUrl}/cookingClass/${classId}`, cooking, {
       headers: this.getAuthHeaders()
     });
@@ -74,7 +74,7 @@ export class CookingClassService {
   }
 
   // Update an existing cooking class request
-  updateCookingClassRequest(requestId: string, request: CookingClassRequest): Observable<CookingClassRequest> {
+  updateCookingClassRequest(requestId: number, request: CookingClassRequest): Observable<CookingClassRequest> {
     return this.http.put<CookingClassRequest>(`${this.apiBaseUrl}/cooking-class-request/${requestId}`, request, {
       headers: this.getAuthHeaders()
     });

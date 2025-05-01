@@ -1,34 +1,58 @@
-<header class="top-0 z-50 bg-[#0A6847] text-[#FFF5E0] shadow-md">
-  <nav class="flex items-center justify-between px-6 py-4 lg:px-8">
+<header class="top-0 z-50 bg-[#0A6847] text-[#FFF5E0]">
+  <nav class="flex items-center justify-between px-10 py-6">
     <!-- Logo Section -->
-    <div class="flex lg:flex-1">
-      <a routerLink="/admin/home" class="text-2xl font-bold -m-1.5 p-1.5 hover:text-[#FFDAB9]">
+    <div class="flex gap-x-2">
+      <img src="../../../assets/cookinghub.png" alt="Cooking Hub" class="w-10">
+      <a href="/home" class="font-extrabold text-3xl">
         Cooking Hub - Admin
       </a>
     </div>
-
     <!-- Navigation Links -->
-    <div class="hidden lg:flex lg:gap-x-8">
-      <a routerLink="/admin/home" class="text-base cursor-pointer hover:text-[#FFDAB9]">Home</a>
+    <div class="flex gap-x-8">
 
       <!-- Dropdown for Cooking Class -->
-      <div class="relative group">
-        <a class="text-base cursor-pointer hover:text-[#FFDAB9]">Cooking Class<span class="ml-2">&#9662;</span></a>
-        <div style="background-color: #f3ca52; margin-top: 0.25rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border-radius: 8px;" 
-             class="absolute left-0 hidden group-hover:block">
-          <a routerLink="/admin/add-class" class="block px-4 py-2 hover:bg-[#0A6847]">Add Class</a>
-          <a routerLink="/admin/view-class" class="block px-4 py-2 hover:bg-[#0A6847]">View Class</a>
+      <!-- ------------- -->
+      <div class="relative">
+        <!-- Dropdown Button -->
+        <button id="dropdownDefaultButton" (click)="toggleDropdown()"
+          class="font-medium px-3 py-1 rounded-full border-[1.4px] border-[#FFF5E0] hover:bg-[#FFF5E0] hover:text-gray-900 flex gap-x-1 items-center"
+          type="button">
+          Cooking Class
+          <svg class="w-2.5 h-2.5 ml-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 10 6">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m1 1 4 4 4-4" />
+          </svg>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div id="dropdown" [class.hidden]="isDropdownHidden"
+          class="absolute bg-[#F3CA52] divide-y divide-gray-100 rounded-lg mt-2 w-32 z-50"
+          style="top: calc(100% + 10px); left: 0;">
+          <ul class="py-2 text-sm text-gray-700">
+            <li>
+              <a routerLink="/admin/add-class" class="block px-4 py-2  font-semibold hover:text-[#FFF5E0] hover:bg-[#0A6847]">
+                Add Class
+              </a>
+            </li>
+            <li>
+              <a routerLink="admin/view-classes" class="block px-4 py-2 font-semibold  hover:text-[#FFF5E0]  hover:bg-[#0A6847]">
+                View Class
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
-
+      <!-- ------------------- -->
       <a routerLink="/admin/class-requested" class="text-base cursor-pointer hover:text-[#FFDAB9]">Class Requested</a>
       <a routerLink="/admin/feedbacks" class="text-base cursor-pointer hover:text-[#FFDAB9]">Feedbacks</a>
     </div>
 
     <!-- Logout Section -->
-    <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-      <a (click)="logout()" class="text-sm font-semibold cursor-pointer hover:text-[#FFDAB9]">
-        Logout <span aria-hidden="true">&rarr;</span>
+    <div class="flex text-[#FFF5E0]">
+      <a routerLink="/"
+        class="font-medium px-3 py-1 rounded-full border-[1.4px] border-[#FFF5E0] hover:bg-[#FFF5E0] hover:text-gray-900">
+        Logout
       </a>
     </div>
   </nav>
