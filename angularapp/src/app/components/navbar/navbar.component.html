@@ -1,26 +1,20 @@
-<header class="bg-[#0A6847] text-[#FFF5E0] shadow-md">
-  <nav class="flex items-center justify-between p-6 lg:px-8">
-    <!-- Logo -->
-    <div class="flex lg:flex-1">
-      <a href="/" class="font-bold text-2xl hover:opacity-80">
+<header class="top-0 z-50 bg-[#0A6847] text-[#FFF5E0]">
+  <nav class="flex items-center justify-between px-10 py-6">
+    <div class="flex gap-x-2">
+      <img src="../../../assets/cookinghub.png" alt="Cooking Hub" class="w-10">
+      <a href="/home" class="font-extrabold text-3xl">
         Cooking Hub
       </a>
     </div>
-
-    <!-- Navigation Links -->
-    <div class="hidden lg:flex lg:gap-x-12">
-      <a href="/home" class="text-base hover:underline">Home</a>
-      <a href="/user/add-request" class="text-base hover:underline">Class Request</a>
-      <a href="/admin/view-feedback" class="text-base hover:underline">Feedback</a>
-    </div>
-
-    <!-- User Actions -->
-    <div class="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
-      <a href="/registration" class="text-sm font-semibold hover:opacity-80">
-        Register &rarr;
+    <div class="flex gap-x-4 text-[#FFF5E0]">
+      <a routerLink="/register">
+        <button
+          class="font-medium px-3 py-1 rounded-full border-[1.4px] border-[#FFF5E0] hover:bg-[#FFF5E0] hover:text-gray-900">Register</button>
       </a>
-      <a href="/login" class="text-sm font-semibold hover:opacity-80">
-        Login &rarr;
+      <a routerLink="/login">
+        <button
+          class="font-medium px-3 py-1 rounded-full border-[1.4px] border-[#FFF5E0] hover:bg-[#FFF5E0] hover:text-gray-900">Login</button>
+
       </a>
     </div>
   </nav>

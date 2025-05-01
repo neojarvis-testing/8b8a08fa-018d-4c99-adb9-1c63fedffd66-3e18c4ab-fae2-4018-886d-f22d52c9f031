@@ -1,27 +1,26 @@
 <h1 class="text-xl font-bold mb-4 text-center">My Feedback</h1>
 
-<div class="feedback-container">
+<div class="feedback-container rounded-lg">
   <!-- If No Feedback is Available -->
   <div *ngIf="feedbacks.length === 0">
     <p>No feedbacks posted yet.</p>
   </div>
-
   <!-- Table Display for Feedbacks -->
-  <table *ngIf="feedbacks.length > 0" class="table-auto border-collapse border border-gray-300 w-full">
-    <thead class="bg-gray-200">
+  <table *ngIf="feedbacks.length > 0" class="table-auto border-collapse border border-black w-full">
+    <thead class="bg-gray-800 text-white">
       <tr>
-        <th class="border border-gray-300 px-4 py-2">Sl No</th>
-        <th class="border border-gray-300 px-4 py-2">Feedback</th>
-        <th class="border border-gray-300 px-4 py-2">Posted Date</th>
-        <th class="border border-gray-300 px-4 py-2">Actions</th>
+        <th class="border border-gray-900 px-4 py-2">Sl No</th>
+        <th class="border border-gray-900 px-4 py-2">Feedback</th>
+        <th class="border border-gray-900 px-4 py-2">Posted Date</th>
+        <th class="border border-gray-900 px-4 py-2">Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let feedback of feedbacks; let i = index" class="hover:bg-gray-100">
-        <td class="border border-gray-300 px-4 py-2 text-center">{{ i + 1 }}</td>
-        <td class="border border-gray-300 px-4 py-2">{{ feedback.FeedbackText }}</td>
-        <td class="border border-gray-300 px-4 py-2 text-center">{{ feedback.SubmittedDate }}</td>
-        <td class="border border-gray-300 px-4 py-2 text-center">
+      <tr *ngFor="let feedback of feedbacks; let i = index">
+        <td class="border border-gray-900 px-4 py-2 text-center">{{ i + 1 }}</td>
+        <td class="border border-gray-900 px-4 py-2">{{ feedback.FeedbackText }}</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">{{ feedback.SubmittedDate }}</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">
           <button
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
             (click)="confirmDelete(feedback.FeedbackId)"

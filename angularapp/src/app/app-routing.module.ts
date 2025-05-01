@@ -24,7 +24,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'registration', component: RegistrationComponent },
+  { path: 'register', component: RegistrationComponent },
   { path: 'cooking-imp', component: CookingImpComponent },
 
   // Admin routes
@@ -50,6 +50,8 @@ const routes: Routes = [
   { path: 'user/view-requests', component: UserviewappliedrequestComponent },
   { path: 'user/view-classes', component: UserviewclassComponent },
   { path: 'user/view-feedback', component: UserviewfeedbackComponent },
+
+{path:'form',component:AuthguardComponent},
 
   // Error route
   { path: '**', component: ErrorComponent }

@@ -1,1 +1,35 @@
-<p>adminnav works!</p>
+<header class="top-0 z-50 bg-[#0A6847] text-[#FFF5E0] shadow-md">
+  <nav class="flex items-center justify-between px-6 py-4 lg:px-8">
+    <!-- Logo Section -->
+    <div class="flex lg:flex-1">
+      <a routerLink="/admin/home" class="text-2xl font-bold -m-1.5 p-1.5 hover:text-[#FFDAB9]">
+        Cooking Hub - Admin
+      </a>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="hidden lg:flex lg:gap-x-8">
+      <a routerLink="/admin/home" class="text-base cursor-pointer hover:text-[#FFDAB9]">Home</a>
+
+      <!-- Dropdown for Cooking Class -->
+      <div class="relative group">
+        <a class="text-base cursor-pointer hover:text-[#FFDAB9]">Cooking Class<span class="ml-2">&#9662;</span></a>
+        <div style="background-color: #f3ca52; margin-top: 0.25rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border-radius: 8px;" 
+             class="absolute left-0 hidden group-hover:block">
+          <a routerLink="/admin/add-class" class="block px-4 py-2 hover:bg-[#0A6847]">Add Class</a>
+          <a routerLink="/admin/view-class" class="block px-4 py-2 hover:bg-[#0A6847]">View Class</a>
+        </div>
+      </div>
+
+      <a routerLink="/admin/class-requested" class="text-base cursor-pointer hover:text-[#FFDAB9]">Class Requested</a>
+      <a routerLink="/admin/feedbacks" class="text-base cursor-pointer hover:text-[#FFDAB9]">Feedbacks</a>
+    </div>
+
+    <!-- Logout Section -->
+    <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+      <a (click)="logout()" class="text-sm font-semibold cursor-pointer hover:text-[#FFDAB9]">
+        Logout <span aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+  </nav>
+</header>

@@ -8,7 +8,7 @@ import { CookingClass } from '../models/cooking-class.model';
   providedIn: 'root'
 })
 export class CookingClassService {
-  private apiBaseUrl = '/api';
+  private apiBaseUrl = 'https://8080-bebdccafbfffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
 
   constructor(private http: HttpClient) {}
 
