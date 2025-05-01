@@ -12,15 +12,15 @@ export class AdminaddclassComponent implements OnInit {
   showModal: boolean = false; // Modal visibility flag
   constructor(private cooking: CookingClassService, private router: Router) { }
   cookingclass: CookingClass = {
-    ClassName: '',
-    CuisineType: '',
-    ChefName: '',
-    Location: '',
-    DurationInHours: 0,
-    Fee: 0,
-    IngredientsProvided: '',
-    SkillLevel: '',
-    SpecialRequirements: ''
+    className: '',
+    cuisineType: '',
+    chefName: '',
+    location: '',
+    durationInHours: 0,
+    fee: 0,
+    ingredientsProvided: '',
+    skillLevel: '',
+    specialRequirements: ''
   }
   ngOnInit(): void { }
 

@@ -1,7 +1,24 @@
-<!-- <app-navbar></app-navbar> -->
-<app-adminnav></app-adminnav>
-<router-outlet></router-outlet>
-<div class="bg-[#FFF5E0] px-10 mn-h-screen">
+<!-- Conditionally render navbar based on role -->
+<ng-container *ngIf="!authService.isAdmin() && !authService.isUser()">
+    <app-navbar></app-navbar>
+  </ng-container>
+  
+<ng-container *ngIf="authService.isAdmin()">
+    <app-adminnav></app-adminnav>
+  </ng-container>
+  
+  <ng-container *ngIf="authService.isUser()">
+    <app-usernav></app-usernav>
+  </ng-container>
+  
+
+  
+  <router-outlet></router-outlet>
+  
+  <!-- Background container with padding -->
+  <div class="bg-[#FFF5E0] px-10 min-h-screen">
     <router-outlet></router-outlet>
-</div>
-<app-footer></app-footer>
+  </div>
+  
+  <!-- Footer remains constant -->
+  <app-footer></app-footer>

@@ -25,21 +25,21 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let class of getFilteredClasses(); let i = index">
+      <tr *ngFor="let class of classes; let i = index">
         <td class="border border-gray-900 px-4 py-2 text-center">{{ i + 1 }}</td>
         <td class="border border-gray-900 px-4 py-2">{{ class.className }}</td>
-        <td class="border border-gray-900 px-4 py-2 text-center">{{ class.cuisineName }}</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">{{ class.cuisineType }}</td>
         <td class="border border-gray-900 px-4 py-2 text-center">{{ class.chefName }}</td>
         <td class="border border-gray-900 px-4 py-2 text-center">{{ class.location }}</td>
-        <td class="border border-gray-900 px-4 py-2 text-center">{{ class.duration }}</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">{{ class.durationInHours }}</td>
         <td class="border border-gray-900 px-4 py-2 text-center">{{ class.fee }}</td>
         <td class="border border-gray-900 px-4 py-2 text-center">{{ class.ingredientsProvided }}</td>
         <td class="border border-gray-900 px-4 py-2 text-center">{{ class.skillLevel }}</td>
-        <td class="border border-gray-900 px-4 py-2 text-center flex gap-3">{{ class.requirements }}</td>
+        <td class="border border-gray-900 px-4 py-2 text-center">{{ class.specialRequirements }}</td>
         <td>
           <button 
             *ngIf="!class.applied" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
-            (click)="applyForClass(class.id)">
+            (click)="applyForClass(class.cookingClassId)">
             Apply
           </button>
           <span *ngIf="class.applied" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">

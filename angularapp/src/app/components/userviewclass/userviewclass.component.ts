@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { CookingClass } from 'src/app/models/cooking-class.model';
+import { CookingClassService } from 'src/app/services/cooking-class.service';
 
 @Component({
   selector: 'app-userviewclass',
@@ -6,53 +9,31 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./userviewclass.component.css']
 })
 export class UserviewclassComponent implements OnInit {
-  classes = [
-    {
-      id: 1,
-      className: 'Italian Cuisine',
-      cuisineName: 'Italian',
-      chefName: 'Chef Mario',
-      location: 'Rome',
-      duration: 3,
-      fee: 50,
-      ingredientsProvided: 'Yes',
-      skillLevel: 'Beginner',
-      requirements: 'None',
-      applied: false
-    },
-    {
-      id: 2,
-      className: 'Baking Basics',
-      cuisineName: 'French',
-      chefName: 'Chef Pierre',
-      location: 'Paris',
-      duration: 2,
-      fee: 40,
-      ingredientsProvided: 'No',
-      skillLevel: 'Intermediate',
-      requirements: 'Bring your own tools',
-      applied: false
-    },
-    // Add more classes as needed
-  ];
+
+  classes : CookingClass[]=[];
 
   searchText: string = '';
 
-  constructor() { }
+  constructor(private cookingClassService : CookingClassService, private router: Router) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.loadClasses()
+   }
+
+  loadClasses(){
+    this.cookingClassService.getAllCookingClasses().subscribe(res=>{
+      this.classes = res;
+    })
+  }
 
   applyForClass(classId: number): void {
-    const selectedClass = this.classes.find(c => c.id === classId);
-    if (selectedClass) {
-      selectedClass.applied = true;
-    }
+      this.router.navigate(['/user/add-request']);
   }
 
   getFilteredClasses(): any[] {
     return this.classes.filter(c =>
       c.className.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      c.cuisineName.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      c.cuisineType.toLowerCase().includes(this.searchText.toLowerCase()) ||
       c.chefName.toLowerCase().includes(this.searchText.toLowerCase())
     );
   }

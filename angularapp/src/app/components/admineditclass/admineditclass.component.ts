@@ -13,15 +13,15 @@ export class AdmineditclassComponent implements OnInit {
   // Cooking Class Model
   classId: number;
   cookingClass: CookingClass = {
-    ClassName: '',
-    CuisineType: '',
-    ChefName: '',
-    Location: '',
-    DurationInHours: 0,
-    Fee: 0,
-    IngredientsProvided: '',
-    SkillLevel: '',
-    SpecialRequirements: ''
+    className: '',
+    cuisineType: '',
+    chefName: '',
+    location: '',
+    durationInHours: 0,
+    fee: 0,
+    ingredientsProvided: '',
+    skillLevel: '',
+    specialRequirements: ''
   };
 
 

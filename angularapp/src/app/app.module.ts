@@ -26,6 +26,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FooterComponent } from './components/footer/footer.component';
 import { AdminaddclassComponent } from './components/adminaddclass/adminaddclass.component';
+import { AdminHomeComponent } from './components/admin-home/admin-home.component';
+import { UserHomeComponent } from './components/user-home/user-home.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,9 @@ import { AdminaddclassComponent } from './components/adminaddclass/adminaddclass
     UserviewappliedrequestComponent,
     UserviewclassComponent,
     UserviewfeedbackComponent,
-    FooterComponent
+    FooterComponent,
+    AdminHomeComponent,
+    UserHomeComponent
   ],
   imports: [
     BrowserModule,

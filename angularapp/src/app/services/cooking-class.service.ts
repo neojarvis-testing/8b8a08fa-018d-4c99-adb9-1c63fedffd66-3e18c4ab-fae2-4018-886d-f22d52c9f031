@@ -8,7 +8,7 @@ import { CookingClass } from '../models/cooking-class.model';
   providedIn: 'root'
 })
 export class CookingClassService {
-  private apiBaseUrl = 'https://8080-cafdefafffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
+  private apiBaseUrl = 'https://8080-abeecbbbdbedfffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
 
   constructor(private http: HttpClient) {}
 
@@ -56,9 +56,7 @@ export class CookingClassService {
 
   // Fetch all cooking class requests
   getAllCookingClassRequests(): Observable<CookingClassRequest[]> {
-    return this.http.get<CookingClassRequest[]>(`${this.apiBaseUrl}/cooking-class-request`, {
-      headers: this.getAuthHeaders()
-    });
+    return this.http.get<CookingClassRequest[]>(`${this.apiBaseUrl}/cooking-class-request`);
   }
 
   // Fetch cooking class requests by user ID

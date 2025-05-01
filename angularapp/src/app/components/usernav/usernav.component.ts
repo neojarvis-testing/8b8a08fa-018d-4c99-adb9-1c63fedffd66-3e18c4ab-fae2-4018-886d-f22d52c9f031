@@ -13,14 +13,13 @@ export class UsernavComponent implements OnInit {
   constructor(public authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    // Initialization logic if needed
   }
 
 
 
   logout(): void {
    this.authService.logout();
-   this.router.navigate(['/login'])
+   this.router.navigate(['/home'])
   }
 
 }

@@ -9,7 +9,7 @@ import { Login } from '../models/login.model';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiBaseUrl = 'https://8080-cafdefafffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
+  private apiBaseUrl = 'https://8080-abeecbbbdbedfffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
 
   private userRole = new BehaviorSubject<string | null>(null);
   private userId = new BehaviorSubject<number | null>(null);
@@ -45,9 +45,9 @@ export class AuthService {
   }
 
   // Get the current user role
-  // getRole(): Observable<string | null> {
-  //   return this.userRole.asObservable();
-  // }
+  getRole(): Observable<string | null> {
+    return this.userRole.asObservable();
+  }
 
   isAdmin(): boolean {
     return this.userRole.value === 'Admin'; // Access the current value of userRole
