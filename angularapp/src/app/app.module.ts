@@ -7,7 +7,7 @@ import { AdmineditclassComponent } from './components/admineditclass/admineditcl
 import { AdminnavComponent } from './components/adminnav/adminnav.component';
 import { AdminviewappliedrequestComponent } from './components/adminviewappliedrequest/adminviewappliedrequest.component';
 import { AdminviewclassComponent } from './components/adminviewclass/adminviewclass.component';
-import { AdminviewfeedbackComponent } from './components/adminviewfeedback/adminviewfeedback.component';
+import { AdminViewFeedbackComponent } from './components/adminviewfeedback/adminviewfeedback.component';
 import { AuthguardComponent } from './authguard/auth.guard';
 import { CookingImpComponent } from './components/cooking-imp/cooking-imp.component';
 import { ErrorComponent } from './components/error/error.component';
@@ -35,7 +35,7 @@ import { AdminaddclassComponent } from './components/adminaddclass/adminaddclass
     AdminnavComponent,
     AdminviewappliedrequestComponent,
     AdminviewclassComponent,
-    AdminviewfeedbackComponent,
+    AdminViewFeedbackComponent,
     CookingImpComponent,
     ErrorComponent,
     HomeComponent,

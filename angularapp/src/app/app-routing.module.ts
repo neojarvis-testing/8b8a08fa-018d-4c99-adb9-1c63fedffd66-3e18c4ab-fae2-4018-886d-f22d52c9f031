@@ -11,7 +11,7 @@ import { AdminaddclassComponent } from './components/adminaddclass/adminaddclass
 import { AdmineditclassComponent } from './components/admineditclass/admineditclass.component';
 import { AdminviewappliedrequestComponent } from './components/adminviewappliedrequest/adminviewappliedrequest.component';
 import { AdminviewclassComponent } from './components/adminviewclass/adminviewclass.component';
-import { AdminviewfeedbackComponent } from './components/adminviewfeedback/adminviewfeedback.component';
+import { AdminViewFeedbackComponent } from './components/adminviewfeedback/adminviewfeedback.component';
 import { UsernavComponent } from './components/usernav/usernav.component';
 import { UseraddrequestComponent } from './components/useraddrequest/useraddrequest.component';
 import { UseraddfeedbackComponent } from './components/useraddfeedback/useraddfeedback.component';
@@ -33,7 +33,7 @@ const routes: Routes = [
   { path: 'admin/edit-class', component: AdmineditclassComponent },
   { path: 'admin/view-requests', component: AdminviewappliedrequestComponent },
   { path: 'admin/view-classes', component: AdminviewclassComponent },
-  { path: 'admin/view-feedback', component: AdminviewfeedbackComponent },
+  { path: 'admin/view-feedback', component: AdminViewFeedbackComponent },
 
   // User routes
   // { path: 'user-nav', component: UsernavComponent, canActivate: [AuthguardComponent], data: { roles: ['User'] } },

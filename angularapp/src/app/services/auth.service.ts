@@ -45,9 +45,9 @@ export class AuthService {
   }
 
   // Get the current user role
-  // getRole(): Observable<string | null> {
-  //   return this.userRole.asObservable();
-  // }
+  getRole(): Observable<string | null> {
+    return this.userRole.asObservable();
+  }
 
   isAdmin(): boolean {
     return this.userRole.value === 'Admin'; // Access the current value of userRole
