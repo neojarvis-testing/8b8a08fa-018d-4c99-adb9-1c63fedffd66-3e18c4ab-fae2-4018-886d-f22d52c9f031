@@ -1,5 +1,7 @@
-
-  import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FeedbackService } from 'src/app/services/feedback.service';
+import { Feedback } from 'src/app/models/feedback.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-adminviewclass',
@@ -7,43 +9,67 @@
   styleUrls: ['./adminviewclass.component.css']
 })
 export class AdminviewclassComponent implements OnInit {
-  classes: any;
-  filteredClasses: any;
+  classes: Feedback[] = [];
+  filteredClasses: Feedback[] = [];
   location: any;
 
-  constructor() { }
+  constructor(private feedbackService: FeedbackService, private router: Router) {}
 
   ngOnInit(): void {
-    // Initialization logic if necessary
+    this.loadClasses();
   }
 
-  // Method to handle form submission
-  onSubmit(cookingForm): void {
+  private loadClasses(): void {
+    this.feedbackService.getFeedbacks().subscribe(
+      (classes) => {
+        this.classes = classes;
+        this.filteredClasses = classes;
+      },
+      (error) => {
+        console.error('Error fetching classes:', error);
+      }
+    );
+  }
+
+  onSubmit(cookingForm: any): void {
     if (cookingForm.valid) {
-      alert('Form submitted successfully!');
-      console.log('Form Data:', cookingForm.value); // Logs form data to the console
+      const newFeedback: Feedback = {
+        UserId: 1, // Assuming a default user ID; update as needed
+        FeedbackText: `Cooking Class Updated: ${cookingForm.value.className}`,
+        Date: new Date(),
+      };
+
+      this.feedbackService.sendFeedback(newFeedback).subscribe(
+        (response) => {
+          alert('Class updated successfully!');
+          console.log('Feedback stored:', response);
+        },
+        (error) => {
+          console.error('Error submitting feedback:', error);
+        }
+      );
     } else {
       alert('Please fill out all required fields.');
     }
   }
 
-  // Method for handling Edit button click
-  onEdit(classData: any): void {
-    alert(`Editing class: ${classData.name}`);
-    // Implement navigation logic to the admineditclass component
-  }
-  goBack(): void {
-    this.location.back(); // Navigate back to the previous page
+  onEdit(classData: Feedback): void {
+    alert(`Editing class: ${classData.FeedbackText}`);
+    this.router.navigate(['/admineditclass', classData.FeedbackId]); // Navigates to the edit class component
   }
 
-  // Method for handling Delete button click
-  onDelete(classData: any): void {
-    const confirmation = confirm(`Are you sure you want to delete the class: ${classData.name}?`);
+  goBack(): void {
+    this.location.back();
+  }
+
+  onDelete(classData: Feedback): void {
+    const confirmation = confirm(`Are you sure you want to delete the class: ${classData.FeedbackText}?`);
     if (confirmation) {
-      // Logic for deleting the class
-      this.classes = this.classes.filter(cls => cls !== classData);
-      this.filteredClasses = this.classes; // Update filtered list
-      alert('Class deleted successfully!');
+      this.feedbackService.deleteFeedback(classData.FeedbackId!).subscribe(() => {
+        this.classes = this.classes.filter(cls => cls.FeedbackId !== classData.FeedbackId);
+        this.filteredClasses = this.classes;
+        alert('Class deleted successfully!');
+      });
     }
   }
 }
