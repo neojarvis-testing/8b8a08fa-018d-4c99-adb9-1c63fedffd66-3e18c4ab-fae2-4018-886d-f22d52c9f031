@@ -20,9 +20,9 @@
     <tbody>
       <tr *ngFor="let feedback of feedbacks; let i = index" class="hover:bg-gray-100">
         <td class="border border-gray-300 px-4 py-2 text-center">{{ i + 1 }}</td>
-        <td class="border border-gray-300 px-4 py-2">{{ feedback.UserDetails.Name }}</td>
-        <td class="border border-gray-300 px-4 py-2">{{ feedback.FeedbackText }}</td>
-        <td class="border border-gray-300 px-4 py-2 text-center">{{ feedback.SubmittedDate }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ feedback.userDetails.name }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ feedback.feedbackText }}</td>
+        <td class="border border-gray-300 px-4 py-2 text-center">{{ feedback.submittedDate }}</td>
         <td class="border border-gray-300 px-4 py-2 text-center">
           <button
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded"

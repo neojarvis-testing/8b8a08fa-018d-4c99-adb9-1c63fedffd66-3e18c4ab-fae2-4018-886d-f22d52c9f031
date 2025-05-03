@@ -1,52 +1,66 @@
-<h1 class="text-xl font-bold mb-4 text-center">Available Classes</h1>
-<div class="search-container">
-  <input 
-    type="text" 
-    [(ngModel)]="searchText" 
-    placeholder="Search classes by name, cuisine, or chef..." 
-    class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5">
-</div>
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-xl font-bold mb-4 text-center text-[#0A6847]">Available Classes</h1>
+  
+  <!-- Search Container -->
+  <div class="search-container mb-6">
+    <input 
+      type="text" 
+      [(ngModel)]="searchText" 
+      placeholder="Search classes by name, cuisine, or chef..." 
+      class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg block w-full p-2.5">
+  </div>
 
-<div class="classes-table-container">
-  <table class="table-auto border-collapse border border-black w-full">
-    <thead class="bg-gray-800 text-white">
-      <tr>
-        <th class="border border-gray-900 px-4 py-2">S.No</th>
-        <th class="border border-gray-900 px-4 py-2">Class Name</th>
-        <th class="border border-gray-900 px-4 py-2">Cuisine Name</th>
-        <th class="border border-gray-900 px-4 py-2">Chef Name</th>
-        <th class="border border-gray-900 px-4 py-2">Location</th>
-        <th class="border border-gray-900 px-4 py-2">Duration (Hours)</th>
-        <th class="border border-gray-900 px-4 py-2">Fee ($)</th>
-        <th class="border border-gray-900 px-4 py-2">Ingredients Provided</th>
-        <th class="border border-gray-900 px-4 py-2">Skill Level</th>
-        <th class="border border-gray-900 px-4 py-2">Requirements</th>
-        <th class="border border-gray-900 px-4 py-2">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let class of classes; let i = index">
-        <td class="border border-gray-900 px-4 py-2 text-center">{{ i + 1 }}</td>
-        <td class="border border-gray-900 px-4 py-2">{{ class.className }}</td>
-        <td class="border border-gray-900 px-4 py-2 text-center">{{ class.cuisineType }}</td>
-        <td class="border border-gray-900 px-4 py-2 text-center">{{ class.chefName }}</td>
-        <td class="border border-gray-900 px-4 py-2 text-center">{{ class.location }}</td>
-        <td class="border border-gray-900 px-4 py-2 text-center">{{ class.durationInHours }}</td>
-        <td class="border border-gray-900 px-4 py-2 text-center">{{ class.fee }}</td>
-        <td class="border border-gray-900 px-4 py-2 text-center">{{ class.ingredientsProvided }}</td>
-        <td class="border border-gray-900 px-4 py-2 text-center">{{ class.skillLevel }}</td>
-        <td class="border border-gray-900 px-4 py-2 text-center">{{ class.specialRequirements }}</td>
-        <td>
-          <button 
-            *ngIf="!class.applied" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
-            (click)="applyForClass(class.cookingClassId)">
-            Apply
-          </button>
-          <span *ngIf="class.applied" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
-            Applied
-          </span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- Classes Table -->
+  <div class="classes-table-container overflow-x-auto">
+    <table class="table-auto border-collapse border border-black w-full">
+      <thead class="bg-gray-800 text-white">
+        <tr>
+          <th class="border border-gray-900 px-4 py-2">S.No</th>
+          <th class="border border-gray-900 px-4 py-2">Class Name</th>
+          <th class="border border-gray-900 px-4 py-2">Cuisine Name</th>
+          <th class="border border-gray-900 px-4 py-2">Chef Name</th>
+          <th class="border border-gray-900 px-4 py-2">Location</th>
+          <th class="border border-gray-900 px-4 py-2">Duration (Hours)</th>
+          <th class="border border-gray-900 px-4 py-2">Fee ($)</th>
+          <th class="border border-gray-900 px-4 py-2">Ingredients Provided</th>
+          <th class="border border-gray-900 px-4 py-2">Skill Level</th>
+          <th class="border border-gray-900 px-4 py-2">Requirements</th>
+          <th class="border border-gray-900 px-4 py-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let class of getFilteredClasses(); let i = index">
+          <td class="border border-gray-900 px-4 py-2 text-center">{{ i + 1 }}</td>
+          <td class="border border-gray-900 px-4 py-2">{{ class.className }}</td>
+          <td class="border border-gray-900 px-4 py-2 text-center">{{ class.cuisineType }}</td>
+          <td class="border border-gray-900 px-4 py-2 text-center">{{ class.chefName }}</td>
+          <td class="border border-gray-900 px-4 py-2 text-center">{{ class.location }}</td>
+          <td class="border border-gray-900 px-4 py-2 text-center">{{ class.durationInHours }}</td>
+          <td class="border border-gray-900 px-4 py-2 text-center">{{ class.fee }}</td>
+          <td class="border border-gray-900 px-4 py-2 text-center">{{ class.ingredientsProvided }}</td>
+          <td class="border border-gray-900 px-4 py-2 text-center">{{ class.skillLevel }}</td>
+          <td class="border border-gray-900 px-4 py-2 text-center">{{ class.specialRequirements }}</td>
+          <td class="border border-gray-900 px-4 py-2 text-center">
+            <button 
+              *ngIf="!hasApplied(class.cookingClassId)" 
+              class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
+              (click)="applyForClass(class.cookingClassId)">
+              Apply
+            </button>
+            <span 
+              *ngIf="hasApplied(class.cookingClassId)" 
+              class="bg-red-500 text-white font-bold py-1 px-3 rounded">
+              Applied
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- No Classes Message -->
+  <div *ngIf="getFilteredClasses().length === 0" class="text-center py-8">
+    <p *ngIf="searchText" class="text-lg text-gray-600">No classes match your search criteria.</p>
+    <p *ngIf="!searchText" class="text-lg text-gray-600">No cooking classes available at the moment.</p>
+  </div>
 </div>

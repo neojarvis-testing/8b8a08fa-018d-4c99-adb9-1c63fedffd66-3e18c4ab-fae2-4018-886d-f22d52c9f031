@@ -21,29 +21,21 @@ export class FeedbackService {
 
   // Send feedback to the server
   sendFeedback(feedback: Feedback): Observable<Feedback> {
-    return this.http.post<Feedback>(`${this.apiBaseUrl}/feedback`, feedback, {
-      headers: this.getAuthHeaders()
-    });
+    return this.http.post<Feedback>(`${this.apiBaseUrl}/feedback`, feedback);
   }
 
   // Fetch all feedbacks by user ID
   getAllFeedbacksByUserId(userId: number): Observable<Feedback[]> {
-    return this.http.get<Feedback[]>(`${this.apiBaseUrl}/feedback/user/${userId}`, {
-      headers: this.getAuthHeaders()
-    });
+    return this.http.get<Feedback[]>(`${this.apiBaseUrl}/feedback/user/${userId}`);
   }
 
   // Delete a feedback by its ID
   deleteFeedback(feedbackId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiBaseUrl}/feedback/${feedbackId}`, {
-      headers: this.getAuthHeaders()
-    });
+    return this.http.delete<void>(`${this.apiBaseUrl}/feedback/${feedbackId}`);
   }
 
   // Fetch all feedbacks
   getFeedbacks(): Observable<Feedback[]> {
-    return this.http.get<Feedback[]>(`${this.apiBaseUrl}/feedback`, {
-      headers: this.getAuthHeaders()
-    });
+    return this.http.get<Feedback[]>(`${this.apiBaseUrl}/feedback`);
   }
 }
