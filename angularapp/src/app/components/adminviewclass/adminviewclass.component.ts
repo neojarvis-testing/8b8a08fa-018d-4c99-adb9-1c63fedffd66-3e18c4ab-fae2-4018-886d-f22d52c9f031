@@ -1,5 +1,6 @@
-
-  import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { CookingClassService } from 'src/app/services/cooking-class.service';
 
 @Component({
   selector: 'app-adminviewclass',
@@ -7,43 +8,57 @@
   styleUrls: ['./adminviewclass.component.css']
 })
 export class AdminviewclassComponent implements OnInit {
-  classes: any;
-  filteredClasses: any;
-  location: any;
+  searchTerm: string = ''; 
+  selectedClass: any = null; 
+  isEditMode: boolean = false;
 
-  constructor() { }
+  // Example data for classes
+  filteredClasses = [
+
+  ];
+
+  constructor(private cookingService: CookingClassService, private router: Router) { }
 
   ngOnInit(): void {
-    // Initialization logic if necessary
+    this.cookingService.getAllCookingClasses().subscribe(data => this.filteredClasses = [...data])
   }
 
-  // Method to handle form submission
-  onSubmit(cookingForm): void {
-    if (cookingForm.valid) {
-      alert('Form submitted successfully!');
-      console.log('Form Data:', cookingForm.value); // Logs form data to the console
-    } else {
-      alert('Please fill out all required fields.');
-    }
+  // Filter classes based on search term
+
+
+  // Show delete confirmation modal
+  confirmDelete(classItem: any): void {
+    this.selectedClass = classItem;
   }
 
-  // Method for handling Edit button click
-  onEdit(classData: any): void {
-    alert(`Editing class: ${classData.name}`);
-    // Implement navigation logic to the admineditclass component
-  }
-  goBack(): void {
-    this.location.back(); // Navigate back to the previous page
+  // Delete class if confirmed
+  // deleteClass(): void {
+  //   if (this.selectedClass) {
+  //     const index = this.classes.indexOf(this.selectedClass);
+  //     if (index > -1) {
+  //       this.classes.splice(index, 1); // Remove the class from the list
+  //       console.log('Deleted class:', this.selectedClass);
+  //     }
+  //     this.selectedClass = null; // Reset selection after deletion
+  //   }
+  // }
+
+  // Cancel deletion
+  cancelDelete(): void {
+    this.selectedClass = null;
   }
 
-  // Method for handling Delete button click
-  onDelete(classData: any): void {
-    const confirmation = confirm(`Are you sure you want to delete the class: ${classData.name}?`);
-    if (confirmation) {
-      // Logic for deleting the class
-      this.classes = this.classes.filter(cls => cls !== classData);
-      this.filteredClasses = this.classes; // Update filtered list
-      alert('Class deleted successfully!');
-    }
+  // Enable edit mode and load selected class
+  editClass(classId:number): void {
+    this.router.navigate([`admin/edit-class/${classId}`]);
   }
+
+  // Save changes to the edited class
+ 
+
+  // Cancel editing
+  // cancelEdit(): void {
+  //   this.selectedClass = null;
+  //   this.isEditMode = false; // Exit edit mode
+  // }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Login } from 'src/app/models/login.model';
 import { AuthService } from 'src/app/services/auth.service';
@@ -9,25 +10,35 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
   login: Login = {
     Email: '',
     Password: ''
   };
+
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
   }
-  onSubmit(loginForm: any) {
-    if (loginForm.valid) {
-      this.login=loginForm.value;
-      console.log('Form Submitted', loginForm.value);
-      console.log(this.login);
-      
-      this.authService.login(this.login).subscribe(data=>this.router.navigate(['home']))
-    } else {
-      console.log('Form is invalid');
-    }
-  }
 
+  onSubmit(loginForm: NgForm) {
+    console.log(this.login);
+    if (loginForm.invalid) {
+      alert("Please fill in all fields correctly");
+      return;
+    }
+
+    this.authService.login(this.login).subscribe({
+      next: user => {
+        if (this.authService.isAdmin()) {
+          this.router.navigate(['/admin-home']);
+        } else {
+          this.router.navigate(['/user-home']);
+        }
+      },
+      error: err => {
+        console.error('Login failed', err);
+        alert('Incorrect Email or password');
+      }
+    });        
+  }
 }
