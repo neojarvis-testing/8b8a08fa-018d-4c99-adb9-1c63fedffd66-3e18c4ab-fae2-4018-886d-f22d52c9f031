@@ -81,7 +81,7 @@ namespace dotnetapp.Services
             {
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            };
+            }; 
 
             foreach (var userRole in userRoles)
             {
