@@ -95,34 +95,6 @@ export class UseraddrequestComponent implements OnInit {
     } else {
       this.markFormGroupTouched(this.requestForm);
     }
-
-    const userId = localStorage.getItem('userId');
-    if (!userId) {
-      alert('User not authenticated');
-      return;
-    }
-
-    // Create the request object
-    const request: CookingClassRequest = {
-      userId: parseInt(userId, 10),
-      cookingClassId: this.selectedClassId,
-      requestDate: new Date().toISOString(),
-      status: 'Pending',
-      dietaryPreferences: this.requestFormData.dietaryPreferences,
-      cookingGoals: this.requestFormData.cookingGoals,
-      comments: this.requestFormData.comments
-    };
-
-    // Submit the request
-    this.cookingClassService.addCookingClassRequest(request).subscribe({
-      next: () => {
-        this.showSuccessModal = true; // Display the success modal
-      },
-      error: (error) => {
-        console.error('Error submitting request:', error);
-        alert('Failed to submit request. Please try again.');
-      }
-    });
   }
 
   closeSuccessModal(): void {

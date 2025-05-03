@@ -59,6 +59,8 @@ namespace dotnetapp.Controllers
         [HttpPost]
         public async Task<ActionResult> AddCookingClass([FromBody] CookingClass cooking)
         {
+            // System.Console.WriteLine(cooking);
+            // System.Console.WriteLine("log-----------------------------");
             try
             {
                 var result = await _cookingClassService.AddCookingClass(cooking);

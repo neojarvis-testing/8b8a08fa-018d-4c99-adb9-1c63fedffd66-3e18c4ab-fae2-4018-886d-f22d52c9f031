@@ -20,7 +20,7 @@ namespace dotnetapp.Controllers
         }
 
         // Get all cooking class requests
-        [Authorize(Roles = "User , Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CookingClassRequest>>> GetAllCookingClassRequests()
         {

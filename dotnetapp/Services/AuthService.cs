@@ -16,7 +16,7 @@ namespace dotnetapp.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context; // ✅ Inject DbContext
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
@@ -57,7 +57,7 @@ namespace dotnetapp.Services
 
             await _userManager.AddToRoleAsync(user, role);
 
-            
+            // ✅ Save User to Database via DbContext
             _context.Users.Add(model);
             await _context.SaveChangesAsync();
 
@@ -90,18 +90,18 @@ namespace dotnetapp.Services
 
             var token = GenerateToken(authClaims);
 
-
+// 🔹 Fetch recently saved user data from User Table
     var storedUser = await _context.Users.SingleOrDefaultAsync(u => u.Email == model.Email);
     if (storedUser == null)
         return (0, "User record not found in database");
 
- 
+    // ✅ Serialize Response with Token, User Details, and Role(s)
     var responseObject = new
     {
         token,
         user = new
         {
-            id = storedUser.UserId,  
+            id = storedUser.UserId,  // Fetching user ID from DB
             username = storedUser.Username,
             email = storedUser.Email,
             mobileNumber = storedUser.MobileNumber
