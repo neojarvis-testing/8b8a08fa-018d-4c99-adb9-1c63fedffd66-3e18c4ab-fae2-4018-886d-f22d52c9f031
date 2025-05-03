@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import { Login } from '../models/login.model';
 
@@ -9,70 +9,95 @@ import { Login } from '../models/login.model';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiBaseUrl = 'https://8080-abeecbbbdbedfffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
+  public apiUrl = 'https://8080-cafdefafffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
+  private userRole = new BehaviorSubject<string>('');
+  private userId = new BehaviorSubject<number>(0);
+  private username = new BehaviorSubject<string>('');
 
-  private userRole = new BehaviorSubject<string | null>(null);
-  private userId = new BehaviorSubject<number | null>(null);
-  private currentUserSubject: BehaviorSubject<User | null>;
-  public currentUser: Observable<User | null>;
+  userRole$ = this.userRole.asObservable();
+  userId$ = this.userId.asObservable();
+  username$ = this.username.asObservable();
 
   constructor(private http: HttpClient) {
-    const storedUser = localStorage.getItem('currentUser');
-    this.currentUserSubject = new BehaviorSubject<User | null>(storedUser ? JSON.parse(storedUser) : null);
-    this.currentUser = this.currentUserSubject.asObservable();
+    this.checkToken();
+  }
+
+  // Check if token exists and is valid
+  private checkToken(): void {
+    const token = localStorage.getItem('jwtToken');
+    const role = localStorage.getItem('userRole');
+    const userId = localStorage.getItem('userId');
+    const username = localStorage.getItem('username');
+
+    if (token && role && userId && username) {
+      this.userRole.next(role);
+      this.userId.next(Number(userId));
+      this.username.next(username);
+    }
   }
 
   // Register a new user
   register(user: User): Observable<any> {
-    return this.http.post(`${this.apiBaseUrl}/register`, user);
+    return this.http.post(`${this.apiUrl}/register`, user, { responseType: 'text' });
   }
 
-  // Login a user and update role and ID
+  // Login user
   login(login: Login): Observable<any> {
-    return this.http.post<any>(`${this.apiBaseUrl}/login`, login)
+    return this.http.post(`${this.apiUrl}/login`, login, { responseType: 'text' })
       .pipe(
-        tap(response => {
-          if (response.token) {
-            localStorage.setItem('jwtToken', response.token);
-            localStorage.setItem('currentUser', JSON.stringify(response.user));
-            localStorage.setItem('Role', JSON.stringify(response.role));
-            this.userRole.next(response.role);
-            this.userId.next(response.id);
-            this.currentUserSubject.next(response);
-          }
+        tap((response: any) => {
+          const parsedResponse = typeof response === 'string' ? JSON.parse(response) : response;
+          
+          localStorage.setItem('jwtToken', parsedResponse.token);
+          localStorage.setItem('userId', parsedResponse.user.id);
+          localStorage.setItem('username', parsedResponse.user.username);
+          localStorage.setItem('userRole', parsedResponse.role);
+          
+          this.userRole.next(parsedResponse.role);
+          this.userId.next(parsedResponse.user.id);
+          this.username.next(parsedResponse.user.username);
+          
         })
       );
   }
 
-  // Get the current user role
-  getRole(): Observable<string | null> {
-    return this.userRole.asObservable();
+  // Logout user
+  logout(): void {
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
+    localStorage.removeItem('userRole');
+    
+    this.userRole.next('');
+    this.userId.next(0);
+    this.username.next('');
   }
 
-  isAdmin(): boolean {
-    return this.userRole.value === 'Admin'; // Access the current value of userRole
-  }
-  
-  isUser(): boolean {
-    return this.userRole.value === 'User'; // Access the current value of userRole
-  }
-
-  // Get the current user ID
-  getId(): Observable<number | null> {
-    return this.userId.asObservable();
+  // Get user role
+  getUserRole(): string {
+    return localStorage.getItem('userRole') || '';
   }
 
   // Check if user is logged in
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('currentUser');
+    return !!localStorage.getItem('jwtToken');
   }
 
-  // Log out user
-  logout(): void {
-    localStorage.removeItem('jwtToken');
-    localStorage.removeItem('currentUser');
-    this.userRole.next(null);
-    this.userId.next(null);
-    this.currentUserSubject.next(null);
+  // Check if user is admin
+  isAdmin(): boolean {
+    return this.getUserRole() === 'Admin';
+  }
+
+  // Check if user is regular user
+  isUser(): boolean {
+    return this.getUserRole() === 'User';
+  }
+
+  // Get user info
+  getUserInfo(): { id: number, username: string } {
+    return {
+      id: +localStorage.getItem('userId'),
+      username: localStorage.getItem('username') || ''
+    };
   }
 }

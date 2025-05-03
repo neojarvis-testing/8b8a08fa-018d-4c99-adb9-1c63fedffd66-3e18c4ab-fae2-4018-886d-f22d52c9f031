@@ -1,12 +1,13 @@
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using dotnetapp.Models;
 using dotnetapp.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace dotnetapp.Controllers
 {
-    [ApiController]
     [Route("api")]
+    [ApiController]
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -16,25 +17,54 @@ namespace dotnetapp.Controllers
             _authService = authService;
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel lModel)
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            // Console.WriteLine($"Attempting login for email: {lModel.Email}");
-            var result = await _authService.Login(lModel);
-            if (result.Item1 == 0)
-                return Unauthorized(new { message = result.Item2 });
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid payload");
+                }
 
-            return Content(result.Item2, "application/json");
+                var (code, message) = await _authService.Login(model);
+                if (code == 0)
+                {
+                    return StatusCode(401, message);
+                }
+
+                return Ok(message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] User rModel)
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> Register([FromBody] User model)
         {
-            var result = await _authService.Registration(rModel, rModel.UserRole);
-            if (result.Item1 == 0)
-                return BadRequest(new { message = result.Item2 });
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid payload");
+                }
 
-            return Ok(new { message = result.Item2 });
+                var (code, message) = await _authService.Registration(model, model.UserRole);
+                if (code == 0)
+                {
+                    return StatusCode(500, message);
+                }
+
+                return Ok(message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

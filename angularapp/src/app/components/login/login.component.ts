@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Login } from 'src/app/models/login.model';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from '../../services/auth.service';
+import { Login } from '../../models/login.model';
 
 @Component({
   selector: 'app-login',
@@ -10,35 +10,73 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  login: Login = {
-    Email: '',
-    Password: ''
-  };
+  loginForm: FormGroup;
+  errorMessage: string = '';
+  submitting: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) { }
-
-  ngOnInit(): void {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
+    this.loginForm = this.fb.group({
+      Email: ['', [Validators.required, Validators.email]],
+      Password: ['', [Validators.required, Validators.minLength(6)]]
+    });
   }
 
-  onSubmit(loginForm: NgForm) {
-    console.log(this.login);
-    if (loginForm.invalid) {
-      alert("Please fill in all fields correctly");
-      return;
-    }
-
-    this.authService.login(this.login).subscribe({
-      next: user => {
-        if (this.authService.isAdmin()) {
-          this.router.navigate(['/admin-home']);
-        } else {
-          this.router.navigate(['/user-home']);
-        }
-      },
-      error: err => {
-        console.error('Login failed', err);
-        alert('Incorrect Email or password');
+  ngOnInit(): void {
+    // Redirect if already logged in
+    if (this.authService.isLoggedIn()) {
+      if (this.authService.isAdmin()) {
+        this.router.navigate(['/admin/home']);
+      } else {
+        this.router.navigate(['/user/home']);
       }
-    });        
+    }
+  }
+
+  onSubmit(): void {
+    if (this.loginForm.valid) {
+      this.submitting = true;
+      this.errorMessage = '';
+      
+      const loginModel: Login = this.loginForm.value;
+      
+      this.authService.login(loginModel).subscribe(
+        response => {
+          this.submitting = false;
+          
+          // Redirect based on role
+          if (this.authService.isAdmin()) {
+            this.router.navigate(['/admin/home']);
+          } else {
+            this.router.navigate(['/user/home']);
+          }
+        },
+        error => {
+          this.submitting = false;
+          
+          if (error.status === 401) {
+            this.errorMessage = 'Invalid email or password';
+          } else {
+            this.errorMessage = 'An error occurred. Please try again later.';
+          }
+        }
+      );
+    } else {
+      this.markFormGroupTouched(this.loginForm);
+    }
+  }
+
+  // Helper to mark all controls as touched
+  markFormGroupTouched(formGroup: FormGroup): void {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 }
