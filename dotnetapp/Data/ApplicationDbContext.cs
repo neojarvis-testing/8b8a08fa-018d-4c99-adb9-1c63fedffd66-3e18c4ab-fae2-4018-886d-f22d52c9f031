@@ -21,8 +21,8 @@ namespace dotnetapp.Data
             modelBuilder.Entity<CookingClassRequest>()
                 .HasOne(cr => cr.User)
                 .WithMany(u => u.CookingClassRequests)
-                .HasForeignKey(cr => cr.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(cr => cr.UserId);
+                
 
             modelBuilder.Entity<CookingClassRequest>()
                 .HasOne(cr => cr.CookingClass)

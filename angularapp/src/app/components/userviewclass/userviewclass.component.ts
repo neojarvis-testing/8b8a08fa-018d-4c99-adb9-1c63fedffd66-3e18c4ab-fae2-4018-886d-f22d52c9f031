@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { CookingClassService } from '../../services/cooking-class.service';
+import { CookingClass } from '../../models/cooking-class.model';
 
 @Component({
   selector: 'app-userviewclass',
@@ -6,54 +9,71 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./userviewclass.component.css']
 })
 export class UserviewclassComponent implements OnInit {
-  classes = [
-    {
-      id: 1,
-      className: 'Italian Cuisine',
-      cuisineName: 'Italian',
-      chefName: 'Chef Mario',
-      location: 'Rome',
-      duration: 3,
-      fee: 50,
-      ingredientsProvided: 'Yes',
-      skillLevel: 'Beginner',
-      requirements: 'None',
-      applied: false
-    },
-    {
-      id: 2,
-      className: 'Baking Basics',
-      cuisineName: 'French',
-      chefName: 'Chef Pierre',
-      location: 'Paris',
-      duration: 2,
-      fee: 40,
-      ingredientsProvided: 'No',
-      skillLevel: 'Intermediate',
-      requirements: 'Bring your own tools',
-      applied: false
-    },
-    // Add more classes as needed
-  ];
+  cookingClasses: CookingClass[] = [];
+  filteredClasses: CookingClass[] = [];
+  searchTerm: string = '';
+  selectedClass: CookingClass | null = null;
+  loading: boolean = true;
+  error: string = '';
+  showDetailsModal: boolean = false;
 
-  searchText: string = '';
+  constructor(
+    private cookingClassService: CookingClassService,
+    private router: Router
+  ) { }
 
-  constructor() { }
-
-  ngOnInit(): void { }
-
-  applyForClass(classId: number): void {
-    const selectedClass = this.classes.find(c => c.id === classId);
-    if (selectedClass) {
-      selectedClass.applied = true;
-    }
+  ngOnInit(): void {
+    this.loadCookingClasses();
   }
 
-  getFilteredClasses(): any[] {
-    return this.classes.filter(c =>
-      c.className.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      c.cuisineName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      c.chefName.toLowerCase().includes(this.searchText.toLowerCase())
+  loadCookingClasses(): void {
+    this.loading = true;
+    this.cookingClassService.getAllCookingClasses().subscribe(
+      classes => {
+        this.cookingClasses = classes;
+        this.filteredClasses = classes;
+        this.loading = false;
+      },
+      error => {
+        console.error('Error loading cooking classes:', error);
+        this.error = 'Failed to load cooking classes. Please try again later.';
+        this.loading = false;
+      }
     );
+  }
+
+  search(): void {
+    if (!this.searchTerm) {
+      this.filteredClasses = this.cookingClasses;
+      return;
+    }
+
+    const term = this.searchTerm.toLowerCase();
+    this.filteredClasses = this.cookingClasses.filter(
+      classItem => 
+        classItem.className.toLowerCase().includes(term) ||
+        classItem.cuisineType.toLowerCase().includes(term) ||
+        classItem.chefName.toLowerCase().includes(term) ||
+        classItem.location.toLowerCase().includes(term) ||
+        classItem.skillLevel.toLowerCase().includes(term)
+    );
+  }
+
+  viewDetails(cookingClass: CookingClass): void {
+    this.selectedClass = cookingClass;
+    this.showDetailsModal = true;
+  }
+
+  closeDetailsModal(): void {
+    this.showDetailsModal = false;
+    this.selectedClass = null;
+  }
+
+  applyForClass(): void {
+    console.log(this.selectedClass);
+    if (this.selectedClass && this.selectedClass.cookingClassId) {
+      localStorage.setItem('selectedClassId', this.selectedClass.cookingClassId.toString());
+      this.router.navigate(['/user/add-request']);
+    }
   }
 }

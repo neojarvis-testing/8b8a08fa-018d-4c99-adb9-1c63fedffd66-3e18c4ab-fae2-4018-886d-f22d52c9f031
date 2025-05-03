@@ -8,19 +8,36 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./usernav.component.css']
 })
 export class UsernavComponent implements OnInit {
-
+  showLogoutModal: boolean = false;
+  username: string = '';
+  userRole: string = '';
 
   constructor(public authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    // Initialization logic if needed
+    const userInfo = this.authService.getUserInfo();
+    this.username = userInfo.username;
+    this.userRole = this.authService.getUserRole();
   }
 
+  confirmLogout(): void {
+    this.showLogoutModal = true;
+  }
 
+  closeLogoutModal(): void {
+    this.showLogoutModal = false;
+  }
 
   logout(): void {
-   this.authService.logout();
-   this.router.navigate(['/login'])
+    this.authService.logout();
+    this.closeLogoutModal();
+    this.router.navigate(['/home']);
   }
 
+  navigateTo(event: Event): void {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    if (selectedValue) {
+      this.router.navigate([selectedValue]);
+    }
+  }
 }

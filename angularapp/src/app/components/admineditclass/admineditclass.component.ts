@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { CookingClass } from 'src/app/models/cooking-class.model';
-import { CookingClassRequest } from 'src/app/models/cooking-class-request.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CookingClassService } from '../../services/cooking-class.service';
+import { CookingClass } from '../../models/cooking-class.model';
 
 @Component({
   selector: 'app-admineditclass',
@@ -10,51 +10,115 @@ import { CookingClassRequest } from 'src/app/models/cooking-class-request.model'
   styleUrls: ['./admineditclass.component.css']
 })
 export class AdmineditclassComponent implements OnInit {
-  // Cooking Class Model
-  cookingClass: CookingClass = {
-    ClassName: 'Italian Cooking Basics',
-    CuisineType: 'Italian',
-    ChefName: 'Chef John Doe',
-    Location: 'New York City',
-    DurationInHours: 3,
-    Fee: 500,
-    IngredientsProvided: 'Yes',
-    SkillLevel: 'Beginner',
-    SpecialRequirements: 'None'
-  };
+  classForm: FormGroup;
+  classId: number;
+  errorMessage: string = '';
+  showSuccessModal: boolean = false;
+  loading: boolean = true;
+  submitting: boolean = false;
+  skillLevels: string[] = ['Beginner', 'Intermediate', 'Advanced'];
 
-  // Cooking Class Request Model
-  cookingClassRequest: CookingClassRequest = {
-    UserId: 1,
-    CookingClassId: 101,
-    RequestDate: '2025-04-28',
-    Status: 'Pending',
-    DietaryPreferences: 'Vegetarian',
-    CookingGoals: 'Learn Italian Cuisine',
-    Comments: 'Looking forward to this class!'
-  };
-
-  constructor(private router: Router) {}
-
-  ngOnInit(): void {
-    // Example of fetching or setting data from a backend (if needed)
-    console.log('Loaded cooking class data:', this.cookingClass);
-    console.log('Loaded cooking class request:', this.cookingClassRequest);
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private cookingClassService: CookingClassService
+  ) {
+    this.classForm = this.fb.group({
+      className: ['', Validators.required],
+      cuisineType: ['', Validators.required],
+      chefName: ['', Validators.required],
+      location: ['', Validators.required],
+      durationInHours: ['', [Validators.required, Validators.min(1)]],
+      fee: ['', [Validators.required, Validators.min(1)]],
+      ingredientsProvided: ['', Validators.required],
+      skillLevel: ['', Validators.required],
+      specialRequirements: ['', Validators.required]
+    });
+    
+    this.classId = +this.route.snapshot.paramMap.get('id');
   }
 
-  // Handle form submission for class editing
-  onSubmit(form: NgForm): void {
-    if (form.valid) {
-      console.log('Updated Cooking Class:', form.value);
-      alert('Cooking class details saved successfully!');
-      // Logic to save to backend API can be added here
+  ngOnInit(): void {
+    this.loadCookingClass();
+  }
+
+  loadCookingClass(): void {
+    if (!this.classId) {
+      this.router.navigate(['/admin/view-class']);
+      return;
+    }
+
+    this.cookingClassService.getCookingClassById(this.classId).subscribe(
+    (cookingClass: CookingClass) => {
+      console.log('Fetched Cooking Class:', cookingClass); // Debugging
+
+      // Ensure response contains all required fields before patching
+      if (cookingClass) {
+        this.classForm.patchValue({
+          className: cookingClass.className || '',
+          cuisineType: cookingClass.cuisineType || '',
+          chefName: cookingClass.chefName || '',
+          location: cookingClass.location || '',
+          durationInHours: cookingClass.durationInHours || '',
+          fee: cookingClass.fee || '',
+          ingredientsProvided: cookingClass.ingredientsProvided || '',
+          skillLevel: cookingClass.skillLevel || '',
+          specialRequirements: cookingClass.specialRequirements || ''
+        });
+      }
+
+      this.loading = false;
+    },
+    error => {
+      console.error('Error fetching cooking class:', error);
+      this.loading = false;
+    }
+  );
+}
+  
+
+  onSubmit(): void {
+    if (this.classForm.valid) {
+      this.submitting = true;
+      this.errorMessage = '';
+      
+      const cookingClass: CookingClass = this.classForm.value;
+      
+      this.cookingClassService.updateCookingClass(this.classId, cookingClass).subscribe(
+        () => {
+          this.submitting = false;
+          this.showSuccessModal = true;
+        },
+        error => {
+          this.submitting = false;
+          
+          if (error.error && typeof error.error === 'string' && error.error.includes('already exists')) {
+            this.errorMessage = 'Cooking class with the same name already exists';
+          } else {
+            this.errorMessage = 'Failed to update cooking class. Please try again.';
+          }
+        }
+      );
     } else {
-      alert('Please complete the form before submitting.');
+      this.markFormGroupTouched(this.classForm);
+      this.errorMessage = 'All fields are required';
     }
   }
 
-  // Navigate back to the admin view class component
-  navigateToAdminViewClass(): void {
-    this.router.navigate(['/adminviewclass']);
+  closeSuccessModal(): void {
+    this.showSuccessModal = false;
+    this.router.navigate(['/admin/view-class']);
+  }
+
+  // Helper to mark all controls as touched
+  markFormGroupTouched(formGroup: FormGroup): void {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 }

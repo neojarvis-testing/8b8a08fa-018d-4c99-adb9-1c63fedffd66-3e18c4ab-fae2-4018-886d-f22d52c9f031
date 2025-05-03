@@ -1,4 +1,44 @@
+// import { Component, OnInit } from '@angular/core';
+// import { Router } from '@angular/router';
+// import { CookingClassService } from 'src/app/services/cooking-class.service';
+
+// @Component({
+//   selector: 'app-adminviewclass',
+//   templateUrl: './adminviewclass.component.html',
+//   styleUrls: ['./adminviewclass.component.css']
+// })
+// export class AdminviewclassComponent implements OnInit {
+//   searchTerm: string = ''; 
+
+//   filteredClasses = [
+
+//   ];
+
+//   constructor(private cookingService: CookingClassService, private router: Router) { }
+
+//   ngOnInit(): void {
+//     this.cookingService.getAllCookingClasses().subscribe(data => this.filteredClasses = [...data])
+//   }
+
+ 
+//   confirmDelete(classId: number): void {
+//     this.cookingService.deleteCookingClass(classId).subscribe(
+//       a=>{this.router.navigate(['admin/view-class'])}
+//     )
+
+//   }
+
+//   editClass(classId:number): void {
+//     this.router.navigate([`admin/edit-class/${classId}`]);
+//   }
+
+
+// }
+
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { CookingClassService } from '../../services/cooking-class.service';
+import { CookingClass } from '../../models/cooking-class.model';
 
 @Component({
   selector: 'app-adminviewclass',
@@ -6,96 +46,86 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./adminviewclass.component.css']
 })
 export class AdminviewclassComponent implements OnInit {
-  searchTerm: string = ''; // Search input
-  selectedClass: any = null; // Holds the class being considered for deletion or editing
-  isEditMode: boolean = false; // Tracks if the component is in edit mode
+  cookingClasses: CookingClass[] = [];
+  filteredClasses: CookingClass[] = [];
+  searchTerm: string = '';
+  selectedClass: CookingClass | null = null;
+  loading: boolean = true;
+  error: string = '';
+  showDeleteModal: boolean = false;
 
-  // Example data for classes
-  classes = [
-    {
-      name: 'Baking Basics',
-      cuisineType: 'Bakery',
-      chefName: 'Chef A',
-      location: 'New York',
-      fee: 50,
-      duration: '2 hours',
-      skillLevel: 'Beginner'
-    },
-    {
-      name: 'Advanced Pastries',
-      cuisineType: 'Desserts',
-      chefName: 'Chef B',
-      location: 'Paris',
-      fee: 100,
-      duration: '3 hours',
-      skillLevel: 'Advanced'
-    },
-    {
-      name: 'Vegetarian Cooking',
-      cuisineType: 'Vegetarian',
-      chefName: 'Chef C',
-      location: 'London',
-      fee: 70,
-      duration: '2.5 hours',
-      skillLevel: 'Intermediate'
-    }
-  ];
+  constructor(
+    private cookingClassService: CookingClassService,
+    private router: Router
+  ) { }
 
-  constructor() {}
-
-  ngOnInit(): void {}
-
-  // Filter classes based on search term
-  get filteredClasses() {
-    return this.classes.filter((c) =>
-      c.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
+  ngOnInit(): void {
+    this.loadCookingClasses();
   }
 
-  // Show delete confirmation modal
-  confirmDelete(classItem: any): void {
-    this.selectedClass = classItem;
-  }
-
-  // Delete class if confirmed
-  deleteClass(): void {
-    if (this.selectedClass) {
-      const index = this.classes.indexOf(this.selectedClass);
-      if (index > -1) {
-        this.classes.splice(index, 1); // Remove the class from the list
-        console.log('Deleted class:', this.selectedClass);
+  loadCookingClasses(): void {
+    this.loading = true;
+    this.cookingClassService.getAllCookingClasses().subscribe(
+      classes => {
+        this.cookingClasses = classes;
+        this.filteredClasses = classes;
+        this.loading = false;
+      },
+      error => {
+        console.error('Error loading cooking classes:', error);
+        this.error = 'Failed to load cooking classes. Please try again later.';
+        this.loading = false;
       }
-      this.selectedClass = null; // Reset selection after deletion
-    }
-  }
-
-  // Cancel deletion
-  cancelDelete(): void {
-    this.selectedClass = null;
-  }
-
-  // Enable edit mode and load selected class
-  editClass(classItem: any): void {
-    this.selectedClass = { ...classItem }; // Make a copy of the selected class
-    this.isEditMode = true;
-  }
-
-  // Save changes to the edited class
-  saveEdit(): void {
-    const index = this.classes.findIndex(
-      (c) => c.name === this.selectedClass.name
     );
-    if (index > -1) {
-      this.classes[index] = this.selectedClass; // Update class details
-      console.log('Edited class:', this.selectedClass);
-    }
-    this.selectedClass = null; // Reset selected class
-    this.isEditMode = false; // Exit edit mode
   }
 
-  // Cancel editing
-  cancelEdit(): void {
+  search(): void {
+    if (!this.searchTerm) {
+      this.filteredClasses = this.cookingClasses;
+      return;
+    }
+
+    const term = this.searchTerm.toLowerCase();
+    this.filteredClasses = this.cookingClasses.filter(
+      classItem => classItem.className.toLowerCase().includes(term)
+    );
+  }
+
+  editClass(classId: number): void {
+    this.router.navigate([`/admin/edit-class/${classId}`]);
+  }
+
+  confirmDelete(cookingClass: CookingClass): void {
+    this.selectedClass = cookingClass;
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal(): void {
+    this.showDeleteModal = false;
     this.selectedClass = null;
-    this.isEditMode = false; // Exit edit mode
+  }
+
+  deleteClass(): void {
+    if (!this.selectedClass || !this.selectedClass.cookingClassId) {
+      return;
+    }
+
+    const classId = this.selectedClass.cookingClassId;
+    
+    this.cookingClassService.deleteCookingClass(classId).subscribe(
+      () => {
+        this.loadCookingClasses();
+        this.closeDeleteModal();
+      },
+      error => {
+        console.error('Error deleting cooking class:', error);
+        if (error.error && typeof error.error === 'string' && error.error.includes('referenced in a request')) {
+          alert('Cooking class cannot be deleted as it is referenced in a request');
+        } else {
+          alert('Failed to delete cooking class. Please try again.');
+        }
+        this.closeDeleteModal();
+      }
+    );
   }
 }

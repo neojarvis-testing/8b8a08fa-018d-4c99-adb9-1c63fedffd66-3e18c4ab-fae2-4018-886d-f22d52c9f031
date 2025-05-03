@@ -1,80 +1,138 @@
-<div class="flex flex-col items-center justify-center px-6 py-8 mx-auto">
-  <div class="w-full bg-[#FFF5E0] rounded-lg shadow shadow-lg dark:border md:mt-0 sm:max-w-md xl:p-0">
-    <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+<!-- <app-adminnav></app-adminnav> -->
 
-      <h1 class="text-xl font-bold leading-tight tracking-tight text-[#0A6847] md:text-2xl">Edit Cooking Class</h1>
-
-      <form #editClassForm="ngForm" (ngSubmit)="onSubmit(editClassForm)" class="space-y-4 md:space-y-6" novalidate>
-        <!-- Class Name -->
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Edit Cooking Class</h2>
+    
+    <div *ngIf="loading" class="text-center py-4">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+      <p class="mt-2 text-gray-600">Loading class information...</p>
+    </div>
+    
+    <form *ngIf="!loading" [formGroup]="classForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label for="className" class="block mb-2 text-sm font-medium text-[#0A6847]">Class Name:</label>
-          <input type="text" id="className" name="ClassName" class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" [(ngModel)]="cookingClass.ClassName" required
-            minlength="3" />
-          <small *ngIf="editClassForm.controls.ClassName?.invalid && editClassForm.controls.ClassName?.touched">
-            Class Name is required and must be at least 3 characters long.
-          </small>
+          <label for="className" class="block text-sm font-medium text-gray-700">Class Name</label>
+          <input 
+            type="text" 
+            id="className" 
+            formControlName="className" 
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          >
         </div>
-
-        <!-- Cuisine Type -->
+        
         <div>
-          <label for="CuisineType" class="block mb-2 text-sm font-medium text-[#0A6847]">Cuisine Type:</label>
-          <input type="text" id="CuisineType" name="CuisineType" class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" [(ngModel)]="cookingClass.CuisineType" required />
-          <small *ngIf="editClassForm.controls.CuisineType?.invalid && editClassForm.controls.CuisineType?.touched">
-            Cuisine Type is required.
-          </small>
+          <label for="cuisineType" class="block text-sm font-medium text-gray-700">Cuisine Type</label>
+          <input 
+            type="text" 
+            id="cuisineType" 
+            formControlName="cuisineType" 
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          >
         </div>
-
-        <!-- Chef Name -->
+        
         <div>
-          <label for="ChefName" class="block mb-2 text-sm font-medium text-[#0A6847]">Chef Name:</label>
-          <input type="text" id="ChefName" name="ChefName" class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" [(ngModel)]="cookingClass.ChefName" required />
-          <small *ngIf="editClassForm.controls.ChefName?.invalid && editClassForm.controls.ChefName?.touched">
-            Chef Name is required.
-          </small>
+          <label for="chefName" class="block text-sm font-medium text-gray-700">Chef Name</label>
+          <input 
+            type="text" 
+            id="chefName" 
+            formControlName="chefName" 
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          >
         </div>
-
-        <!-- Location -->
+        
         <div>
-          <label for="Location" class="block mb-2 text-sm font-medium text-[#0A6847]">Location:</label>
-          <input type="text" id="Location" name="Location" class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" [(ngModel)]="cookingClass.Location" required />
-          <small *ngIf="editClassForm.controls.Location?.invalid && editClassForm.controls.Location?.touched">
-            Location is required.
-          </small>
+          <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+          <input 
+            type="text" 
+            id="location" 
+            formControlName="location" 
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          >
         </div>
-
-        <!-- Duration -->
+        
         <div>
-          <label for="DurationInHours" class="block mb-2 text-sm font-medium text-[#0A6847]">Duration (in hours):</label>
-          <input type="number" id="DurationInHours" name="DurationInHours" class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" [(ngModel)]="cookingClass.DurationInHours"
-            required min="1" />
-          <small
-            *ngIf="editClassForm.controls.DurationInHours?.invalid && editClassForm.controls.DurationInHours?.touched">
-            Duration is required and must be at least 1 hour.
-          </small>
+          <label for="durationInHours" class="block text-sm font-medium text-gray-700">Duration (hours)</label>
+          <input 
+            type="number" 
+            id="durationInHours" 
+            formControlName="durationInHours" 
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          >
         </div>
-
-        <!-- Fee -->
+        
         <div>
-          <label for="Fee" class="block mb-2 text-sm font-medium text-[#0A6847]">Fee:</label>
-          <input type="number" id="Fee" name="Fee" class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5" [(ngModel)]="cookingClass.Fee" required min="0" />
-          <small *ngIf="editClassForm.controls.Fee?.invalid && editClassForm.controls.Fee?.touched">
-            Fee is required and must be a positive number.
-          </small>
+          <label for="fee" class="block text-sm font-medium text-gray-700">Fee</label>
+          <input 
+            type="number" 
+            id="fee" 
+            formControlName="fee" 
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          >
         </div>
-
-        <!-- Special Requirements -->
+        
         <div>
-          <label for="SpecialRequirements" class="block mb-2 text-sm font-medium text-[#0A6847]">Special Requirements:</label>
-          <input type="text" id="SpecialRequirements" name="SpecialRequirements" class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg  focus:border-[#7ABA78] block w-full p-2.5"
-            [(ngModel)]="cookingClass.SpecialRequirements" />
+          <label for="ingredientsProvided" class="block text-sm font-medium text-gray-700">Ingredients Provided</label>
+          <input 
+            type="text" 
+            id="ingredientsProvided" 
+            formControlName="ingredientsProvided" 
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          >
         </div>
+        
+        <div>
+          <label for="skillLevel" class="block text-sm font-medium text-gray-700">Skill Level</label>
+          <select 
+            id="skillLevel" 
+            formControlName="skillLevel" 
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          >
+            <option value="" disabled>Select skill level</option>
+            <option *ngFor="let level of skillLevels" [value]="level">{{ level }}</option>
+          </select>
+        </div>
+      </div>
+      
+      <div>
+        <label for="specialRequirements" class="block text-sm font-medium text-gray-700">Special Requirements</label>
+        <textarea 
+          id="specialRequirements" 
+          formControlName="specialRequirements" 
+          rows="3" 
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        ></textarea>
+      </div>
+      
+      <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <span class="block sm:inline">{{ errorMessage }}</span>
+      </div>
+      
+      <div class="flex justify-end">
+        <button 
+          type="submit" 
+          [disabled]="submitting" 
+          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        >
+          {{ submitting ? 'Updating...' : 'Update Class' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 
-        <!-- Submit Button -->
-        <button type="submit" class="w-full text-white bg-[#0A6847] hover:bg-[#7ABA78] focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center" [disabled]="editClassForm.invalid">Save</button>
-
-        <!-- Back Button -->
-        <button type="button" (click)="navigateToAdminViewClass()">Back</button>
-      </form>
+<!-- Success Modal -->
+<div *ngIf="showSuccessModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+  <div class="bg-white rounded-lg p-6 max-w-md">
+    <h3 class="text-lg font-medium text-gray-900 mb-4">Success!</h3>
+    <p class="text-gray-600 mb-6">Cooking class updated successfully!</p>
+    <div class="flex justify-end">
+      <button 
+        class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+        (click)="closeSuccessModal()"
+      >
+        OK
+      </button>
     </div>
   </div>
 </div>

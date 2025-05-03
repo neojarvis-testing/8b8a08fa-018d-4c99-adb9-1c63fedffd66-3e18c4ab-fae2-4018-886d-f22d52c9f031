@@ -1,25 +1,35 @@
-<div class="container-fluid p-4" style="background-color: #fdf7e6;">
-  <h4 class="text-center mb-4">Feedback Details</h4>
-  <table class="table table-bordered" style="background-color: white;">
-    <thead style="background-color: black; color: white;">
-      <tr class="text-center">
-        <th style="width: 5%;">S.No</th>
-        <th style="width: 15%;">User ID</th>
-        <th style="width: 40%;">Feedback</th>
-        <th style="width: 15%;">Posted Date</th>
-        <th style="width: 10%;">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let feedback of feedbackList; let i = index">
-        <td class="text-center">{{ i + 1 }}</td>
-        <td class="text-center">{{ feedback.UserId }}</td>
-        <td>{{ feedback.FeedbackText }}</td>
-        <td class="text-center">{{ feedback.Date | date:'yyyy-MM-dd' }}</td>
-        <td class="text-center">
-          <button class="btn btn-primary btn-sm">Show Profile</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<!-- <app-adminnav></app-adminnav> -->
+<h1 class="text-center">Feedback Details</h1>
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">User Feedbacks</h1>
+  
+  <div *ngIf="loading" class="text-center py-4">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+    <p class="mt-2 text-gray-600">Loading feedbacks...</p>
+  </div>
+  
+  <div *ngIf="!loading && error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded" role="alert">
+    <p>{{ error }}</p>
+  </div>
+  
+  <div *ngIf="!loading && !error">
+    <div *ngIf="feedbacks.length === 0" class="text-center py-6">
+      <p class="text-gray-600">No feedbacks found</p>
+    </div>
+    
+    <div *ngIf="feedbacks.length > 0" class="space-y-6">
+      <div *ngFor="let feedback of feedbacks" class="bg-white shadow overflow-hidden rounded-lg p-6">
+        <div class="flex justify-between items-start">
+          <div>
+            <h2 class="text-lg font-medium text-gray-900">{{ feedback.username }}</h2>
+            <p class="text-sm text-gray-500">{{ feedback.Date | date:'medium' }}</p>
+          </div>
+        </div>
+        
+        <div class="mt-4">
+          <p class="text-gray-800">{{ feedback.feedbackText }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

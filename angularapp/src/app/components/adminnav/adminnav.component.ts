@@ -1,4 +1,36 @@
+// import { Component, OnInit } from '@angular/core';
+// import { Router } from '@angular/router';
+// import { AuthService } from 'src/app/services/auth.service';
+
+// @Component({
+//   selector: 'app-adminnav',
+//   templateUrl: './adminnav.component.html',
+//   styleUrls: ['./adminnav.component.css']
+// })
+// export class AdminnavComponent implements OnInit {
+//   constructor(private authService: AuthService, private router: Router) { }
+
+//   ngOnInit(): void {
+//     // Initialization logic if needed
+//   }
+
+ 
+//   isDropdownHidden: boolean = true;
+
+//   toggleDropdown() {
+//     this.isDropdownHidden = !this.isDropdownHidden;
+//   }
+
+//   logout(): void {
+//     this.authService.logout();
+//     this.router.navigate(['/home'])
+//    }
+
+// }
+
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-adminnav',
@@ -6,25 +38,29 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./adminnav.component.css']
 })
 export class AdminnavComponent implements OnInit {
-  // State to track dropdown visibility
-  isDropdownVisible: boolean = false;
+  showLogoutModal: boolean = false;
+  username: string = '';
+  userRole: string = '';
 
-  constructor() { }
+  constructor(public authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    // Initialization logic if needed
+    const userInfo = this.authService.getUserInfo();
+    this.username = userInfo.username;
+    this.userRole = this.authService.getUserRole();
   }
 
-  // Method to toggle the dropdown menu visibility
-  toggleDropdown(): void {
-    this.isDropdownVisible = !this.isDropdownVisible;
+  confirmLogout(): void {
+    this.showLogoutModal = true;
+  }
+
+  closeLogoutModal(): void {
+    this.showLogoutModal = false;
   }
 
   logout(): void {
-    // Logout logic - clear session/local storage and navigate to login
-    localStorage.clear();
-    sessionStorage.clear();
-    console.log('Admin logged out');
-    // Add navigation logic here, e.g., using Router
+    this.authService.logout();
+    this.closeLogoutModal();
+    this.router.navigate(['/home']);
   }
 }
