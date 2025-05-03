@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CookingClassService } from 'src/app/services/cooking-class.service';
-import { CookingClassRequest } from 'src/app/models/cooking-class-request.model';
+import { CookingClassService } from '../../services/cooking-class.service';
+import { AuthService } from '../../services/auth.service';
+import { CookingClass } from '../../models/cooking-class.model';
+import { CookingClassRequest } from '../../models/cooking-class-request.model';
 
 @Component({
   selector: 'app-useraddrequest',
@@ -10,40 +12,88 @@ import { CookingClassRequest } from 'src/app/models/cooking-class-request.model'
   styleUrls: ['./useraddrequest.component.css']
 })
 export class UseraddrequestComponent implements OnInit {
-  // Form fields for Cooking Class Request
-  requestFormData = {
-    dietaryPreferences: '',
-    cookingGoals: '',
-    comments: ''
-  };
-
-  // Modal control variables
-  showSuccessModal: boolean = false; // Controls visibility of the success modal
-  selectedClassId: number | null = null;
+  requestForm: FormGroup;
+  cookingClass: CookingClass | null = null;
+  loading: boolean = true;
+  submitting: boolean = false;
+  errorMessage: string = '';
+  showSuccessModal: boolean = false;
 
   constructor(
+    private fb: FormBuilder,
+    private router: Router,
     private cookingClassService: CookingClassService,
-    private router: Router
-  ) {}
-
-  ngOnInit(): void {
-    // Get the selected class ID from local storage
-    const storedClassId = localStorage.getItem('selectedClassId');
-    if (storedClassId) {
-      this.selectedClassId = parseInt(storedClassId, 10);
-    }
+    private authService: AuthService
+  ) 
+  {
+    this.requestForm = this.fb.group({
+      DietaryPreferences: ['', Validators.required],
+      CookingGoals: ['', Validators.required],
+      Comments: ['']
+    });
   }
 
-  // Method to handle form submission
-  onSubmit(form: NgForm): void {
-    if (form.invalid) {
-      alert('All fields are required');
+  ngOnInit(): void {
+    const selectedClassId = +localStorage.getItem('selectedClassId');
+    console.log(selectedClassId);
+    
+    if (!selectedClassId) {
+      this.router.navigate(['/user/view-classes']);
       return;
     }
 
-    if (!this.selectedClassId) {
-      alert('No cooking class selected');
-      return;
+    this.loadCookingClass(selectedClassId);
+  }
+
+  loadCookingClass(classId: number): void {
+    this.cookingClassService.getCookingClassById(classId).subscribe(
+      cookingClass => {
+        this.cookingClass = cookingClass;
+        this.loading = false;
+      },
+      error => {
+        console.error('Error loading cooking class:', error);
+        this.errorMessage = 'Failed to load cooking class. Please try again later.';
+        this.loading = false;
+      }
+    );
+  }
+
+  onSubmit(): void {
+    if (this.requestForm.valid && this.cookingClass) {
+      this.submitting = true;
+      this.errorMessage = '';
+      
+      const userInfo = this.authService.getUserInfo();
+      const userId = +(userInfo.id);
+      
+      const request: CookingClassRequest = {
+        userId: userId,
+        cookingClassId: this.cookingClass.cookingClassId!,
+        requestDate: new Date().toISOString().split('T')[0], // Format as YYYY-MM-DD
+        status: 'Pending',
+        dietaryPreferences: this.requestForm.value.DietaryPreferences,
+        cookingGoals: this.requestForm.value.CookingGoals,
+        comments: this.requestForm.value.Comments
+      };
+      
+      this.cookingClassService.addCookingClassRequest(request).subscribe(
+        () => {
+          this.submitting = false;
+          this.showSuccessModal = true;
+        },
+        error => {
+          this.submitting = false;
+          
+          if (error.error && typeof error.error === 'string' && error.error.includes('already requested')) {
+            this.errorMessage = 'You have already requested this cooking class';
+          } else {
+            this.errorMessage = 'Failed to submit request. Please try again later.';
+          }
+        }
+      );
+    } else {
+      this.markFormGroupTouched(this.requestForm);
     }
 
     const userId = localStorage.getItem('userId');
@@ -75,16 +125,20 @@ export class UseraddrequestComponent implements OnInit {
     });
   }
 
-  // Method to close the success modal and navigate to userviewappliedrequest
   closeSuccessModal(): void {
-    this.showSuccessModal = false; // Hide the modal
-    localStorage.removeItem('selectedClassId'); // Clear the selected class ID
-    this.router.navigate(['/userviewappliedrequest']); // Navigate to userviewappliedrequest
+    this.showSuccessModal = false;
+    localStorage.removeItem('selectedClassId');
+    this.router.navigate(['/user/applied-requests']);
   }
 
-  // Method to navigate back to userviewappliedrequest component
-  navigateBack(): void {
-    localStorage.removeItem('selectedClassId'); // Clear the selected class ID
-    this.router.navigate(['user/view-requests']);
+  // Helper to mark all controls as touched
+  markFormGroupTouched(formGroup: FormGroup): void {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 }

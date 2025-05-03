@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FeedbackService } from '../../services/feedback.service';
+import { AuthService } from '../../services/auth.service';
+import { Feedback } from '../../models/feedback.model';
 
 @Component({
   selector: 'app-userviewfeedback',
@@ -6,38 +9,67 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./userviewfeedback.component.css']
 })
 export class UserviewfeedbackComponent implements OnInit {
-  // Feedback list (example data)
-  feedbacks = [
-    { FeedbackId: 1, FeedbackText: 'Amazing class!', SubmittedDate: '2025-04-27' },
-    { FeedbackId: 2, FeedbackText: 'Learned so much!', SubmittedDate: '2025-04-28' }
-  ];
+  feedbacks: Feedback[] = [];
+  loading: boolean = true;
+  error: string = '';
+  selectedFeedback: Feedback | null = null;
+  showDeleteModal: boolean = false;
 
-  // Modal control variables
-  showDeleteModal: boolean = false; // Controls the delete confirmation modal
-  selectedFeedbackId: number | null = null; // Stores ID of feedback to be deleted
+  constructor(
+    private feedbackService: FeedbackService,
+    private authService: AuthService
+  ) { }
 
-  constructor() {}
+  ngOnInit(): void {
+    this.loadFeedbacks();
+  }
 
-  ngOnInit(): void {}
+  loadFeedbacks(): void {
+    this.loading = true;
+    const userInfo = this.authService.getUserInfo();
+    const userId = +(userInfo.id);
+    
+    this.feedbackService.getAllFeedbacksByUserId(userId).subscribe(
+      feedbacks => {
+        this.feedbacks = feedbacks;
+        this.loading = false;
+      },
+      error => {
+        console.error('Error loading feedbacks:', error);
+        this.error = 'Failed to load feedbacks. Please try again later.';
+        this.loading = false;
+      }
+    );
+  }
 
-  // Method to show delete confirmation modal
-  confirmDelete(feedbackId: number): void {
-    this.selectedFeedbackId = feedbackId;
+  confirmDelete(feedback: Feedback): void {
+    this.selectedFeedback = feedback;
     this.showDeleteModal = true;
   }
 
-  // Method to delete feedback
-  deleteFeedback(): void {
-    if (this.selectedFeedbackId !== null) {
-      this.feedbacks = this.feedbacks.filter(feedback => feedback.FeedbackId !== this.selectedFeedbackId);
-      this.selectedFeedbackId = null;
-      this.showDeleteModal = false;
-    }
-  }
-
-  // Method to close the delete confirmation modal
   closeDeleteModal(): void {
     this.showDeleteModal = false;
-    this.selectedFeedbackId = null;
+    this.selectedFeedback = null;
+  }
+
+  deleteFeedback(): void {
+    if (!this.selectedFeedback || !this.selectedFeedback.feedbackId) {
+      return;
+    }
+
+    const feedbackId = this.selectedFeedback.feedbackId;
+    console.log(feedbackId);
+    
+    this.feedbackService.deleteFeedback(feedbackId).subscribe(
+      () => {
+        this.loadFeedbacks();
+        this.closeDeleteModal();
+      },
+      error => {
+        console.error('Error deleting feedback:', error);
+        alert('Failed to delete feedback. Please try again.');
+        this.closeDeleteModal();
+      }
+    );
   }
 }

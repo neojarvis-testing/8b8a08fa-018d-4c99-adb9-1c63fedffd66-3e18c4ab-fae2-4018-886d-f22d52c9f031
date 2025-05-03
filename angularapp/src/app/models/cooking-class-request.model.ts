@@ -1,3 +1,6 @@
+import { CookingClass } from "./cooking-class.model";
+import { User } from "./user.model";
+
 export interface CookingClassRequest { 
     cookingClassRequestId?: number;   
     userId: number; 
@@ -7,4 +10,6 @@ export interface CookingClassRequest {
     dietaryPreferences: string; 
     cookingGoals: string;  
     comments?: string;  
+    cookingClass? : CookingClass;
+    user?: User
 }

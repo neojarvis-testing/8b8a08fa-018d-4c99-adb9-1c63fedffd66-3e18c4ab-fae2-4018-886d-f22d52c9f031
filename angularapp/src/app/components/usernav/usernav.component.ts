@@ -9,10 +9,15 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class UsernavComponent implements OnInit {
   showLogoutModal: boolean = false;
+  username: string = '';
+  userRole: string = '';
 
   constructor(public authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
+    const userInfo = this.authService.getUserInfo();
+    this.username = userInfo.username;
+    this.userRole = this.authService.getUserRole();
   }
 
   confirmLogout(): void {
@@ -26,7 +31,7 @@ export class UsernavComponent implements OnInit {
   logout(): void {
     this.authService.logout();
     this.closeLogoutModal();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home']);
   }
 
   navigateTo(event: Event): void {

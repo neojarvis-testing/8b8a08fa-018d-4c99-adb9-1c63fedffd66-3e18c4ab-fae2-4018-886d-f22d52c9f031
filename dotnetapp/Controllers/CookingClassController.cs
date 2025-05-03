@@ -20,6 +20,7 @@ namespace dotnetapp.Controllers
         }
 
         // Get all cooking classes
+        [Authorize(Roles = "Admin, User")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CookingClass>>> GetAllCookingClasses()
         {
@@ -35,7 +36,7 @@ namespace dotnetapp.Controllers
         }
 
         // Get cooking class by ID
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, User")]
         [HttpGet("{classId}")]
         public async Task<ActionResult<CookingClass>> GetCookingClassById(int classId)
         {
@@ -123,3 +124,5 @@ namespace dotnetapp.Controllers
         }
     }
 }
+
+

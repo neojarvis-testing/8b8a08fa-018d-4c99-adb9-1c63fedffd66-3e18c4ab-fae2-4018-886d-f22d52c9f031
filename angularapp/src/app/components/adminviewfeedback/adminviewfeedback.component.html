@@ -1,53 +1,35 @@
+<!-- <app-adminnav></app-adminnav> -->
 <h1 class="text-center">Feedback Details</h1>
-
-<div class="feedback-container">
-  <!-- If No Data is Available -->
-  <div *ngIf="feedbacks.length === 0">
-    <p>No data found</p>
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">User Feedbacks</h1>
+  
+  <div *ngIf="loading" class="text-center py-4">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+    <p class="mt-2 text-gray-600">Loading feedbacks...</p>
   </div>
-
-  <!-- Table Display for Feedbacks -->
-  <table *ngIf="feedbacks.length > 0" class="table-auto border-collapse border border-gray-300 w-full">
-    <thead class="bg-gray-900 text-white">
-      <tr>
-        <th class="border border-gray-300 px-4 py-2">Sl No</th>
-        <th class="border border-gray-300 px-4 py-2">User Name</th>
-        <th class="border border-gray-300 px-4 py-2">Feedback</th>
-        <th class="border border-gray-300 px-4 py-2">Posted Date</th>
-        <th class="border border-gray-300 px-4 py-2">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let feedback of feedbacks; let i = index" class="hover:bg-gray-100">
-        <td class="border border-gray-300 px-4 py-2 text-center">{{ i + 1 }}</td>
-        <td class="border border-gray-300 px-4 py-2">{{ feedback.userDetails.name }}</td>
-        <td class="border border-gray-300 px-4 py-2">{{ feedback.feedbackText }}</td>
-        <td class="border border-gray-300 px-4 py-2 text-center">{{ feedback.submittedDate }}</td>
-        <td class="border border-gray-300 px-4 py-2 text-center">
-          <button
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded"
-            (click)="showProfile(feedback.UserDetails)"
-          >
-            Show Profile
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  
+  <div *ngIf="!loading && error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded" role="alert">
+    <p>{{ error }}</p>
+  </div>
+  
+  <div *ngIf="!loading && !error">
+    <div *ngIf="feedbacks.length === 0" class="text-center py-6">
+      <p class="text-gray-600">No feedbacks found</p>
+    </div>
+    
+    <div *ngIf="feedbacks.length > 0" class="space-y-6">
+      <div *ngFor="let feedback of feedbacks" class="bg-white shadow overflow-hidden rounded-lg p-6">
+        <div class="flex justify-between items-start">
+          <div>
+            <h2 class="text-lg font-medium text-gray-900">{{ feedback.username }}</h2>
+            <p class="text-sm text-gray-500">{{ feedback.Date | date:'medium' }}</p>
+          </div>
+        </div>
+        
+        <div class="mt-4">
+          <p class="text-gray-800">{{ feedback.feedbackText }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<!-- Modal for User Details
-<div *ngIf="showModal" class="fixed inset-0 bg-backdrop-blur-md bg-opacity-50 flex items-center justify-center">
-  <div class="bg-white rounded-lg p-6 w-96">
-    <h2 class="text-lg font-bold mb-4">User Details</h2>
-    <p><strong>Name:</strong> {{ selectedUserDetails?.Name }}</p>
-    <p><strong>Email:</strong> {{ selectedUserDetails?.Email }}</p>
-    <p><strong>Contact:</strong> {{ selectedUserDetails?.Contact }}</p>
-    <button
-      class="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700"
-      (click)="closeModal()"
-    >
-      Close
-    </button>
-  </div>
-</div> -->

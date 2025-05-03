@@ -1,66 +1,77 @@
-import { Component } from '@angular/core';
-import { FeedbackService } from 'src/app/services/feedback.service';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Feedback } from 'src/app/models/feedback.model';
+import { FeedbackService } from '../../services/feedback.service';
+import { AuthService } from '../../services/auth.service';
+import { Feedback } from '../../models/feedback.model';
 
 @Component({
   selector: 'app-useraddfeedback',
   templateUrl: './useraddfeedback.component.html',
   styleUrls: ['./useraddfeedback.component.css']
 })
-export class UseraddfeedbackComponent {
-  feedback: string = '';
-  showPopup: boolean = false;
-  validationMessage: string = '';
+export class UseraddfeedbackComponent implements OnInit {
+  feedbackForm: FormGroup;
+  errorMessage: string = '';
+  showSuccessModal: boolean = false;
+  submitting: boolean = false;
 
-  constructor(private feedbackService: FeedbackService, private router: Router) {}
-
-  submitFeedback() {
-    if (!this.feedback.trim()) {
-      this.validationMessage = 'Feedback is required';
-      return;
-    }
-
-    // Get userId from local storage (assuming authentication system stores this)
-    const currentUser = localStorage.getItem('currentUser');
-    let userId: number | null = null;
-
-if (currentUser) {
-  try {
-    const parsedUser = JSON.parse(currentUser);
-    userId = parsedUser.id; // Extracting 'id' from parsed JSON
-  } catch (error) {
-    console.error("Error parsing user data from localStorage:", error);
-  }
-}
-
-if (!userId) {
-  this.validationMessage = 'User not identified. Please log in.';
-  return;
-}
-
-    // Create feedback object
-    const feedbackData: Feedback = {
-      userId,
-      feedbackText: this.feedback,
-      date: new Date()
-    };
-
-    // Send feedback to API
-    this.feedbackService.sendFeedback(feedbackData).subscribe({
-      next: () => {
-        this.validationMessage = '';
-        this.showPopup = true; // Show success popup
-      },
-      error: (error) => {
-        console.error('Error submitting feedback:', error);
-        this.validationMessage = 'Failed to submit feedback. Try again!';
-      }
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private feedbackService: FeedbackService,
+    private authService: AuthService
+  ) {
+    this.feedbackForm = this.fb.group({
+      feedbackText: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
 
-  closePopup() {
-    this.showPopup = false;
-    this.feedback = ''; // Clear feedback input
+  ngOnInit(): void {}
+
+  onSubmit(): void {
+    if (this.feedbackForm.valid) {
+      this.submitting = true;
+      this.errorMessage = '';
+      
+      const userInfo = this.authService.getUserInfo();
+      const userId = +(userInfo.id);
+      
+      const feedback: Feedback = {
+        userId: userId,
+        feedbackText: this.feedbackForm.value.feedbackText,
+        date: new Date()
+      };
+      
+      this.feedbackService.sendFeedback(feedback).subscribe(
+        () => {
+          this.submitting = false;
+          this.showSuccessModal = true;
+        },
+        error => {
+          this.submitting = false;
+          this.errorMessage = 'Failed to submit feedback. Please try again later.';
+        }
+      );
+    } else {
+      this.markFormGroupTouched(this.feedbackForm);
+    }
+  }
+
+  closeSuccessModal(): void {
+    this.showSuccessModal = false;
+    this.router.navigate(['/user/view-feedback']);
+  }
+
+  // Helper to mark all controls as touched
+  markFormGroupTouched(formGroup: FormGroup): void {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 }
+

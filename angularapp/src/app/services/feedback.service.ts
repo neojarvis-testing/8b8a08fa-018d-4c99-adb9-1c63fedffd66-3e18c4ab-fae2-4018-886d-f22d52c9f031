@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -8,34 +7,45 @@ import { Feedback } from '../models/feedback.model';
   providedIn: 'root'
 })
 export class FeedbackService {
-  private apiBaseUrl = 'https://8080-abeecbbbdbedfffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
+  public apiUrl = 'https://8080-cafdefafffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
+  // Get auth headers
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('jwtToken');
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`
+      'Authorization': `Bearer ${token}`
     });
   }
 
-  // Send feedback to the server
-  sendFeedback(feedback: Feedback): Observable<Feedback> {
-    return this.http.post<Feedback>(`${this.apiBaseUrl}/feedback`, feedback);
+  // Send feedback
+  sendFeedback(feedback: Feedback): Observable<string> {
+    return this.http.post(`${this.apiUrl}/feedback`, feedback, {
+      headers: this.getAuthHeaders(),
+      responseType : 'text'
+    });
   }
 
-  // Fetch all feedbacks by user ID
+  // Get all feedbacks by user ID
   getAllFeedbacksByUserId(userId: number): Observable<Feedback[]> {
-    return this.http.get<Feedback[]>(`${this.apiBaseUrl}/feedback/user/${userId}`);
+    return this.http.get<Feedback[]>(`${this.apiUrl}/feedback/user/${userId}`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
-  // Delete a feedback by its ID
-  deleteFeedback(feedbackId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiBaseUrl}/feedback/${feedbackId}`);
+  // Delete feedback
+  deleteFeedback(feedbackId: number): Observable<string> {
+    return this.http.delete(`${this.apiUrl}/feedback/${feedbackId}`, {
+      headers: this.getAuthHeaders(),
+      responseType : 'text'
+    });
   }
 
-  // Fetch all feedbacks
+  // Get all feedbacks
   getFeedbacks(): Observable<Feedback[]> {
-    return this.http.get<Feedback[]>(`${this.apiBaseUrl}/feedback`);
+    return this.http.get<Feedback[]>(`${this.apiUrl}/feedback`, {
+      headers: this.getAuthHeaders()
+    });
   }
 }

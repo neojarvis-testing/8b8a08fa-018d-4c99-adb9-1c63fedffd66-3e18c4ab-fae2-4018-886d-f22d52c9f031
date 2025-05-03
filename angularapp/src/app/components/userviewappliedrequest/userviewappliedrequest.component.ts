@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { CookingClassService } from 'src/app/services/cooking-class.service';
-import { CookingClassRequest } from 'src/app/models/cooking-class-request.model';
-import { CookingClass } from 'src/app/models/cooking-class.model';
+import { CookingClassService } from '../../services/cooking-class.service';
+import { AuthService } from '../../services/auth.service';
+import { CookingClassRequest } from '../../models/cooking-class-request.model';
 
 @Component({
   selector: 'app-userviewappliedrequest',
@@ -10,122 +9,73 @@ import { CookingClass } from 'src/app/models/cooking-class.model';
   styleUrls: ['./userviewappliedrequest.component.css']
 })
 export class UserviewappliedrequestComponent implements OnInit {
-  appliedRequests: any[] = []; // Using any to accommodate join data
-  filteredRequests: any[] = [];
-  searchTerm: string = '';
-  showDeleteModal: boolean = false;
-  selectedRequestId: number | null = null;
+  requests: CookingClassRequest[] = [];
+  filteredRequests: CookingClassRequest[] = [];
+  statusFilter: string = '';
+  loading: boolean = true;
+  error: string = '';
+  selectedRequest: CookingClassRequest | null = null;
+  showDetailsModal: boolean = false;
 
-  constructor(private cookingClassService: CookingClassService, private router: Router) { }
+  constructor(
+    private cookingClassService: CookingClassService,
+    private authService: AuthService
+  ) { }
 
   ngOnInit(): void {
-    this.loadAppliedRequests();
+    this.loadRequests();
   }
 
-  loadAppliedRequests(): void {
-    const userId = localStorage.getItem('userId');
-    if (userId) {
-      this.cookingClassService.getCookingClassRequestsByUserId(userId).subscribe({
-        next: (requests) => {
-          // For each request, fetch the class details to get the class name
-          const requestsWithClassNames = [];
-          let completedRequests = 0;
+  loadRequests(): void {
+  this.loading = true;
+  const userInfo = this.authService.getUserInfo();
 
-          if (requests.length === 0) {
-            this.appliedRequests = [];
-            this.filteredRequests = [];
-            return;
+  this.cookingClassService.getCookingClassRequestsByUserId(userInfo.id).subscribe(
+    requests => {
+      this.requests = requests;
+
+      // Fetch class details for each request
+      this.requests.forEach(request => {
+        this.cookingClassService.getCookingClassById(request.cookingClassId).subscribe(
+          cookingClass => {
+            request.cookingClass = cookingClass; // Attach details to request
+          },
+          error => {
+            console.error(`Error fetching class details for ID ${request.cookingClassId}:`, error);
           }
-
-          requests.forEach(request => {
-            this.cookingClassService.getCookingClassById(request.cookingClassId).subscribe({
-              next: (cookingClass) => {
-                // Create a new object combining both
-                const requestWithClass = {
-                  ...request,
-                  className: cookingClass.className
-                };
-                requestsWithClassNames.push(requestWithClass);
-                
-                completedRequests++;
-                if (completedRequests === requests.length) {
-                  this.appliedRequests = requestsWithClassNames;
-                  this.filteredRequests = [...this.appliedRequests];
-                }
-              },
-              error: (error) => {
-                console.error('Error fetching class details:', error);
-                completedRequests++;
-                // Even with error, check if we've processed all requests
-                if (completedRequests === requests.length) {
-                  this.appliedRequests = requestsWithClassNames;
-                  this.filteredRequests = [...this.appliedRequests];
-                }
-              }
-            });
-          });
-        },
-        error: (error) => {
-          console.error('Error loading applied requests:', error);
-        }
+        );
       });
+
+      this.applyFilters();
+      this.loading = false;
+    },
+    error => {
+      console.error('Error loading cooking class requests:', error);
+      this.error = 'Failed to load requests. Please try again later.';
+      this.loading = false;
     }
-  }
+  );
+}
 
-  searchRequests(): void {
-    if (!this.searchTerm.trim()) {
-      this.filteredRequests = [...this.appliedRequests];
-      return;
+
+  applyFilters(): void {
+    let filtered = this.requests;
+    
+    // Apply status filter
+    if (this.statusFilter) {
+      filtered = filtered.filter(request => request.status === this.statusFilter);
     }
-
-    const term = this.searchTerm.toLowerCase();
-    this.filteredRequests = this.appliedRequests.filter(request => 
-      request.className && request.className.toLowerCase().includes(term)
-    );
+    
+    this.filteredRequests = filtered;
   }
 
-  confirmDelete(requestId: number): void {
-    this.selectedRequestId = requestId;
-    this.showDeleteModal = true;
+  viewDetails(request: CookingClassRequest): void {
+    this.selectedRequest = request;
+    this.showDetailsModal = true;
   }
 
-  deleteRequest(): void {
-    if (this.selectedRequestId) {
-      this.cookingClassService.deleteCookingClassRequest(this.selectedRequestId.toString()).subscribe({
-        next: () => {
-          this.loadAppliedRequests(); // Reload the list after deletion
-          this.closeDeleteModal();
-        },
-        error: (error) => {
-          console.error('Error deleting request:', error);
-          this.closeDeleteModal();
-        }
-      });
-    }
-  }
-
-  closeDeleteModal(): void {
-    this.showDeleteModal = false;
-    this.selectedRequestId = null;
-  }
-
-  canDelete(status: string): boolean {
-    return status !== 'Approved' && status !== 'Rejected';
-  }
-
-  // Method to handle form submission - kept from your original code
-  onSubmit(cookingForm): void {
-    if (cookingForm.valid) {
-      alert('Form submitted successfully!');
-      console.log('Form Data:', cookingForm.value); // Logs the form data
-    } else {
-      alert('All required fields cannot be left empty.');
-    }
-  }
-  
-  // Method to go back - kept from your original code
-  goBack(): void {
-    alert('Navigating back!');
-    // Implement navigation logic, e.g., using Angular Router or any other preferred approach
+  closeDetailsModal(): void {
+    this.showDetailsModal = false;
+    this.selectedRequest = null;
   }
 }

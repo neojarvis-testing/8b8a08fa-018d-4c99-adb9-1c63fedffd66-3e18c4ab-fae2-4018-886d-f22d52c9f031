@@ -1,34 +1,54 @@
-<div class="flex flex-col items-center justify-center px-6 py-32 mx-auto">
-  <div class="w-full bg-[#FFF5E0] rounded-lg shadow-lg border max-w-md font-bold">
-    <div class="space-y-6 p-8">
-      <h1 class="text-[#0A6847] text-2xl">Add Feedback</h1>
-      <p class="text-sm text-[#0A6847]">* Feedback</p>
-
-      <!-- Feedback Input -->
-      <div class="mb-4">
-        <div class="bg-[#FFF5E0] border border-[#7ABA78] text-[#0A6847] text-sm rounded-lg outline-none block w-full p-2.5">
-          <textarea [(ngModel)]="feedback" placeholder="Enter your feedback here" class="w-full bg-transparent outline-none placeholder:font-medium"></textarea>
+  <!-- <app-usernav></app-usernav> -->
+  <h1 class="heading">Add Feedback</h1>
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Submit Feedback</h2>
+    
+    <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div>
+        <label for="feedback" class="block text-sm font-medium text-gray-700">Your Feedback</label>
+        <textarea 
+          id="feedback" 
+          formControlName="feedbackText" 
+          rows="6" 
+          placeholder="Share your thoughts, suggestions, or experiences about our cooking classes..."
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        ></textarea>
+        <div *ngIf="feedbackForm.get('FeedbackText')?.invalid && feedbackForm.get('FeedbackText')?.touched" class="text-red-500 text-xs mt-1">
+          <span *ngIf="feedbackForm.get('FeedbackText')?.errors?.required">Feedback is required</span>
+          <span *ngIf="feedbackForm.get('FeedbackText')?.errors?.minlength">Feedback must be at least 10 characters</span>
         </div>
       </div>
+      
+      <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <span class="block sm:inline">{{ errorMessage }}</span>
+      </div>
+      
+      <div class="flex justify-end">
+        <button 
+          type="submit" 
+          [disabled]="submitting" 
+          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        >
+          {{ submitting ? 'Submitting...' : 'Submit Feedback' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 
-      <!-- Validation Message -->
-      <p *ngIf="validationMessage" class="text-sm text-red-500">{{ validationMessage }}</p>
-
-      <!-- Submit Button -->
-      <button class="w-full text-white bg-[#0A6847] hover:bg-[#7ABA78] focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-        (click)="submitFeedback()">
-        Submit
+<!-- Success Modal -->
+<div *ngIf="showSuccessModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+  <div class="bg-white rounded-lg p-6 max-w-md">
+    <h3 class="text-lg font-medium text-gray-900 mb-4">Thank You!</h3>
+    <p class="text-gray-600 mb-6">Your feedback has been submitted successfully. We appreciate your input!</p>
+    <div class="flex justify-end">
+      <button 
+        class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+        (click)="closeSuccessModal()"
+      >
+        OK
       </button>
-
-      <!-- Success Popup -->
-      <div *ngIf="showPopup" class="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center">
-        <div class="bg-[#2C3E50] text-white p-5 rounded-lg text-center shadow-lg">
-          <p class="text-xl font-bold mb-4">Successfully Added!</p>
-          <button (click)="closePopup()" class="text-white bg-[#0A6847] px-6 py-3 rounded-md font-bold text-lg hover:scale-105">
-            Ok
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 </div>
