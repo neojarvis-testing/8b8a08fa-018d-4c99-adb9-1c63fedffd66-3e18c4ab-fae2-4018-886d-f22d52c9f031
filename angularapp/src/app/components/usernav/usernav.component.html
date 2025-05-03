@@ -1,40 +1,64 @@
-<header class="top-0 z-50 bg-[#0A6847] text-[#FFF5E0]">
-  <nav class="flex items-center justify-between px-10 py-6">
-      <!-- Logo Section -->
-      <div class="flex lg:flex-1">
-        <a routerLink="/user/home" class="text-2xl font-bold -m-1.5 p-1.5 hover:text-[#ADD8E6]">
-          Cooking Hub - User
-        </a>
-      </div>
-  
-      <!-- Navigation Links -->
-      <div class="hidden lg:flex lg:gap-x-8">
+  <header class="top-0 z-50 bg-[#0A6847] text-[#FFF5E0]">
+    <nav class="flex items-center justify-between px-10 py-6">
+        <!-- Logo Section -->
+        <div class="flex lg:flex-1">
+          <a routerLink="/user/home" class="text-2xl font-bold -m-1.5 p-1.5 hover:text-[#ADD8E6]">
+            Cooking Hub - User
+          </a>
+        </div>
+    
+        <!-- Navigation Links -->
         <div class="hidden lg:flex lg:gap-x-8">
-            <a routerLink="/user/home" 
-               routerLinkActive="active-link"
-               class="text-base cursor-pointer hover:text-[#ADD8E6]">Home</a>
-            <a routerLink="/cooking-imp" 
-               routerLinkActive="active-link"
-               class="text-base cursor-pointer hover:text-[#ADD8E6]">Importance of Cooking</a>
-            <a routerLink="/user/view-classes" 
-               routerLinkActive="active-link"
-               class="text-base cursor-pointer hover:text-[#ADD8E6]">View Classes</a>
-            <a routerLink="/user/add-request" 
-               routerLinkActive="active-link"
-               class="text-base cursor-pointer hover:text-[#ADD8E6]">Applied Classes</a>
-            <a routerLink="/user/view-feedback" 
-               routerLinkActive="active-link"
-               class="text-base cursor-pointer hover:text-[#ADD8E6]">Feedback</a>
-          </div>
-          
-      </div>
+          <a routerLink="/user/home" routerLinkActive="active-link" class="text-base cursor-pointer hover:text-[#ADD8E6]">Home</a>
+          <a routerLink="/cooking-imp" routerLinkActive="active-link" class="text-base cursor-pointer hover:text-[#ADD8E6]">Importance of Cooking</a>
+          <a routerLink="/user/view-classes" routerLinkActive="active-link" class="text-base cursor-pointer hover:text-[#ADD8E6]">Cooking Classes</a>
+          <a routerLink="/user/applied-requests" routerLinkActive="active-link" class="text-base cursor-pointer hover:text-[#ADD8E6]">Applied Classes</a>
   
-      <!-- Logout Section -->
-      <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <a (click)="logout()" class="text-sm font-semibold cursor-pointer hover:text-[#ADD8E6]">
-          Logout <span aria-hidden="true">&rarr;</span>
-        </a>
-      </div>
-    </nav>
+          <!-- Feedback Dropdown -->
+          <div class="relative group">
+            <button class="text-base cursor-pointer hover:text-[#ADD8E6] flex items-center">
+              Feedback 
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            <div class="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-[#FFF5E0] text-[#0A6847] ring-1 ring-black ring-opacity-5 hidden group-hover:block">
+              <div class="py-1">
+                <a routerLink="/user/add-feedback" class="block px-4 py-2 text-sm hover:bg-[#7ABA78]">Post Feedback</a>
+                <a routerLink="/user/view-feedback" class="block px-4 py-2 text-sm hover:bg-[#7ABA78]">My Feedbacks</a>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <!-- User Info & Logout Section -->
+        <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+          <span class="mr-4 text-sm font-semibold">{{ username }} ({{ userRole }})</span>
+          <button (click)="confirmLogout()" class="text-sm font-semibold cursor-pointer hover:text-[#ADD8E6]">
+            Logout <span aria-hidden="true">&rarr;</span>
+          </button>
+        </div>
+      </nav>
   </header>
   
+  <!-- Logout Confirmation Modal -->
+  <div *ngIf="showLogoutModal" class="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center">
+    <div class="bg-white rounded-lg p-6 w-96 max-w-md">
+      <h2 class="text-xl font-bold mb-4 text-[#0A6847]">Confirm Logout</h2>
+      <p class="mb-6">Are you sure you want to logout?</p>
+      <div class="flex justify-end space-x-4">
+        <button
+          class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+          (click)="closeLogoutModal()"
+        >
+          Cancel
+        </button>
+        <button
+          class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+          (click)="logout()"
+        >
+          Yes, Logout
+        </button>
+      </div>
+    </div>
+  </div>
