@@ -8,16 +8,17 @@ using dotnetapp.Services;
 using System.Text;
 using System.Threading.Tasks;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);  //creates the foundation for configuring an asp.net core application
 
-builder.Configuration
+builder.Configuration  //explicitely configure where application should look for its configuration setting.
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables();
 
+//configures dependency injection by registering services
 // Add services to the container
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers(); //register mvc coltrollers and related services
+builder.Services.AddEndpointsApiExplorer(); // api exploraion for swagger
 
 // Configure database connection
 builder.Services.AddDbContext<ApplicationDbContext>(o =>
