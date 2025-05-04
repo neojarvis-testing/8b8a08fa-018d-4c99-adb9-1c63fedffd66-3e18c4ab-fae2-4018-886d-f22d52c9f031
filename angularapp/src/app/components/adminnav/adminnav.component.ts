@@ -14,7 +14,7 @@
 //     // Initialization logic if needed
 //   }
 
- 
+
 //   isDropdownHidden: boolean = true;
 
 //   toggleDropdown() {
@@ -50,6 +50,12 @@ export class AdminnavComponent implements OnInit {
     this.userRole = this.authService.getUserRole();
   }
 
+
+  isDropdownHidden: boolean = true;
+  toggleDropdown() {
+    this.isDropdownHidden = !this.isDropdownHidden;
+  }
+  
   confirmLogout(): void {
     this.showLogoutModal = true;
   }

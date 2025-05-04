@@ -7,6 +7,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 // Components
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
@@ -28,11 +30,11 @@ import { UseraddrequestComponent } from './components/useraddrequest/useraddrequ
 import { UserviewappliedrequestComponent } from './components/userviewappliedrequest/userviewappliedrequest.component';
 import { UseraddfeedbackComponent } from './components/useraddfeedback/useraddfeedback.component';
 import { UserviewfeedbackComponent } from './components/userviewfeedback/userviewfeedback.component';
-import { FooterComponent } from './components/footer/footer.component';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
+    NavbarComponent,
     AppComponent,
     HomeComponent,
     LoginComponent,

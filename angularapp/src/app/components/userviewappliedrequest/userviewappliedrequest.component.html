@@ -2,13 +2,16 @@
 
 <div class="container mx-auto px-4 py-8">
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-xl font-bold leading-tight tracking-tight text-[#0A6847] md:text-2xl">Applied Class Requests</h1>    
-    <div class="relative">
-      <select 
-        [(ngModel)]="statusFilter" 
-        (change)="applyFilters()" 
-        class="block w-40 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-      >
+    <h1 class="text-xl font-bold leading-tight tracking-tight text-[#0A6847] md:text-2xl">Applied Class Requests</h1>
+    <div class="relative flex gap-3">
+      <div>
+        <button onclick="window.location.reload();" class="bg-blue-500 font-medium text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          Refresh
+        </button>
+      </div>
+
+      <select [(ngModel)]="statusFilter" (change)="applyFilters()"
+        class="border rounded-lg block w-full p-2.5 font-medium text-sm outline-none">
         <option value="">All Status</option>
         <option value="Pending">Pending</option>
         <option value="Approved">Approved</option>
@@ -16,30 +19,34 @@
       </select>
     </div>
   </div>
-  
+
+
   <div *ngIf="loading" class="text-center py-4">
     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-    <p class="mt-2 text-gray-600">Loading requests...</p>
+    <p class="mt-3 text-2xl font-bold text-gray-800">Loading classes...</p>
   </div>
-  
+
   <div *ngIf="!loading && error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded" role="alert">
     <p>{{ error }}</p>
   </div>
-  
+
   <div *ngIf="!loading && !error">
     <div *ngIf="filteredRequests.length === 0" class="text-center py-6">
-      <p class="text-gray-600">No requests found</p>
+      <p class="text-2xl font-bold text-gray-800">No requests found</p>
     </div>
-    
+
     <div *ngIf="filteredRequests.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div *ngFor="let request of filteredRequests" class="bg-white rounded-lg shadow overflow-hidden">
+      <div *ngFor="let request of filteredRequests" class="bg-white rounded-lg shadow overflow-hidden border-l-4 border-yellow-400">
         <div class="p-6">
-          <h3 class="text-lg font-bold text-gray-900 mb-2">{{ request.cookingClass.className }}</h3>
-          <p class="text-sm text-gray-500 mb-1"><span class="font-medium">Chef:</span> {{ request.cookingClass.chefName }}</p>
-          <p class="text-sm text-gray-500 mb-1"><span class="font-medium">Location:</span> {{ request.cookingClass.location }}</p>
-          <p class="text-sm text-gray-500 mb-1"><span class="font-medium">Request Date:</span> {{ request.requestDate }}</p>
+          <h3 class="text-lg font-bold text-gray-900 mb-2 capitalize line-clamp-1">{{ request.cookingClass.className }}</h3>
+          <p class="text-sm text-gray-500 mb-1"><span class="font-medium">Chef:</span> {{ request.cookingClass.chefName
+            }}</p>
+          <p class="text-sm text-gray-500 mb-1"><span class="font-medium">Location:</span> {{
+            request.cookingClass.location }}</p>
+          <p class="text-sm text-gray-500 mb-1"><span class="font-medium">Request Date:</span> {{ request.requestDate }}
+          </p>
           <p class="text-sm text-gray-500 mb-4">
-            <span class="font-medium">Status:</span> 
+            <span class="font-medium">Status:</span>
             <span [ngClass]="{
               'text-yellow-600': request.status === 'Pending',
               'text-green-600': request.status === 'Approved',
@@ -48,11 +55,9 @@
               {{ request.status }}
             </span>
           </p>
-          
-          <button 
-            (click)="viewDetails(request)" 
-            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-          >
+
+          <button (click)="viewDetails(request)"
+            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
             View Details
           </button>
         </div>
@@ -62,38 +67,36 @@
 </div>
 
 <!-- Request Details Modal -->
-<div *ngIf="showDetailsModal && selectedRequest" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-  <div class="bg-white rounded-lg p-6 max-w-2xl w-full">
+<div *ngIf="showDetailsModal && selectedRequest"
+  class="fixed inset-0 backdrop-blur-xs flex justify-center items-center">
+  <div class="bg-white rounded-lg p-6 max-w-2xl w-full shadow-lg">
     <div class="flex justify-between items-start">
       <h3 class="text-xl font-bold text-gray-900">{{ selectedRequest.cookingClass?.className }}</h3>
-      <button 
-        class="text-gray-400 hover:text-gray-500"
-        (click)="closeDetailsModal()"
-      >
+      <button class="text-gray-400 hover:text-gray-500" (click)="closeDetailsModal()">
         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
     </div>
-    
+
     <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
-        <h4 class="text-sm font-medium text-gray-500">Class Information</h4>
+        <h4 class="text-sm font-semibold text-gray-500">Class Information</h4>
         <div class="mt-2">
-          <p><span class="font-medium">Chef:</span> {{ selectedRequest.cookingClass?.chefName }}</p>
-          <p><span class="font-medium">Location:</span> {{ selectedRequest.cookingClass?.location }}</p>
-          <p><span class="font-medium">Duration:</span> {{ selectedRequest.cookingClass?.durationInHours }} hour(s)</p>
-          <p><span class="font-medium">Fee:</span> {{ selectedRequest.cookingClass?.fee | currency }}</p>
-          <p><span class="font-medium">Skill Level:</span> {{ selectedRequest.cookingClass?.skillLevel }}</p>
+          <p><span class="font-semibold text-gray-500">Chef:</span> {{ selectedRequest.cookingClass?.chefName }}</p>
+          <p><span class="font-semibold text-gray-500">Location:</span> {{ selectedRequest.cookingClass?.location }}</p>
+          <p><span class="font-semibold text-gray-500">Duration:</span> {{ selectedRequest.cookingClass?.durationInHours }} hour(s)</p>
+          <p><span class="font-semibold text-gray-500">Fee:</span> {{ selectedRequest.cookingClass?.fee | currency }}</p>
+          <p><span class="font-semibold text-gray-500">Skill Level:</span> {{ selectedRequest.cookingClass?.skillLevel }}</p>
         </div>
       </div>
-      
+
       <div>
-        <h4 class="text-sm font-medium text-gray-500">Request Information</h4>
+        <h4 class="text-sm font-semibold text-gray-500">Request Information</h4>
         <div class="mt-2">
-          <p><span class="font-medium">Request Date:</span> {{ selectedRequest.requestDate }}</p>
+          <p><span class="font-semibold text-gray-500">Request Date:</span> {{ selectedRequest.requestDate }}</p>
           <p>
-            <span class="font-medium">Status:</span> 
+            <span class="font-semibold text-gray-500">Status:</span>
             <span [ngClass]="{
               'text-yellow-600': selectedRequest.status === 'Pending',
               'text-green-600': selectedRequest.status === 'Approved',
@@ -102,18 +105,16 @@
               {{ selectedRequest.status }}
             </span>
           </p>
-          <p><span class="font-medium">Dietary Preferences:</span> {{ selectedRequest.dietaryPreferences }}</p>
-          <p><span class="font-medium">Cooking Goals:</span> {{ selectedRequest.cookingGoals }}</p>
-          <p *ngIf="selectedRequest.Comments"><span class="font-medium">Comments:</span> {{ selectedRequest.comments }}</p>
+          <p><span class="font-semibold text-gray-500">Dietary Preferences:</span> {{ selectedRequest.dietaryPreferences }}</p>
+          <p><span class="font-semibold text-gray-500">Cooking Goals:</span> {{ selectedRequest.cookingGoals }}</p>
+          <p *ngIf="selectedRequest.Comments"><span class="font-semibold text-gray-500">Comments:</span> {{ selectedRequest.comments }}
+          </p>
         </div>
       </div>
     </div>
-    
+
     <div class="mt-6 flex justify-end">
-      <button 
-        class="bg-gray-100 text-gray-800 px-4 py-2 rounded hover:bg-gray-200"
-        (click)="closeDetailsModal()"
-      >
+      <button class="bg-gray-100 text-gray-800 px-4 py-2 rounded hover:bg-gray-200 font-medium" (click)="closeDetailsModal()">
         Close
       </button>
     </div>

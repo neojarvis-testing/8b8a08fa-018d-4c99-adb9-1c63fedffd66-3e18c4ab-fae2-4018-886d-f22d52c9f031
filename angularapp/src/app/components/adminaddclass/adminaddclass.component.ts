@@ -14,7 +14,7 @@ export class AdminaddclassComponent implements OnInit {
   errorMessage: string = '';
   showSuccessModal: boolean = false;
   submitting: boolean = false;
-  skillLevels: string[] = ['Beginner', 'Intermediate', 'Advanced', 'All Levels'];
+  skillLevels: string[] = ['Beginner', 'Intermediate', 'Advanced'];
 
   constructor(
     private fb: FormBuilder,
