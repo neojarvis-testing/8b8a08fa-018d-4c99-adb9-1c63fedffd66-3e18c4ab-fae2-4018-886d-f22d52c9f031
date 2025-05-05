@@ -24,8 +24,13 @@ export class RegistrationComponent implements OnInit {
     this.registrationForm = this.fb.group({
       Username: ['', [Validators.required, Validators.minLength(3)]],
       Email: ['', [Validators.required, Validators.email]],
-      MobileNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
-      Password: ['', [Validators.required, Validators.minLength(6)]],
+      MobileNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/), Validators.minLength(10),
+      Validators.maxLength(10)]],
+      Password: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/)
+      ]],
       UserRole: ['User', Validators.required]
     });
   }
@@ -46,16 +51,16 @@ export class RegistrationComponent implements OnInit {
       this.submitting = true;
       this.errorMessage = '';
       this.successMessage = '';
-      
+
       const userModel: User = this.registrationForm.value;
       console.log(userModel);
-      
+
       this.authService.register(userModel).subscribe(
         response => {
           console.log('Success Response:', response);
-          
+
           this.successMessage = 'Registration successful!';
-          
+
           // Navigate to login after a brief delay
           setTimeout(() => {
             this.router.navigate(['/login']);
@@ -64,9 +69,9 @@ export class RegistrationComponent implements OnInit {
         },
         error => {
           this.submitting = false;
-                    console.error('Error:', error);
+          console.error('Error:', error);
 
-          
+
           if (error.status === 400) {
             this.errorMessage = 'Invalid registration data';
           } else if (error.error && typeof error.error === 'string' && error.error.includes('already exists')) {
@@ -85,7 +90,7 @@ export class RegistrationComponent implements OnInit {
   markFormGroupTouched(formGroup: FormGroup): void {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();
-      
+
       if (control instanceof FormGroup) {
         this.markFormGroupTouched(control);
       }

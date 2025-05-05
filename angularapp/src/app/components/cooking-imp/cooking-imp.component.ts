@@ -15,4 +15,5 @@ export class CookingImpComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void { }
+  
 }

@@ -23,7 +23,7 @@ export class UseraddfeedbackComponent implements OnInit {
     private authService: AuthService
   ) {
     this.feedbackForm = this.fb.group({
-      feedbackText: ['', [Validators.required, Validators.minLength(10)]]
+      feedbackText: ['', [Validators.required]]
     });
   }
 
@@ -74,4 +74,5 @@ export class UseraddfeedbackComponent implements OnInit {
     });
   }
 }
+
 

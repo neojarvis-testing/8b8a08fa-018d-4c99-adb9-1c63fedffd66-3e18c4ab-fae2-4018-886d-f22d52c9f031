@@ -13,15 +13,15 @@ namespace dotnetapp.Controllers
     [Route("api/feedback")]
     public class FeedbackController : ControllerBase
     {
-        private readonly FeedbackService _feedbackService;
+        private readonly IFeedbackService _feedbackService;
 
-        public FeedbackController(FeedbackService feedbackService)
+        public FeedbackController(IFeedbackService feedbackService)
         {
             _feedbackService = feedbackService;
         }
 
         // Get all feedbacks
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Feedback>>> GetAllFeedbacks()
         {

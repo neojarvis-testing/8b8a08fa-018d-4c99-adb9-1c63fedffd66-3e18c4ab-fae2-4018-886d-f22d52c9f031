@@ -10,7 +10,7 @@ using dotnetapp.Dto;
 
 namespace dotnetapp.Services
 {
-    public class CookingClassRequestService
+    public class CookingClassRequestService : ICookingClassRequestService
     {
         private readonly ApplicationDbContext _context;
 
