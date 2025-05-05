@@ -63,7 +63,6 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
