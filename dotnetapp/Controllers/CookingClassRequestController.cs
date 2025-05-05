@@ -12,9 +12,9 @@ namespace dotnetapp.Controllers
     [Route("api/cooking-class-request")]
     public class CookingClassRequestController : ControllerBase
     {
-        private readonly CookingClassRequestService _cookingClassRequestService;
+        private readonly ICookingClassRequestService _cookingClassRequestService;
 
-        public CookingClassRequestController(CookingClassRequestService cookingClassRequestService)
+        public CookingClassRequestController(ICookingClassRequestService cookingClassRequestService)
         {
             _cookingClassRequestService = cookingClassRequestService;
         }
