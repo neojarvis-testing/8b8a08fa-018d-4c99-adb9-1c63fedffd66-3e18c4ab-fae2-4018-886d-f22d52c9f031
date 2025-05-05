@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CookingClassService } from 'src/app/services/cooking-class.service';
+import { CookingClassService } from '../../services/cooking-class.service';
+import { CookingClass } from '../../models/cooking-class.model';
 
 @Component({
   selector: 'app-adminviewclass',
@@ -8,57 +9,86 @@ import { CookingClassService } from 'src/app/services/cooking-class.service';
   styleUrls: ['./adminviewclass.component.css']
 })
 export class AdminviewclassComponent implements OnInit {
-  searchTerm: string = ''; 
-  selectedClass: any = null; 
-  isEditMode: boolean = false;
+  cookingClasses: CookingClass[] = [];
+  filteredClasses: CookingClass[] = [];
+  searchTerm: string = '';
+  selectedClass: CookingClass | null = null;
+  loading: boolean = true;
+  error: string = '';
+  showDeleteModal: boolean = false;
 
-  // Example data for classes
-  filteredClasses = [
-
-  ];
-
-  constructor(private cookingService: CookingClassService, private router: Router) { }
+  constructor(
+    private cookingClassService: CookingClassService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
-    this.cookingService.getAllCookingClasses().subscribe(data => this.filteredClasses = [...data])
+    this.loadCookingClasses();
   }
 
-  // Filter classes based on search term
-
-
-  // Show delete confirmation modal
-  confirmDelete(classItem: any): void {
-    this.selectedClass = classItem;
+  loadCookingClasses(): void {
+    this.loading = true;
+    this.cookingClassService.getAllCookingClasses().subscribe(
+      classes => {
+        this.cookingClasses = classes;
+        this.filteredClasses = classes;
+        this.loading = false;
+      },
+      error => {
+        console.error('Error loading cooking classes:', error);
+        this.error = 'Failed to load cooking classes. Please try again later.';
+        this.loading = false;
+      }
+    );
   }
 
-  // Delete class if confirmed
-  // deleteClass(): void {
-  //   if (this.selectedClass) {
-  //     const index = this.classes.indexOf(this.selectedClass);
-  //     if (index > -1) {
-  //       this.classes.splice(index, 1); // Remove the class from the list
-  //       console.log('Deleted class:', this.selectedClass);
-  //     }
-  //     this.selectedClass = null; // Reset selection after deletion
-  //   }
-  // }
+  search(): void {
+    if (!this.searchTerm) {
+      this.filteredClasses = this.cookingClasses;
+      return;
+    }
 
-  // Cancel deletion
-  cancelDelete(): void {
+    const term = this.searchTerm.toLowerCase();
+    this.filteredClasses = this.cookingClasses.filter(
+      classItem => classItem.className.toLowerCase().includes(term)
+    );
+  }
+
+  editClass(classId: number): void {
+    this.router.navigate([`/admin/edit-class/${classId}`]);
+  }
+
+  confirmDelete(cookingClass: CookingClass): void {
+    this.selectedClass = cookingClass;
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal(): void {
+    this.showDeleteModal = false;
     this.selectedClass = null;
   }
 
-  // Enable edit mode and load selected class
-  editClass(classId:number): void {
-    this.router.navigate([`admin/edit-class/${classId}`]);
+  deleteClass(): void {
+    if (!this.selectedClass || !this.selectedClass.cookingClassId) {
+      return;
+    }
+
+    const classId = this.selectedClass.cookingClassId;
+    
+    this.cookingClassService.deleteCookingClass(classId).subscribe(
+      () => {
+        this.loadCookingClasses();
+        this.closeDeleteModal();
+      },
+      error => {
+        console.error('Error deleting cooking class:', error);
+        if (error.error && typeof error.error === 'string' && error.error.includes('referenced in a request')) {
+          alert('Cooking class cannot be deleted as it is referenced in a request');
+        } else {
+          alert('Failed to delete cooking class. Please try again.');
+        }
+        this.closeDeleteModal();
+      }
+    );
   }
-
-  // Save changes to the edited class
- 
-
-  // Cancel editing
-  // cancelEdit(): void {
-  //   this.selectedClass = null;
-  //   this.isEditMode = false; // Exit edit mode
-  // }
 }

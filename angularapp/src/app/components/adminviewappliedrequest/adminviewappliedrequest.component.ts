@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CookingClass } from 'src/app/models/cooking-class.model';
-import { CookingClassRequest } from 'src/app/models/cooking-class-request.model';
-import { CookingClassService } from 'src/app/services/cooking-class.service';
+import { CookingClassService } from '../../services/cooking-class.service';
+import { CookingClassRequest } from '../../models/cooking-class-request.model';
 
 @Component({
   selector: 'app-adminviewappliedrequest',
@@ -9,92 +8,89 @@ import { CookingClassService } from 'src/app/services/cooking-class.service';
   styleUrls: ['./adminviewappliedrequest.component.css']
 })
 export class AdminviewappliedrequestComponent implements OnInit {
-  cookingClasses: CookingClass[] = []; // List of cooking classes fetched from the service
-  requests: CookingClassRequest[] = []; // List of cooking class requests fetched from the service
-  filteredRequests: CookingClassRequest[] = []; // Filtered requests based on search and status filters
+  requests: CookingClassRequest[] = [];
+  filteredRequests: CookingClassRequest[] = [];
+  searchTerm: string = '';
+  statusFilter: string = '';
+  loading: boolean = true;
+  error: string = '';
+  selectedRequest: CookingClassRequest | null = null;
+  showProfileModal: boolean = false;
 
-  searchClassName: string = ''; // Search term for filtering by class name
-  statusFilter: string = ''; // Status filter for requests (e.g., Pending, Approved, Rejected)
-
-  // Pagination properties
-  currentPage: number = 1;
-  itemsPerPage: number = 5;
-
-  constructor(private cookingClassService: CookingClassService) {}
+  constructor(private cookingClassService: CookingClassService) { }
 
   ngOnInit(): void {
-    this.loadCookingClasses();
     this.loadRequests();
   }
 
-  // Load cooking classes from the service
-  loadCookingClasses(): void {
-    this.cookingClassService.getAllCookingClasses().subscribe(data => {
-      this.cookingClasses = data;
-      
-    });
-  }
-
-  // Load cooking class requests from the service
   loadRequests(): void {
-    this.cookingClassService.getAllCookingClassRequests().subscribe(data => {
-      this.requests = data;
-      this.filteredRequests = data; // Initialize filtered requests
-      console.log("Fetched Requests:", data);
-    });
+    this.loading = true;
+    this.cookingClassService.getAllCookingClassRequests().subscribe(
+      requests => {
+        this.requests = requests;
+        this.filteredRequests = requests;
+        console.log(requests);
+        this.loading = false;
+      },
+      error => {
+        console.error('Error loading cooking class requests:', error);
+        this.error = 'Failed to load requests. Please try again later.';
+        this.loading = false;
+      }
+    );
   }
 
-  // Get the class name by CookingClassId
-  getClassName(cookingClassId: number): string {
-    const cookingClass = this.cookingClasses.find(classItem => classItem.cookingClassId === cookingClassId);
-    return cookingClass ? cookingClass.className : 'Unknown Class';
+  search(): void {
+    this.applyFilters();
   }
 
-  // Filter requests based on search term and status
-  filterRequests(): void {
-    this.filteredRequests = this.requests.filter(request => {
-      const className = this.getClassName(request.cookingClassId).toLowerCase();
-      const matchesSearch = className.includes(this.searchClassName.toLowerCase());
-      const matchesStatus = this.statusFilter === '' || request.status === this.statusFilter;
-
-      return matchesSearch && matchesStatus;
-    });
-  }
-
-  // Pagination logic
-  get paginatedRequests(): CookingClassRequest[] {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    return this.filteredRequests.slice(startIndex, startIndex + this.itemsPerPage);
-  }
-
-  changePage(page: number): void {
-    this.currentPage = page;
-  }
-
-  get totalPages(): number {
-    return Math.ceil(this.filteredRequests.length / this.itemsPerPage);
-  }
-
-  // Approve a request
-  approveRequest(request: CookingClassRequest): void {
-    console.log("Approving Request:", request.status);
-    if (request.status === 'Pending') {
-      request.status = 'Approved';
-      this.cookingClassService.updateCookingClassRequest(request.cookingClassRequestId, request).subscribe(() => {
-        alert(`Request for Class "${this.getClassName(request.cookingClassId)}" has been approved.`);
-        this.filterRequests(); // Refresh the filtered list
-      });
+  applyFilters(): void {
+    let filtered = this.requests;
+    
+    // Apply search term filter
+    if (this.searchTerm) {
+      const term = this.searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        request => request.cookingClass?.className.toLowerCase().includes(term)
+      );
     }
+    
+    // Apply status filter
+    if (this.statusFilter) {
+      filtered = filtered.filter(request => request.status === this.statusFilter);
+    }
+    
+    this.filteredRequests = filtered;
   }
 
-  // Reject a request
-  rejectRequest(request: CookingClassRequest): void {
-    if (request.status === 'Pending') {
-      request.status = 'Rejected';
-      this.cookingClassService.updateCookingClassRequest(request.cookingClassRequestId, request).subscribe(() => {
-        alert(`Request for Class "${this.getClassName(request.cookingClassId)}" has been rejected.`);
-        this.filterRequests(); // Refresh the filtered list
-      });
-    }
+  updateStatus(requestId: number, status: string): void {
+    const request = this.requests.find(r => r.cookingClassRequestId === requestId);
+    if (!request) return;
+    
+    const updatedRequest = { ...request, status: status };
+    
+    this.cookingClassService.updateCookingClassRequest(requestId.toString(), updatedRequest).subscribe(
+      () => {
+        const index = this.requests.findIndex(r => r.cookingClassRequestId === requestId);
+        if (index !== -1) {
+          this.requests[index].status = status;
+          this.applyFilters(); // Re-apply filters to update the filtered list
+        }
+      },
+      error => {
+        console.error('Error updating request status:', error);
+        alert('Failed to update request status. Please try again.');
+      }
+    );
+  }
+
+  viewProfile(request: CookingClassRequest): void {
+    this.selectedRequest = request;
+    this.showProfileModal = true;
+  }
+
+  closeProfileModal(): void {
+    this.showProfileModal = false;
+    this.selectedRequest = null;
   }
 }

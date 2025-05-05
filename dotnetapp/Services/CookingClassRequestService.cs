@@ -6,6 +6,7 @@ using dotnetapp.Data;
 using dotnetapp.Exceptions;
 using dotnetapp.Models;
 using Microsoft.EntityFrameworkCore;
+using dotnetapp.Dto;
 
 namespace dotnetapp.Services
 {
@@ -19,13 +20,40 @@ namespace dotnetapp.Services
         }
 
         // Get all cooking class requests including related CookingClass & User details
-        public async Task<IEnumerable<CookingClassRequest>> GetAllCookingClassRequests()
+       public async Task<IEnumerable<CookingClassRequestDto>> GetAllCookingClassRequests()
+{
+    return await _context.CookingClassRequests
+        .Include(cr => cr.CookingClass)
+        .Include(cr => cr.User)
+        .Select(cr => new CookingClassRequestDto
         {
-            return await _context.CookingClassRequests
-                .Include(cr => cr.CookingClass)
-                .Include(cr => cr.User)
-                .ToListAsync();
-        }
+            CookingClassRequestId = cr.CookingClassRequestId,
+            UserId = cr.UserId,
+            Username = cr.User.Username,
+            Email = cr.User.Email,
+            Mobile = cr.User.MobileNumber,
+            CookingClassId = cr.CookingClassId,
+            CookingClass = cr.CookingClass != null ? new CookingClassDto
+            {
+                ClassName = cr.CookingClass.ClassName,
+                CuisineType = cr.CookingClass.CuisineType,
+                ChefName = cr.CookingClass.ChefName,
+                Location = cr.CookingClass.Location,
+                DurationInHours = cr.CookingClass.DurationInHours,
+                Fee = cr.CookingClass.Fee,
+                IngredientsProvided = cr.CookingClass.IngredientsProvided,
+                SkillLevel = cr.CookingClass.SkillLevel,
+                SpecialRequirements = cr.CookingClass.SpecialRequirements
+            } : null,
+            RequestDate = cr.RequestDate,
+            Status = cr.Status,
+            DietaryPreferences = cr.DietaryPreferences,
+            CookingGoals = cr.CookingGoals,
+            Comments = cr.Comments
+        })
+        .ToListAsync();
+}
+
 
         // Get cooking class requests for a specific user
         public async Task<IEnumerable<CookingClassRequest>> GetCookingClassRequestsByUserId(int userId)

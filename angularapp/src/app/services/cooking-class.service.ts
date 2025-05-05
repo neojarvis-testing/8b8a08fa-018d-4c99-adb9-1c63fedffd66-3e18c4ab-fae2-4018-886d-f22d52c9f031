@@ -1,88 +1,98 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CookingClassRequest } from '../models/cooking-class-request.model';
 import { CookingClass } from '../models/cooking-class.model';
+import { CookingClassRequest } from '../models/cooking-class-request.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CookingClassService {
-  private apiBaseUrl = 'https://8080-abeecbbbdbedfffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
+  public apiUrl = 'https://8080-abeecbbbdbedfffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
+  // Get auth headers
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('jwtToken');
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`
+      'Authorization': `Bearer ${token}`
     });
   }
 
-  // Fetch all cooking classes
+  // Get all cooking classes
   getAllCookingClasses(): Observable<CookingClass[]> {
-    return this.http.get<CookingClass[]>(`${this.apiBaseUrl}/cookingClass`, {
+    return this.http.get<CookingClass[]>(`${this.apiUrl}/cookingClass`, {
       headers: this.getAuthHeaders()
     });
   }
 
-  // Get a specific cooking class by ID
+  // Get cooking class by ID
   getCookingClassById(classId: number): Observable<CookingClass> {
-    return this.http.get<CookingClass>(`${this.apiBaseUrl}/cookingClass/${classId}`, {
+    return this.http.get<CookingClass>(`${this.apiUrl}/cookingClass/${classId}`, {
       headers: this.getAuthHeaders()
     });
   }
 
-  // Add a new cooking class
-  addCookingClass(cooking: CookingClass): Observable<CookingClass> {
-    return this.http.post<CookingClass>(`${this.apiBaseUrl}/cookingClass`, cooking, {
-      headers: this.getAuthHeaders()
+  // Add new cooking class
+  addCookingClass(cooking: CookingClass): Observable<string> {
+    return this.http.post(`${this.apiUrl}/cookingClass`, cooking, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text' // Ensures response is treated as plain text
     });
   }
 
-  // Update an existing cooking class
-  updateCookingClass(classId: number, cooking: CookingClass): Observable<CookingClass> {
-    return this.http.put<CookingClass>(`${this.apiBaseUrl}/cookingClass/${classId}`, cooking, {
-      headers: this.getAuthHeaders()
+
+  // Update cooking class
+  updateCookingClass(classId: number, cooking: CookingClass): Observable<string> {
+    return this.http.put(`${this.apiUrl}/cookingClass/${classId}`, cooking, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text'
     });
   }
 
-  // Delete a cooking class by ID
-  deleteCookingClass(classId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiBaseUrl}/cookingClass/${classId}`, {
-      headers: this.getAuthHeaders()
+  // Delete cooking class
+  deleteCookingClass(classId: number): Observable<string> {
+    return this.http.delete(`${this.apiUrl}/cookingClass/${classId}`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text'
     });
   }
 
-  // Fetch all cooking class requests
+
+  // Get all cooking class requests
   getAllCookingClassRequests(): Observable<CookingClassRequest[]> {
-    return this.http.get<CookingClassRequest[]>(`${this.apiBaseUrl}/cooking-class-request`);
-  }
-
-  // Fetch cooking class requests by user ID
-  getCookingClassRequestsByUserId(userId: string): Observable<CookingClassRequest[]> {
-    return this.http.get<CookingClassRequest[]>(`${this.apiBaseUrl}/cooking-class-request/user/${userId}`, {
+    return this.http.get<CookingClassRequest[]>(`${this.apiUrl}/cooking-class-request`, {
       headers: this.getAuthHeaders()
     });
   }
 
-  // Add a new cooking class request
-  addCookingClassRequest(request: CookingClassRequest): Observable<CookingClassRequest> {
-    return this.http.post<CookingClassRequest>(`${this.apiBaseUrl}/cooking-class-request`, request, {
+  // Get cooking class requests by user ID
+  getCookingClassRequestsByUserId(userId: number): Observable<CookingClassRequest[]> {
+    return this.http.get<CookingClassRequest[]>(`${this.apiUrl}/cooking-class-request/user/${userId}`, {
       headers: this.getAuthHeaders()
     });
   }
 
-  // Update an existing cooking class request
-  updateCookingClassRequest(requestId: number, request: CookingClassRequest): Observable<CookingClassRequest> {
-    return this.http.put<CookingClassRequest>(`${this.apiBaseUrl}/cooking-class-request/${requestId}`, request, {
-      headers: this.getAuthHeaders()
+  // Add cooking class request
+  addCookingClassRequest(request: CookingClassRequest): Observable<string> {
+    return this.http.post(`${this.apiUrl}/cooking-class-request`, request, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text'
     });
   }
 
-  // Delete a cooking class request by ID
+  // Update cooking class request
+  updateCookingClassRequest(requestId: string, request: CookingClassRequest): Observable<string> {
+    return this.http.put(`${this.apiUrl}/cooking-class-request/${requestId}`, request, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text'
+    });
+  }
+
+  // Delete cooking class request
   deleteCookingClassRequest(requestId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiBaseUrl}/cooking-class-request/${requestId}`, {
+    return this.http.delete<void>(`${this.apiUrl}/cooking-class-request/${requestId}`, {
       headers: this.getAuthHeaders()
     });
   }

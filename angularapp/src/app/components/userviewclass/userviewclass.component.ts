@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CookingClass } from 'src/app/models/cooking-class.model';
-import { CookingClassService } from 'src/app/services/cooking-class.service';
+import { CookingClassService } from '../../services/cooking-class.service';
+import { CookingClass } from '../../models/cooking-class.model';
 
 @Component({
   selector: 'app-userviewclass',
@@ -9,32 +9,71 @@ import { CookingClassService } from 'src/app/services/cooking-class.service';
   styleUrls: ['./userviewclass.component.css']
 })
 export class UserviewclassComponent implements OnInit {
+  cookingClasses: CookingClass[] = [];
+  filteredClasses: CookingClass[] = [];
+  searchTerm: string = '';
+  selectedClass: CookingClass | null = null;
+  loading: boolean = true;
+  error: string = '';
+  showDetailsModal: boolean = false;
 
-  classes : CookingClass[]=[];
-
-  searchText: string = '';
-
-  constructor(private cookingClassService : CookingClassService, private router: Router) { }
+  constructor(
+    private cookingClassService: CookingClassService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
-    this.loadClasses()
-   }
-
-  loadClasses(){
-    this.cookingClassService.getAllCookingClasses().subscribe(res=>{
-      this.classes = res;
-    })
+    this.loadCookingClasses();
   }
 
-  applyForClass(classId: number): void {
-      this.router.navigate(['/user/add-request']);
-  }
-
-  getFilteredClasses(): any[] {
-    return this.classes.filter(c =>
-      c.className.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      c.cuisineType.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      c.chefName.toLowerCase().includes(this.searchText.toLowerCase())
+  loadCookingClasses(): void {
+    this.loading = true;
+    this.cookingClassService.getAllCookingClasses().subscribe(
+      classes => {
+        this.cookingClasses = classes;
+        this.filteredClasses = classes;
+        this.loading = false;
+      },
+      error => {
+        console.error('Error loading cooking classes:', error);
+        this.error = 'Failed to load cooking classes. Please try again later.';
+        this.loading = false;
+      }
     );
+  }
+
+  search(): void {
+    if (!this.searchTerm) {
+      this.filteredClasses = this.cookingClasses;
+      return;
+    }
+
+    const term = this.searchTerm.toLowerCase();
+    this.filteredClasses = this.cookingClasses.filter(
+      classItem => 
+        classItem.className.toLowerCase().includes(term) ||
+        classItem.cuisineType.toLowerCase().includes(term) ||
+        classItem.chefName.toLowerCase().includes(term) ||
+        classItem.location.toLowerCase().includes(term) ||
+        classItem.skillLevel.toLowerCase().includes(term)
+    );
+  }
+
+  viewDetails(cookingClass: CookingClass): void {
+    this.selectedClass = cookingClass;
+    this.showDetailsModal = true;
+  }
+
+  closeDetailsModal(): void {
+    this.showDetailsModal = false;
+    this.selectedClass = null;
+  }
+
+  applyForClass(): void {
+    console.log(this.selectedClass);
+    if (this.selectedClass && this.selectedClass.cookingClassId) {
+      localStorage.setItem('selectedClassId', this.selectedClass.cookingClassId.toString());
+      this.router.navigate(['/user/add-request']);
+    }
   }
 }
