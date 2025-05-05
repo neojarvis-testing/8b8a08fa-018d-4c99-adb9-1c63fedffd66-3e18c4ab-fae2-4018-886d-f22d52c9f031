@@ -8,36 +8,22 @@ import { FeedbackService } from 'src/app/services/feedback.service';
   styleUrls: ['./adminviewfeedback.component.css']
 })
 export class AdminviewfeedbackComponent implements OnInit {
+
+
   feedbacks: Feedback[] = [];
-  selectedUserDetails: any = null; 
-  showModal: boolean = false; 
-
-  constructor(private feedbackService: FeedbackService) {}
-
+  constructor(private feedbackService: FeedbackService) { }
   ngOnInit(): void {
     this.loadFeedbacks();
   }
-
-  private loadFeedbacks(): void {
-    this.feedbackService.getFeedbacks().subscribe(
-      (feedbacks) => {
-        this.feedbacks = feedbacks;
+  loadFeedbacks(): void {
+    this.feedbackService.getFeedbacks().subscribe({
+      next: (data) => {
+        this.feedbacks = data;
       },
-      (error) => {
-        console.error('Error fetching feedback:', error);
+      error: (err) => {
+        console.error('Error fetching feedbacks:', err);
+        alert('Failed to load feedbacks');
       }
-    );
-  }
-
-  // Show Profile method
-  showProfile(userDetails: any): void {
-    this.selectedUserDetails = userDetails; 
-    this.showModal = true; 
-  }
-
-  // Close Modal method
-  closeModal(): void {
-    this.showModal = false; 
-    this.selectedUserDetails = null; 
+    });
   }
 }

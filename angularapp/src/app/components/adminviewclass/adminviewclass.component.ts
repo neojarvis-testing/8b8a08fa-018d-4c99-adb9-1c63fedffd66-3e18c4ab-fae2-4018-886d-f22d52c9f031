@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FeedbackService } from 'src/app/services/feedback.service';
-import { Feedback } from 'src/app/models/feedback.model';
 import { Router } from '@angular/router';
+import { CookingClassService } from 'src/app/services/cooking-class.service';
 
 @Component({
   selector: 'app-adminviewclass',
@@ -9,67 +8,57 @@ import { Router } from '@angular/router';
   styleUrls: ['./adminviewclass.component.css']
 })
 export class AdminviewclassComponent implements OnInit {
-  classes: Feedback[] = [];
-  filteredClasses: Feedback[] = [];
-  location: any;
+  searchTerm: string = ''; 
+  selectedClass: any = null; 
+  isEditMode: boolean = false;
 
-  constructor(private feedbackService: FeedbackService, private router: Router) {}
+  // Example data for classes
+  filteredClasses = [
+
+  ];
+
+  constructor(private cookingService: CookingClassService, private router: Router) { }
 
   ngOnInit(): void {
-    this.loadClasses();
+    this.cookingService.getAllCookingClasses().subscribe(data => this.filteredClasses = [...data])
   }
 
-  private loadClasses(): void {
-    this.feedbackService.getFeedbacks().subscribe(
-      (classes) => {
-        this.classes = classes;
-        this.filteredClasses = classes;
-      },
-      (error) => {
-        console.error('Error fetching classes:', error);
-      }
-    );
+  // Filter classes based on search term
+
+
+  // Show delete confirmation modal
+  confirmDelete(classItem: any): void {
+    this.selectedClass = classItem;
   }
 
-  onSubmit(cookingForm: any): void {
-    if (cookingForm.valid) {
-      const newFeedback: Feedback = {
-        UserId: 1, // Assuming a default user ID; update as needed
-        FeedbackText: `Cooking Class Updated: ${cookingForm.value.className}`,
-        Date: new Date(),
-      };
+  // Delete class if confirmed
+  // deleteClass(): void {
+  //   if (this.selectedClass) {
+  //     const index = this.classes.indexOf(this.selectedClass);
+  //     if (index > -1) {
+  //       this.classes.splice(index, 1); // Remove the class from the list
+  //       console.log('Deleted class:', this.selectedClass);
+  //     }
+  //     this.selectedClass = null; // Reset selection after deletion
+  //   }
+  // }
 
-      this.feedbackService.sendFeedback(newFeedback).subscribe(
-        (response) => {
-          alert('Class updated successfully!');
-          console.log('Feedback stored:', response);
-        },
-        (error) => {
-          console.error('Error submitting feedback:', error);
-        }
-      );
-    } else {
-      alert('Please fill out all required fields.');
-    }
+  // Cancel deletion
+  cancelDelete(): void {
+    this.selectedClass = null;
   }
 
-  onEdit(classData: Feedback): void {
-    alert(`Editing class: ${classData.FeedbackText}`);
-    this.router.navigate(['/admineditclass', classData.FeedbackId]); // Navigates to the edit class component
+  // Enable edit mode and load selected class
+  editClass(classId:number): void {
+    this.router.navigate([`admin/edit-class/${classId}`]);
   }
 
-  goBack(): void {
-    this.location.back();
-  }
+  // Save changes to the edited class
+ 
 
-  onDelete(classData: Feedback): void {
-    const confirmation = confirm(`Are you sure you want to delete the class: ${classData.FeedbackText}?`);
-    if (confirmation) {
-      this.feedbackService.deleteFeedback(classData.FeedbackId!).subscribe(() => {
-        this.classes = this.classes.filter(cls => cls.FeedbackId !== classData.FeedbackId);
-        this.filteredClasses = this.classes;
-        alert('Class deleted successfully!');
-      });
-    }
-  }
+  // Cancel editing
+  // cancelEdit(): void {
+  //   this.selectedClass = null;
+  //   this.isEditMode = false; // Exit edit mode
+  // }
 }

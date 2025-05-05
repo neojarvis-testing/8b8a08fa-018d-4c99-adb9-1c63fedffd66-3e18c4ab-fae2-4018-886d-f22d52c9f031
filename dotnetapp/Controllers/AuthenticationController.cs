@@ -24,7 +24,7 @@ namespace dotnetapp.Controllers
             if (result.Item1 == 0)
                 return Unauthorized(new { message = result.Item2 });
 
-            return Ok(new { token = result.Item2 });
+            return Content(result.Item2, "application/json");
         }
 
         [HttpPost("register")]

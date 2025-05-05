@@ -18,7 +18,6 @@ export class RegistrationComponent implements OnInit {
     Username: '',
     Email: '',
     Password: '',
-    // confirmPassword: '',
     MobileNumber: '',
     UserRole: ''
   };
@@ -30,7 +29,7 @@ export class RegistrationComponent implements OnInit {
       console.log('Form submitted successfully!', this.user);
       // Perform additional actions like making an API call here
       this.authService.register(this.user).subscribe(data =>
-        this.router.navigate(['login']))
+        this.router.navigate(['/login']))
     } else {
       console.log('Form is invalid. Please fix errors and try again.');
     }

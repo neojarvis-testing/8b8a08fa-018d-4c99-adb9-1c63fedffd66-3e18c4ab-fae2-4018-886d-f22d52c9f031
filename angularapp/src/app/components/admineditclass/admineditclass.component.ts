@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CookingClass } from 'src/app/models/cooking-class.model';
 import { CookingClassRequest } from 'src/app/models/cooking-class-request.model';
+import { CookingClassService } from 'src/app/services/cooking-class.service';
 
 @Component({
   selector: 'app-admineditclass',
@@ -11,41 +11,39 @@ import { CookingClassRequest } from 'src/app/models/cooking-class-request.model'
 })
 export class AdmineditclassComponent implements OnInit {
   // Cooking Class Model
+  classId: number;
   cookingClass: CookingClass = {
-    ClassName: 'Italian Cooking Basics',
-    CuisineType: 'Italian',
-    ChefName: 'Chef John Doe',
-    Location: 'New York City',
-    DurationInHours: 3,
-    Fee: 500,
-    IngredientsProvided: 'Yes',
-    SkillLevel: 'Beginner',
-    SpecialRequirements: 'None'
+    className: '',
+    cuisineType: '',
+    chefName: '',
+    location: '',
+    durationInHours: 0,
+    fee: 0,
+    ingredientsProvided: '',
+    skillLevel: '',
+    specialRequirements: ''
   };
 
-  // Cooking Class Request Model
-  cookingClassRequest: CookingClassRequest = {
-    UserId: 1,
-    CookingClassId: 101,
-    RequestDate: '2025-04-28',
-    Status: 'Pending',
-    DietaryPreferences: 'Vegetarian',
-    CookingGoals: 'Learn Italian Cuisine',
-    Comments: 'Looking forward to this class!'
-  };
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private cookingService: CookingClassService) { }
 
   ngOnInit(): void {
-    // Example of fetching or setting data from a backend (if needed)
-    console.log('Loaded cooking class data:', this.cookingClass);
-    console.log('Loaded cooking class request:', this.cookingClassRequest);
+    this.activatedRoute.params.subscribe(
+      data => this.classId = data['id']
+    )
+    if (this.classId) {
+      this.cookingService.getCookingClassById(this.classId).subscribe(
+        data => this.cookingClass = data
+      )
+    }
   }
 
   // Handle form submission for class editing
-  onSubmit(form: NgForm): void {
-    if (form.valid) {
-      console.log('Updated Cooking Class:', form.value);
+  onSubmit(editClassForm: any): void {
+    if (editClassForm.valid) {
+      this.cookingService.updateCookingClass(this.classId,editClassForm.value).subscribe()
+      console.log(editClassForm.value);
+      
       alert('Cooking class details saved successfully!');
       // Logic to save to backend API can be added here
     } else {
@@ -55,6 +53,6 @@ export class AdmineditclassComponent implements OnInit {
 
   // Navigate back to the admin view class component
   navigateToAdminViewClass(): void {
-    this.router.navigate(['/adminviewclass']);
+    this.router.navigate(['/admin/view-classes']);
   }
 }
