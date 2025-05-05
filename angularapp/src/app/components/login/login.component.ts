@@ -46,7 +46,15 @@ export class LoginComponent implements OnInit {
       this.authService.login(loginModel).subscribe(
         response => {
           this.submitting = false;
-          
+          Swal.fire({
+            toast: true,
+            position: 'top-end', // Places the toast at the top-right corner
+            icon: 'success', // Icon type (success, error, warning, info, question)
+            title: 'Logged in Successfully',
+            showConfirmButton: false, // Removes the confirmation button
+            timer: 3000, // Auto-closes the toast after 3 seconds
+            timerProgressBar: true, // Shows a progress bar
+        });
           // Redirect based on role
           if (this.authService.isAdmin()) {
             this.router.navigate(['/admin/home']);

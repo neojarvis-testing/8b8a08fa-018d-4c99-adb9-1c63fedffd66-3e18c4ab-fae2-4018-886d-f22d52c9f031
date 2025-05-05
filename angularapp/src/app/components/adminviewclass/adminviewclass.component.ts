@@ -83,9 +83,26 @@ export class AdminviewclassComponent implements OnInit {
       error => {
         console.error('Error deleting cooking class:', error);
         if (error.error && typeof error.error === 'string' && error.error.includes('referenced in a request')) {
-          alert('Cooking class cannot be deleted as it is referenced in a request');
+          Swal.fire({
+            toast: true,
+            position: 'top-end', // Places the toast at the top-right corner
+            icon: 'error', // Icon type (success, error, warning, info, question)
+            title: 'Cannot be deleted as it is referenced in a request',
+            showConfirmButton: false, // Removes the confirmation button
+            timer: 3000, // Auto-closes the toast after 3 seconds
+            timerProgressBar: true, // Shows a progress bar
+            background: '#ffd6d6', // Custom background color
+        });
         } else {
-          alert('Failed to delete cooking class. Please try again.');
+          Swal.fire({
+            toast: true,
+            position: 'top-end', // Places the toast at the top-right corner
+            icon: 'error', // Icon type (success, error, warning, info, question)
+            title: 'Failed to delete cooking class. Please try again.',
+            showConfirmButton: false, // Removes the confirmation button
+            timer: 3000, // Auto-closes the toast after 3 seconds
+            timerProgressBar: true, // Shows a progress bar
+        })
         }
         this.closeDeleteModal();
       }

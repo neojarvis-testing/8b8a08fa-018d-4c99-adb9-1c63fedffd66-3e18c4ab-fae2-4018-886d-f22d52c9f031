@@ -79,7 +79,16 @@ export class AdminviewappliedrequestComponent implements OnInit {
       },
       error => {
         console.error('Error updating request status:', error);
-        alert('Failed to update request status. Please try again.');
+        Swal.fire({
+          toast: true,
+          position: 'top-end', // Places the toast at the top-right corner
+          icon: 'error', // Icon type (success, error, warning, info, question)
+          title: 'Failed to update request status. Please try again.',
+          showConfirmButton: false, // Removes the confirmation button
+          timer: 3000, // Auto-closes the toast after 3 seconds
+          timerProgressBar: true, // Shows a progress bar
+          background: '#ffd6d6', // Custom background color
+      });
       }
     );
   }
