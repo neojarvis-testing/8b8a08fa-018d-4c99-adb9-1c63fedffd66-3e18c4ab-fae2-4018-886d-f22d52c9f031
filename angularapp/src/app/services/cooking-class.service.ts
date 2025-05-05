@@ -8,7 +8,7 @@ import { CookingClassRequest } from '../models/cooking-class-request.model';
   providedIn: 'root'
 })
 export class CookingClassService {
-  public apiUrl = 'https://8080-abeecbbbdbedfffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
+  public apiUrl = 'https://8080-cafdefafffbcadcffcbecabfaedfdcf.premiumproject.examly.io/api';
 
   constructor(private http: HttpClient) { }
 

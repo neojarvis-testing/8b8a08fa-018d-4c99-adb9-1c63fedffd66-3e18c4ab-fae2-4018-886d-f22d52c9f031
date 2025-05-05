@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
           this.submitting = false;
           
           if (error.status === 401) {
-            this.errorMessage = 'Invalid email or password';
+            this.errorMessage = error.error;
           } else {
             this.errorMessage = 'An error occurred. Please try again later.';
           }
