@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace dotnetapp.Services
 {
-    public class CookingClassService
+    public class CookingClassService : ICookingClassService
     {
         private readonly ApplicationDbContext _context;
 

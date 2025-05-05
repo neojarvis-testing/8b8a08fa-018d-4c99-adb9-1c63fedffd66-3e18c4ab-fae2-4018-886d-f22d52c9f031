@@ -36,9 +36,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 // Register services for dependency injection
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<CookingClassService>();
-builder.Services.AddScoped<CookingClassRequestService>();
-builder.Services.AddScoped<FeedbackService>();
+builder.Services.AddScoped<ICookingClassService,CookingClassService>();
+builder.Services.AddScoped<ICookingClassRequestService ,CookingClassRequestService>();
+builder.Services.AddScoped<IFeedbackService ,FeedbackService>();
 
 // Configure JWT Authentication
 builder.Services.AddAuthentication(options =>
