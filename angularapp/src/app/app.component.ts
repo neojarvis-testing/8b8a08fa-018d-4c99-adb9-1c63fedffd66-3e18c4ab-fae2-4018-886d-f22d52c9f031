@@ -4,20 +4,11 @@ import { AuthService } from './services/auth.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   title = 'angularapp';
-  constructor(public authService: AuthService){}
+  constructor(public authService: AuthService) { }
   ngOnInit(): void {
-    // this.getRole();
   }
-  // Role: string='';
-  // getRole(): void {
-  //   this.authService.getRole
-  // }
-
-
-
-
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using dotnetapp.Data;
 using dotnetapp.Models;
 using Microsoft.EntityFrameworkCore;
+using dotnetapp.Dto;
 
 namespace dotnetapp.Services
 {
@@ -18,10 +19,21 @@ namespace dotnetapp.Services
         }
 
         // Get all feedbacks
-        public async Task<IEnumerable<Feedback>> GetAllFeedbacks()
+        public async Task<IEnumerable<FeedbackDto>> GetAllFeedbacks()
+{
+    return await _context.Feedbacks
+        .Include(f => f.User)
+        .Select(f => new FeedbackDto
         {
-            return await _context.Feedbacks.Include(f => f.User).ToListAsync();
-        }
+            FeedbackId = f.FeedbackId,
+            UserId = f.UserId,
+            Username = f.User.Username, // Ensures safe access
+            FeedbackText = f.FeedbackText,
+            Date = f.Date
+        })
+        .ToListAsync();
+}
+
 
         // Get feedbacks by User ID
         public async Task<IEnumerable<Feedback>> GetFeedbacksByUserId(int userId)

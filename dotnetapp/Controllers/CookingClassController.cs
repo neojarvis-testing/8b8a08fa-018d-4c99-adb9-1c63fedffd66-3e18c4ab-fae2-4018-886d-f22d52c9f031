@@ -7,7 +7,7 @@ using dotnetapp.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 namespace dotnetapp.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    
     [ApiController]
     [Route("api/cookingClass")]
     public class CookingClassController : ControllerBase
@@ -20,6 +20,7 @@ namespace dotnetapp.Controllers
         }
 
         // Get all cooking classes
+        [Authorize(Roles = "Admin, User")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CookingClass>>> GetAllCookingClasses()
         {
@@ -35,6 +36,7 @@ namespace dotnetapp.Controllers
         }
 
         // Get cooking class by ID
+        [Authorize(Roles = "Admin, User")]
         [HttpGet("{classId}")]
         public async Task<ActionResult<CookingClass>> GetCookingClassById(int classId)
         {
@@ -53,6 +55,7 @@ namespace dotnetapp.Controllers
         }
 
         // Add a cooking class
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> AddCookingClass([FromBody] CookingClass cooking)
         {
@@ -77,6 +80,7 @@ namespace dotnetapp.Controllers
         }
 
         // Update a cooking class
+        [Authorize(Roles = "Admin")]
         [HttpPut("{classId}")]
         public async Task<ActionResult> UpdateCookingClass(int classId, [FromBody] CookingClass cooking)
         {
@@ -99,6 +103,7 @@ namespace dotnetapp.Controllers
         }
 
         // Delete a cooking class
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{classId}")]
         public async Task<ActionResult> DeleteCookingClass(int classId)
         {
@@ -121,3 +126,5 @@ namespace dotnetapp.Controllers
         }
     }
 }
+
+
