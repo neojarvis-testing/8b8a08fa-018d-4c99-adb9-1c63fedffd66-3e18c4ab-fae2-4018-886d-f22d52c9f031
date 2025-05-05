@@ -91,7 +91,6 @@ export class AdminviewclassComponent implements OnInit {
             showConfirmButton: false, // Removes the confirmation button
             timer: 3000, // Auto-closes the toast after 3 seconds
             timerProgressBar: true, // Shows a progress bar
-            background: '#ffd6d6', // Custom background color
         });
         } else {
           Swal.fire({
