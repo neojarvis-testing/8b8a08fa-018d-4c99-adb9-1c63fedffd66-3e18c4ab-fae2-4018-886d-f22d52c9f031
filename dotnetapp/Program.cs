@@ -76,30 +76,5 @@ app.UseAuthorization();
 app.UseCors();
 app.MapControllers();
 
-// 🔹 Ensure Roles Exist at Startup
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    await SeedRoles(services);
-}
 
 app.Run();
-
-// 🔹 Role Seeding Method (Ensures Admin and User Roles Exist)
-async Task SeedRoles(IServiceProvider serviceProvider)
-{
-    using (var scope = serviceProvider.CreateScope())
-    {
-        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-        string[] roleNames = { "Admin", "User" };
-        foreach (var roleName in roleNames)
-        {
-            if (!await roleManager.RoleExistsAsync(roleName))
-            {
-                await roleManager.CreateAsync(new IdentityRole(roleName));
-                Console.WriteLine($"Role '{roleName}' created.");
-            }
-        }
-    }
-}

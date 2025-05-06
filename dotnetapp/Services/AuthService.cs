@@ -16,7 +16,7 @@ namespace dotnetapp.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly ApplicationDbContext _context; // ✅ Inject DbContext
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;

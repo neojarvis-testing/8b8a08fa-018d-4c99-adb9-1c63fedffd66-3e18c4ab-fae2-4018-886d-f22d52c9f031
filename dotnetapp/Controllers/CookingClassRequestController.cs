@@ -69,7 +69,7 @@ namespace dotnetapp.Controllers
             }
             catch (CookingClassException ex)
             {
-                return BadRequest(ex.Message); // Handles custom exceptions
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

@@ -5,10 +5,11 @@ using dotnetapp.Models;
 
 namespace dotnetapp.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser> // 🔹 Use IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser> // ✅ Extends IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
+        // Define DbSets for your entities
         public DbSet<CookingClass> CookingClasses { get; set; }
         public DbSet<CookingClassRequest> CookingClassRequests { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
@@ -16,8 +17,9 @@ namespace dotnetapp.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); // 🔹 Ensures Identity configurations are applied
+            base.OnModelCreating(modelBuilder);
 
+  
             modelBuilder.Entity<CookingClassRequest>()
                 .HasOne(cr => cr.User)
                 .WithMany(u => u.CookingClassRequests)
