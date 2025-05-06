@@ -9,7 +9,7 @@ using dotnetapp.Dto;
 
 namespace dotnetapp.Services
 {
-    public class FeedbackService
+    public class FeedbackService : IFeedbackService
     {
         private readonly ApplicationDbContext _context;
 

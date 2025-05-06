@@ -10,15 +10,10 @@ using System.Threading.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);  //creates the foundation for configuring an asp.net core application
 
-builder.Configuration  //explicitely configure where application should look for its configuration setting.
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddEnvironmentVariables();
 
 //configures dependency injection by registering services
 // Add services to the container
 builder.Services.AddControllers(); //register mvc coltrollers and related services
-builder.Services.AddEndpointsApiExplorer(); // api exploraion for swagger
 
 // Configure database connection
 builder.Services.AddDbContext<ApplicationDbContext>(o =>
@@ -41,9 +36,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 // Register services for dependency injection
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<CookingClassService>();
-builder.Services.AddScoped<CookingClassRequestService>();
-builder.Services.AddScoped<FeedbackService>();
+builder.Services.AddScoped<ICookingClassService,CookingClassService>();
+builder.Services.AddScoped<ICookingClassRequestService ,CookingClassRequestService>();
+builder.Services.AddScoped<IFeedbackService ,FeedbackService>();
 
 // Configure JWT Authentication
 builder.Services.AddAuthentication(options =>

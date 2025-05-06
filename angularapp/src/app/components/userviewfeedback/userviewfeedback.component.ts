@@ -66,8 +66,17 @@ export class UserviewfeedbackComponent implements OnInit {
         this.closeDeleteModal();
       },
       error => {
-        console.error('Error deleting feedback:', error);
-        alert('Failed to delete feedback. Please try again.');
+        alert('');
+        Swal.fire({
+          toast: true,
+          position: 'top-end', // Places the toast at the top-right corner
+          icon: 'error', // Icon type (success, error, warning, info, question)
+          title: 'Failed to delete feedback. Please try again.',
+          showConfirmButton: false, // Removes the confirmation button
+          timer: 3000, // Auto-closes the toast after 3 seconds
+          timerProgressBar: true, // Shows a progress bar
+          background: '#ffd6d6', // Custom background color
+      });
         this.closeDeleteModal();
       }
     );
